@@ -257,7 +257,7 @@ $(document).ready(function() {
     records.forEach(function(d) {
       var dateDataObj = {};
       var appliedDate = moment(d.AppliedDate);
-      var issuedDate = moment(d.issuedDate);
+      var issuedDate = moment(d.IssuedDate);
       dateDataObj.permitNum = d.PermitNum;
       dateDataObj.permitType = d.PermitTypeMapped;
       dateDataObj.dateDifference = Math.abs(appliedDate.diff(issuedDate, 'd'));
