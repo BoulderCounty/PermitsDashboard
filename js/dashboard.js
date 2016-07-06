@@ -1,8 +1,10 @@
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
-var startDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
-var startDateMoment = moment().subtract(30, 'd');
+var startDate = moment().subtract(365, 'd').format("YYYY-MM-DD");
+var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
+var startDateMoment = moment().subtract(365, 'd');
+var shortStartDateMoment = moment().subtract(30, 'd');
 
 $(document).ready(function() {
      
@@ -21,32 +23,49 @@ $(document).ready(function() {
   }
 
   /********************************************************************************/
-  /* Get all activity in last 30 days (START)
+  /* Get all activity in last year (START)
   /********************************************************************************/
 
-  var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
-  var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
+  var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
+  var urlLast7Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
+  var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
+  var urlLast7 = baseURI + encodeURIComponent(urlLast7Query.replace("permitsResourceId", permitsResourceId));
 
-  requestJSON(urlLast30, function(json) {
+  requestJSON(urlLast365, function(json) {
     var records = json.result.records;
 
     //extract permits applied for in last 30 days
-    var appliedLast30Days = records.filter(function(d) { 
+    var appliedLast365Days = records.filter(function(d) { 
       return moment(d.AppliedDate) > startDateMoment; 
+    });
+
+    //extract permits applied for in last 30 days
+    var appliedLast7Days = records.filter(function(d) { 
+      return moment(d.AppliedDate) > shortStartDateMoment; 
     });
     
     //extract permits issued in last 30 days
-    var issuedLast30Days = records.filter(function(d) { 
+    var issuedLast365Days = records.filter(function(d) { 
       return moment(d.IssuedDate) > startDateMoment; 
     });
 
+    //extract permits issued in last 30 days
+    var issuedLast7Days = records.filter(function(d) { 
+      return moment(d.IssuedDate) > shortStartDateMoment; 
+    });
+
     //total construction value for new project in last 30 days
-    var totalConstructionValue = d3.sum(appliedLast30Days, function(d) {
+    var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
       return Number(d.EstProjectCost);
     });
 
-    $("#newApplications").text(appliedLast30Days.length);
-    $("#issuedPermits").text(issuedLast30Days.length);
+
+    records.forEach(function(record, inc, array) {
+      record.AppliedDate = moment(record.AppliedDate).format('MMM');
+    })
+
+    $("#newApplications").text(appliedLast7Days.length);
+    $("#issuedPermits").text(issuedLast7Days.length);
     $("#totalConstructionValue").text(numeral(totalConstructionValue).format('($ 0.00 a)'));
 
     /********************************************************************************/
@@ -54,13 +73,13 @@ $(document).ready(function() {
     /********************************************************************************/
     
     var permitsToLoad = 10;
-    var totalPermits = appliedLast30Days.length-1;
+    var totalPermits = appliedLast365Days.length-1;
     var permitStart = 1
     
-    for (var i = totalPermits; i > totalPermits - 10; i--) {
-      $("#recent" + permitStart).attr("href", appliedLast30Days[i].Link);
-      $("#permit" + permitStart).text(appliedLast30Days[i].PermitNum);
-      $("#address" + permitStart).text(appliedLast30Days[i].OriginalAddress1);
+    for (var i = totalPermits; i > totalPermits - 100; i--) {
+      $("#recent" + permitStart).attr("href", appliedLast365Days[i].Link);
+      $("#permit" + permitStart).text(appliedLast365Days[i].PermitNum);
+      $("#address" + permitStart).text(appliedLast365Days[i].OriginalAddress1);
       permitStart++;
     }
 
@@ -76,7 +95,7 @@ $(document).ready(function() {
       .key(function(d) { return d.AppliedDate })
       .key(function(d) { return d.PermitTypeMapped })
       .rollup (function(v) { return v.length })
-      .entries(appliedLast30Days);
+      .entries(appliedLast365Days);
 
     console.log(appliedByDayByType);
 
@@ -86,13 +105,19 @@ $(document).ready(function() {
     var other = ['Other'];
     var mech = ['Mechanical'];
     var plm = ['Plumbing'];
+    var psp = ['Pool/Spa'];
+    var fnc = ['Fence'];
+    var roof = ['Roof'];
     var datesArray = [];
-    var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false, plmAdded = false;
+    var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false,  pspAdded = false, fncAdded = false, roofAdded = false, plmAdded = false;
     var tempArray = [];
 
     appliedByDayByType.forEach(function(d) {
-      var dArray = d.key.split("-");
-      datesArray.push(dArray[1] + "-" + dArray[2]);
+
+      console.log(d);
+
+      var dArray = d.key;
+      datesArray.push(dArray);
 
       bldAdded = false;
       demoAdded = false;
@@ -100,6 +125,10 @@ $(document).ready(function() {
       otherAdded = false;
       mechAdded = false;
       plmAdded = false;
+      pspAdded = false;
+      fncAdded = false;
+      roofAdded = false;
+
 
       d.values.forEach(function(i) {
         
@@ -123,10 +152,24 @@ $(document).ready(function() {
           mech.push(i.values);
           mechAdded = true;
         }
+        if (i.key == "Roof") {
+          roof.push(i.values);
+          roofAdded = true;    
+        }
+        if (i.key == "Pool/Spa") {
+          psp.push(i.values);
+          pspAdded = true;    
+        }
+        if (i.key == "Fence") {
+          fnc.push(i.values);
+          fncAdded = true;    
+        }
+
         if (i.key == "Plumbing") {
           plm.push(i.values);
           plmAdded = true;    
         }
+
 
       });
 
@@ -142,7 +185,13 @@ $(document).ready(function() {
         other.push(0);
       if (!plmAdded)
         plm.push(0);
-  
+      if (!roofAdded);
+        roof.push(0);
+      if (!fncAdded);
+        fnc.push(0);
+      if (!pspAdded);
+        psp.push(0);
+
     });
 
     var chart = c3.generate({
@@ -191,11 +240,11 @@ $(document).ready(function() {
 
   forceDelay(1000);
 
-  var urlLast30InspectionsQuery = "SELECT \"PermitNum\",\"InspType\",\"Result\",\"ScheduledDate\",\"InspectedDate\",\"InspectionNotes\" from \"inspectionsResourceId\" where \"InspectedDate\" > \'" + startDate + "' order by \"InspectedDate\" DESC";
+  var urlLast365InspectionsQuery = "SELECT \"PermitNum\",\"InspType\",\"Result\",\"ScheduledDate\",\"InspectedDate\",\"InspectionNotes\" from \"inspectionsResourceId\" where \"InspectedDate\" > \'" + startDate + "' order by \"InspectedDate\" DESC";
   
-  var urlLast30Inspections = baseURI + encodeURIComponent(urlLast30InspectionsQuery.replace("inspectionsResourceId", inspectionsResourceId));
+  var urlLast365Inspections = baseURI + encodeURIComponent(urlLast365InspectionsQuery.replace("inspectionsResourceId", inspectionsResourceId));
 
-  requestJSON(urlLast30Inspections, function(json) {
+  requestJSON(urlLast365Inspections, function(json) {
     var records = json.result.records;
 
     $("#inspectionCount").text(records.length);
@@ -230,17 +279,230 @@ $(document).ready(function() {
       bindto: '#permitTypes',
       data: {
         columns: permitTypes,
-        type : 'pie'
-      },
+        type : 'pie',
+        onmouseover: function (d, i) {
+          console.log("onmouseover", d.id, i);
+          requestJSON(urlLast7, function(json) {
+              var records = json.result.records;
+              //extract permits applied for in last 7 days
+              var appliedLast7Days = records.filter(function(d) { 
+                return moment(d.AppliedDate) > shortStartDateMoment; 
+              });
+              
+              //extract permits issued in last 7 days
+              var issuedLast7Days = records.filter(function(d) { 
+                return moment(d.IssuedDate) > shortStartDateMoment; 
+              });
+
+              console.log(d);
+
+              switch(d.id) {
+
+                case "Building":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Building";
+                  });
+                  break;
+
+                case "Electrical":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Electrical";
+                  });
+                  break;
+
+                case "Plumbing":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Plumbing";
+                  });
+                  break;
+
+                case "Mechanical":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                                                          console.log("ERROR2!");
+                    return o.PermitTypeMapped === "Mechanical";
+                  });
+                  break;
+
+                case "Roof":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    console.log("ERROR!")
+                    return o.PermitTypeMapped === "Roof";
+                  });
+                  break;
+
+                case "Grading":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Grading";
+                  });
+                  break;
+
+                case "Demolition":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Demolition";
+                  });
+                  break;
+
+                case "Pool/Spa":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Pool/Spa";
+                  });
+                  break;
+
+                case "Fence":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Fence";
+                  });
+                  break;
+
+                case "Other":
+                  var appliedLastWeek = appliedLast7Days.filter(function(o) {
+                    return o.PermitTypeMapped === "Other";
+                  });
+                  break;
+              }
+              
+              var appliedByDayByType = [];
+              var appliedByDayByType = d3.nest()
+                .key(function(d) { return d.AppliedDate })
+                .key(function(d) { return d.PermitTypeMapped })
+                .rollup (function(v) { return v.length })
+                .entries(appliedLastWeek);
+
+              var bld = ['Building'];
+              var demo = ['Demolition'];
+              var ele = ['Electrical'];
+              var other = ['Other'];
+              var mech = ['Mechanical'];
+              var plm = ['Plumbing'];
+              var psp = ['Pool/Spa'];
+              var fnc = ['Fence'];
+              var roof = ['Roof'];
+              var datesArray = [];
+              var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false, plmAdded = false;
+              var tempArray = [];
+
+              appliedByDayByType.forEach(function(d) {
+
+                console.log(d);
+
+                var dArray = d.key;
+                datesArray.push(dArray);
+
+                bldAdded = false;
+                demoAdded = false;
+                eleAdded = false;
+                otherAdded = false;
+                mechAdded = false;
+                plmAdded = false;
+                pspAdded = false;
+                fncAdded = false;
+                roofAdded = false;
+
+                d.values.forEach(function(i) {
+                  
+                  if (i.key == "Building") {
+                    bld.push(i.values);
+                    bldAdded = true;
+                  }
+                  if (i.key == "Demolition") {
+                    demo.push(i.values);
+                    demoAdded = true;
+                  }
+                  if (i.key == "Electrical") {
+                    ele.push(i.values);
+                    eleAdded = true;
+                  }
+                  if (i.key == "Other") {
+                    other.push(i.values);
+                    otherAdded = true;
+                  }
+                  if (i.key == "Mechanical") {
+                    mech.push(i.values);
+                    mechAdded = true;
+                  }
+                  if (i.key == "Plumbing") {
+                    plm.push(i.values);
+                    plmAdded = true;    
+                  }
+                  if (i.key == "Roof") {
+                    roof.push(i.values);
+                    roofAdded = true;    
+                  }
+                  if (i.key == "Pool/Spa") {
+                    psp.push(i.values);
+                    pspAdded = true;    
+                  }
+                  if (i.key == "Fence") {
+                    fnc.push(i.values);
+                    fncAdded = true;    
+                  }
+
+                });
+
+                if (!bldAdded)
+                  bld.push(0);
+                if (!demoAdded)
+                  demo.push(0);
+                if (!eleAdded)
+                  ele.push(0);
+                if (!mechAdded)
+                  mech.push(0);
+                if (!otherAdded)
+                  other.push(0);
+                if (!plmAdded)
+                  plm.push(0);
+                if (!roofAdded);
+                  roof.push(0);
+                if (!fncAdded);
+                  fnc.push(0);
+                if (!pspAdded);
+                  psp.push(0);
+            
+              });
+
+            var chart = c3.generate({
+                  bindto: '#byDay',
+                  data: {
+                    columns: [
+                        bld,
+                        demo,
+                        ele,
+                        other,
+                        mech,
+                        plm,
+                        roof,
+                        fnc,
+                        psp
+                    ],
+                    type: 'bar'//,
+                    //groups: [['Building','Electrical','Other','Mechanical','Plumbing']]
+                  },
+                  grid: {
+                    y: {
+                      lines: [{value:0}]
+                    }
+                  },
+                  axis: {
+                    x: {
+                      type: 'category',
+                      categories: datesArray
+                    }
+                  }
+                });
+              
+              // console.log(appliedLast7Days);
+          });
+          console.log('works!')
+        },
       donut: {
         title: "Permit Types"
-      }
-    }); 
-        
+      },
+    } 
+    })    
   });
 
   /********************************************************************************/
-  /* Permits by type (START)
+  /* Permits by type (END)
   /********************************************************************************/ 
 
   /********************************************************************************/
@@ -257,7 +519,7 @@ $(document).ready(function() {
     records.forEach(function(d) {
       var dateDataObj = {};
       var appliedDate = moment(d.AppliedDate);
-      var issuedDate = moment(d.issuedDate);
+      var issuedDate = moment(d.IssuedDate);
       dateDataObj.permitNum = d.PermitNum;
       dateDataObj.permitType = d.PermitTypeMapped;
       dateDataObj.dateDifference = Math.abs(appliedDate.diff(issuedDate, 'd'));
