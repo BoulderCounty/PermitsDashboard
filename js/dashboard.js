@@ -1145,7 +1145,7 @@ function month_select(){
     console.log(iSD);
 
 
-    var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+    var startDate = moment().subtract(iSD, 'M').format("YYYY-MM-DD");
     var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
     var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
@@ -1178,6 +1178,9 @@ function month_select(){
       }
     });
   });
+
+  $('#pieDrop').text((iSD) + ' Months ');
+
     function requestJSON(url, callback) {
     $.ajax({
       beforeSend: function() {
@@ -1197,7 +1200,7 @@ function year_select(){
     console.log(iSD);
 
 
-    var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+    var startDate = moment().subtract(iSD, 'Y').format("YYYY-MM-DD");
     var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
     var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
@@ -1230,6 +1233,9 @@ function year_select(){
       }
     });
   });
+
+  $('#pieDrop').text((iSD/12) + ' Years ');
+
     function requestJSON(url, callback) {
     $.ajax({
       beforeSend: function() {

@@ -99,26 +99,13 @@
                 <div class="col-lg-12">
 
 
-                      <div class="clearfix dropdown"> 
-                        <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
-<!-- CSS -->                  <select id="mainSumSelect" style="font-size:24px;"><span class="caret"></span>>
-                                <option selected="selected" value="1">One month</option>
-                                <option value="2">Two months</option>
-                                <option value="3">Three months</option>
-                                <option value="4">Four months</option>
-                                <option value="5">Five months</option>
-                                <option value="6">Six months</option>
-                                <option value="7">Seven months</option>
-                                <option value="8">Eight months</option>
-                                <option value="9">Nine months</option>
-                                <option value="10">Ten months</option>
-                                <option value="11">Eleven months</option>
-                                <option value="12">Twelve months</option>
-</select>
-                           
-                        </div> 
-<!-- CSS -->                  <div style="font-size:18px;"> in summary
-                              <span class="inline">; it's now <span id="demo"> </span>.</span></div>
+                    <div class="clearfix dropdown"> 
+                        <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"></div> 
+                        <span class="inline">*It's now __<span id="demo"> </span>__</span>
+                    </div>
+                    <div>________________________</div>
+<!-- CSS -->        <div style="font-size:24px;">In the last <span>month</span>...</div>
+
 
 <!-- JAVASCRIPT NEEDS TO COME OUT -->
 
@@ -236,35 +223,30 @@
 
             <!-- CSS -->          <div class="dropdown" style="padding-left: 75px;"> 
                                     <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
-            <!-- CSS -->               <button class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown" style="font-size:24px;">A Year <span class="caret"></span></button>
+            <!-- CSS -->               <button class="btn btn-lg btn-link dropdown-toggle" id="pieDrop" data-toggle="dropdown" style="font-size:24px;">A Year <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
 
                                          <li onclick="month_select();">Select months to display:<select id="monthly-dropdown-menu">
-                                            <option value="30">One month</option>
-                                            <option value="61">Two months</option>
-                                            <option value="91">Three months</option>
-                                            <option value="122">Four months</option>
-                                            <option value="152">Five months</option>
-                                            <option value="183">Six months</option>
-                                            <option value="213">Seven months</option>
-                                            <option value="243">Eight months</option>
-                                            <option value="273">Nine months</option>
-                                            <option value="304">Ten months</option>
-                                            <option value="334">Eleven months</option>
-                                            <option value="365" selected="selected">Twelve months</option>
+                                            <option selected="selected" value="1">One month</option>
+                                            <option value="2">Two months</option>
+                                            <option value="3">Three months</option>
+                                            <option value="4">Four months</option>
+                                            <option value="5">Five months</option>
+                                            <option value="6">Six months</option>
+                                            <option value="7">Seven months</option>
+                                            <option value="8">Eight months</option>
+                                            <option value="9">Nine months</option>
+                                            <option value="10">Ten months</option>
+                                            <option value="11">Eleven months</option>
+                                            <option value="12">Twelve months</option>
                                         </select></li>
 
                                         <li onclick="year_select();">Select years to display:<select id="yearly-dropdown-menu">
-                                            <option value="365" selected="selected">One year</option>
-                                            <option value="730">Two years</option>
-                                            <option value="1095">Three years</option>
-                                            <option value="1461">Four years</option>
-                                            <option value="1826">Five years</option>
-                                            <option value="2191">Six years</option>
-                                            <option value="2556">Seven years</option>
-                                            <option value="2922">Eight years</option>
-                                            <option value="3287">Nine years</option>
-                                            <option value="3652">Ten years</option>
+                                            <option value="12" selected="selected">One year</option>
+                                            <option value="24">Two years</option>
+                                            <option value="36">Three years</option>
+                                            <option value="48">Four years</option>
+                                            <option value="60">Five years</option>
                                         </select></li>
                                        
                                     </div> 
