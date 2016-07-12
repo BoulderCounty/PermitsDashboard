@@ -97,7 +97,37 @@
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 class="section-header">In the last 30 days...</h3>
+
+
+                      <div class="clearfix dropdown"> 
+                        <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
+<!-- CSS -->                  <select id="mainSumSelect" style="font-size:24px;"><span class="caret"></span>>
+                                <option selected="selected" value="1">One month</option>
+                                <option value="2">Two months</option>
+                                <option value="3">Three months</option>
+                                <option value="4">Four months</option>
+                                <option value="5">Five months</option>
+                                <option value="6">Six months</option>
+                                <option value="7">Seven months</option>
+                                <option value="8">Eight months</option>
+                                <option value="9">Nine months</option>
+                                <option value="10">Ten months</option>
+                                <option value="11">Eleven months</option>
+                                <option value="12">Twelve months</option>
+</select>
+                           
+                        </div> 
+<!-- CSS -->                  <div style="font-size:18px;"> in summary
+                              <span class="inline">; it's now <span id="demo"> </span>.</span></div>
+
+<!-- JAVASCRIPT NEEDS TO COME OUT -->
+
+                                <script>
+                                document.getElementById("demo").innerHTML = (Date()).substring(0,15);
+                                </script>
+
+<!-- END JAVASCRIPT -->
+
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -202,7 +232,46 @@
                             <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last 30 days)</small>
                         </div>
                         <div class="panel-body">
-                            <div id="permitTypes"></div>
+                             <div class="container">
+
+            <!-- CSS -->          <div class="dropdown" style="padding-left: 75px;"> 
+                                    <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
+            <!-- CSS -->               <button class="btn btn-lg btn-link dropdown-toggle" data-toggle="dropdown" style="font-size:24px;">A Year <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+
+                                         <li onclick="month_select();">Select months to display:<select id="monthly-dropdown-menu">
+                                            <option value="30">One month</option>
+                                            <option value="61">Two months</option>
+                                            <option value="91">Three months</option>
+                                            <option value="122">Four months</option>
+                                            <option value="152">Five months</option>
+                                            <option value="183">Six months</option>
+                                            <option value="213">Seven months</option>
+                                            <option value="243">Eight months</option>
+                                            <option value="273">Nine months</option>
+                                            <option value="304">Ten months</option>
+                                            <option value="334">Eleven months</option>
+                                            <option value="365" selected="selected">Twelve months</option>
+                                        </select></li>
+
+                                        <li onclick="year_select();">Select years to display:<select id="yearly-dropdown-menu">
+                                            <option value="365" selected="selected">One year</option>
+                                            <option value="730">Two years</option>
+                                            <option value="1095">Three years</option>
+                                            <option value="1461">Four years</option>
+                                            <option value="1826">Five years</option>
+                                            <option value="2191">Six years</option>
+                                            <option value="2556">Seven years</option>
+                                            <option value="2922">Eight years</option>
+                                            <option value="3287">Nine years</option>
+                                            <option value="3652">Ten years</option>
+                                        </select></li>
+                                       
+                                    </div> 
+                                  <div> of data</div></div>  displayed</div>
+                                <div id="permitTypes"></div>
+                            </div>
+
                         </div>
                         <!-- /.panel-body -->
                     </div>

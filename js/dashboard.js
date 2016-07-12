@@ -1,9 +1,11 @@
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
-var startDate = moment().subtract(365, 'd').format("YYYY-MM-DD");
+var iSD = document.getElementById('monthly-dropdown-menu').value;
+iSD = 365;
+var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
 var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
-var startDateMoment = moment().subtract(365, 'd');
+var startDateMoment = moment().subtract(iSD, 'd');
 var shortStartDateMoment = moment().subtract(30, 'd');
 
 $(document).ready(function() {
@@ -759,10 +761,14 @@ $(document).ready(function() {
               requestJSON(urlLast30, function(json) {
                 var records = json.result.records;
                 //extract permits applied for in last 7 days
-                records.forEach(function(record, inc, array) {
-                  record.AppliedDate = moment(record.AppliedDate).format('MMMM');
-                });
-
+              
+/*
+*******************************************
+**
+** THE FOLLOWING SEVERAL HUNDRED LINES OF CODE DEAL WITH THE LEGEND INTERACTION AND NEED TO BE REFACTORED
+**
+*******************************************
+*/
                 console.log(records);
 
                 var appliedLast30Days = records.filter(function(d) { 
@@ -798,14 +804,12 @@ $(document).ready(function() {
 
                   case "Mechanical":
                     var appliedLastWeek = appliedLast30Days.filter(function(o) {
-                      console.log("ERROR2!");
                       return o.PermitTypeMapped === "Mechanical";
                     });
                     break;
 
                   case "Roof":
                     var appliedLastWeek = appliedLast30Days.filter(function(o) {
-                      console.log("ERROR!")
                       return o.PermitTypeMapped === "Roof";
                     });
                     break;
@@ -856,9 +860,10 @@ $(document).ready(function() {
               var plm = ['Plumbing'];
               var psp = ['Pool/Spa'];
               var fnc = ['Fence'];
+              var grad = ['Grading'];
               var roof = ['Roof'];
               var datesArray = [];
-              var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false, plmAdded = false;
+              var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false, plmAdded = false, pspAdded = false, fncAdded = false, gradAdded = false, roofAdded = false;
               var tempArray = [];
 
               appliedByDayByType.forEach(function(d) {
@@ -877,6 +882,7 @@ $(document).ready(function() {
                 pspAdded = false;
                 fncAdded = false;
                 roofAdded = false;
+                gradAdded = false;
 
                 d.values.forEach(function(i) {
                   
@@ -1081,6 +1087,47 @@ $(document).ready(function() {
   /********************************************************************************/
   /* Average Issuance Days (END)
   /********************************************************************************/
+
+  // function month_select(){
+  //   var iSD = document.getElementById('monthly-dropdown-menu').value;
+  //   console.log(iSD);
+
+
+  //   var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+  //   var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+  //   var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+      
+  //   var records = [];
+
+  //   requestJSON(permitTypesQ, function(json) {
+  //     var records = json.result.records 
+
+  //     records.forEach(function(record, inc, array) {
+  //       record.AppliedDate = moment(record.AppliedDate).format('MMMM');
+  //     })   
+    
+  //     console.log(records);
+
+  //     var permitTypes = [];
+
+  //     //Get a distinct list of neighborhoods
+  //     for (var i = 0; i < records.length; i++) {
+  //       permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+  //     }
+
+  //     var chart = c3.generate({
+  //       bindto: '#permitTypes',
+  //       data: {
+  //         columns: permitTypes,
+  //         type : 'pie',
+  //       },
+  //       donut: {
+  //         title: "Permit Types"
+  //       }
+  //     });
+  //   });
+
+  // };
              
 });
 
@@ -1091,3 +1138,108 @@ function forceDelay(millis) {
   do { curDate = new Date(); } 
     while (curDate - date < millis);
 }
+
+
+function month_select(){
+    var iSD = document.getElementById('monthly-dropdown-menu').value;
+    console.log(iSD);
+
+
+    var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+    var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+    var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+      
+    var records = [];
+
+  requestJSON(permitTypesQ, function(json) {
+    var records = json.result.records 
+
+    records.forEach(function(record, inc, array) {
+      record.AppliedDate = moment(record.AppliedDate).format('MMMM');
+    })   
+  
+    console.log(records);
+
+    var permitTypes = [];
+
+    //Get a distinct list of neighborhoods
+    for (var i = 0; i < records.length; i++) {
+      permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+    }
+
+    var chart = c3.generate({
+      bindto: '#permitTypes',
+      data: {
+        columns: permitTypes,
+        type : 'pie',
+      },
+      donut: {
+        title: "Permit Types"
+      }
+    });
+  });
+    function requestJSON(url, callback) {
+    $.ajax({
+      beforeSend: function() {
+        // Handle the beforeSend event
+      },
+      url: url,
+      complete: function(xhr) {
+        callback.call(null, xhr.responseJSON);
+         
+      }
+    });
+  }
+};
+
+function year_select(){
+    var iSD = document.getElementById('yearly-dropdown-menu').value;
+    console.log(iSD);
+
+
+    var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+    var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+    var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+      
+    var records = [];
+
+  requestJSON(permitTypesQ, function(json) {
+    var records = json.result.records 
+
+    records.forEach(function(record, inc, array) {
+      record.AppliedDate = moment(record.AppliedDate).format('MMMM');
+    })   
+  
+    console.log(records);
+
+    var permitTypes = [];
+
+    //Get a distinct list of neighborhoods
+    for (var i = 0; i < records.length; i++) {
+      permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+    }
+
+    var chart = c3.generate({
+      bindto: '#permitTypes',
+      data: {
+        columns: permitTypes,
+        type : 'pie',
+      },
+      donut: {
+        title: "Permit Types"
+      }
+    });
+  });
+    function requestJSON(url, callback) {
+    $.ajax({
+      beforeSend: function() {
+        // Handle the beforeSend event
+      },
+      url: url,
+      complete: function(xhr) {
+        callback.call(null, xhr.responseJSON);
+         
+      }
+    });
+  }
+};
