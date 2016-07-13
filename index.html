@@ -89,23 +89,29 @@
 
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">Dashboard</h1>
+                <div class="col-lg-1"></div>
+                <div class="col-lg-9">
+                    <h1 class="page-header" style="margin-right: auto; margin-left: auto">Dashboard</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-4">
 
+                </div>
+
+                <div class="col-lg-4">
 
                     <div class="clearfix dropdown"> 
                         <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"></div> 
-                        <span class="inline">*It's now __<span id="demo"> </span>__</span>
+                        <span class="inline">Today is _ <span id="demo"> </span> _</span>
                     </div>
                     <div>________________________</div>
-<!-- CSS -->        <div style="font-size:24px;">In the last <span>month</span>...</div>
-
+                <div class="col-lg-12"> . </div>
+<!-- CSS -->            <div style="font-size:24px;">In the last <span>year</span>...</div>
+                </div>
+                <div class="col-lg-12"> . </div>
 
 <!-- JAVASCRIPT NEEDS TO COME OUT -->
 
@@ -115,10 +121,10 @@
 
 <!-- END JAVASCRIPT -->
 
-                </div>
                 <!-- /.col-lg-12 -->
             </div>
             <div class="row">
+                <div class="col-lg-1"></div>
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-red">
                         <div class="panel-heading">
@@ -182,20 +188,7 @@
             </div>
             <!-- /.row -->
             <div class="row">
-                <div class="col-lg-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i><span id='toggleWRollover'> Applications by Month </span>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            
-                                <div id="byDay"></div>
-                           
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
+                <!-- /.panel -->
                     <!-- <div class="panel panel-default">
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Days to Permit Issuance <small>(Last 30 days)</small>
@@ -216,14 +209,14 @@
                     <!-- /.panel -->
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last 30 days)</small>
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last <span id ='pieHeader'>year</span>)</small>
                         </div>
                         <div class="panel-body">
                              <div class="container">
 
             <!-- CSS -->          <div class="dropdown" style="padding-left: 75px;"> 
                                     <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
-            <!-- CSS -->               <button class="btn btn-lg btn-link dropdown-toggle" id="pieDrop" data-toggle="dropdown" style="font-size:24px;">A Year <span class="caret"></span></button>
+            <!-- CSS -->               <button class="btn btn-lg btn-link dropdown-toggle" id="pieDrop" data-toggle="dropdown" style="font-size:24px;"> <span class="caret"></span> A Year</button>
                                     <ul class="dropdown-menu">
 
                                          <li onclick="month_select();">Select months to display:<select id="monthly-dropdown-menu">
@@ -254,6 +247,19 @@
                                 <div id="permitTypes"></div>
                             </div>
 
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i><span id='toggleWithPieClick'> Applications by Month </span>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            
+                                <div id="byDay"></div>
+                           
                         </div>
                         <!-- /.panel-body -->
                     </div>
