@@ -1,16 +1,19 @@
+// SET GLOBAL VARIABLES
+
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
-var iSD = document.getElementById('monthly-dropdown-menu').value;
-iSD = 365;
-var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
-var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
-var startDateMoment = moment().subtract(iSD, 'd');
-var shortStartDateMoment = moment().subtract(30, 'd');
-
-debugger;
+var initialStartDate = 365;
+var startDate = moment().subtract(initialStartDate, 'd').format("YYYY-MM-DD");
+// var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
+var startDateMoment = moment().subtract(initialStartDate, 'd');
+// var shortStartDateMoment = moment().subtract(30, 'd');
 
 $(document).ready(function() {
+
+  // Grab dropdown length of data to "breakdown"
+  initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+
      
   // Helper function to make request for JSONP.
   function requestJSON(url, callback) {
@@ -30,42 +33,49 @@ $(document).ready(function() {
   /* Get all activity in last year (START)
   /********************************************************************************/
 
+  // Original data grab
+
+      // set up SQL query string
   var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
-  var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
+  // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
+      // encode URL
   var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
-  var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
+  // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
   requestJSON(urlLast365, function(json) {
     var records = json.result.records;
 
-    //extract permits applied for in last 30 days
+    //extract permits applied for the last year
     var appliedLast365Days = records.filter(function(d) { 
       return moment(d.AppliedDate) > startDateMoment; 
     });
 
-    //extract permits applied for in last 30 days
-    var appliedLast30Days = records.filter(function(d) { 
-      return moment(d.AppliedDate) > shortStartDateMoment; 
-    });
+    // //extract permits applied for in last 30 days
+    // var appliedLast30Days = records.filter(function(d) { 
+    //   return moment(d.AppliedDate) > shortStartDateMoment; 
+    // });
     
-    //extract permits issued in last 30 days
+    //extract permits issued in last year
     var issuedLast365Days = records.filter(function(d) { 
       return moment(d.IssuedDate) > startDateMoment; 
     });
 
-    //extract permits issued in last 30 days
-    var issuedLast30Days = records.filter(function(d) { 
-      return moment(d.IssuedDate) > shortStartDateMoment; 
-    });
+    // //extract permits issued in last 30 days
+    // var issuedLast30Days = records.filter(function(d) { 
+    //   return moment(d.IssuedDate) > shortStartDateMoment; 
+    // });
 
-    //total construction value for new project in last 30 days
+    //total construction value for new project in last year
     var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
       return Number(d.EstProjectCost);
     });
 
 
+    // format record.AppliedDate to drop days and years
+    // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
+
     records.forEach(function(record, inc, array) {
-      record.AppliedDate = moment(record.AppliedDate).format('MMM');
+      record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
     })
 
     $("#newApplications").text(appliedLast365Days.length);
@@ -75,7 +85,9 @@ $(document).ready(function() {
     /********************************************************************************/
     /* Load recent permit applications (Start)
     /********************************************************************************/
-    
+    /* NEED TO EXPAND THIS SECTION TO INCLUDE SUBSET AND 'INFINITE SCROLL'
+    /********************************************************************************/
+
     var permitsToLoad = 10;
     var totalPermits = appliedLast365Days.length-1;
     var permitStart = 1
@@ -95,6 +107,9 @@ $(document).ready(function() {
     /* Calculated permits applied for by day and by type (START)
     /********************************************************************************/
     
+    // (A) creates the data object
+    // FURTHER DESCRIPTION NECESSARY {key_Month : [ {key_type : numb }]}
+
     var appliedByDayByType = d3.nest()
       .key(function(d) { return d.AppliedDate })
       .key(function(d) { return d.PermitTypeMapped })
@@ -102,6 +117,8 @@ $(document).ready(function() {
       .entries(appliedLast365Days);
 
     console.log(appliedByDayByType);
+
+    // (B) Initiate arrays with type label 
 
     var bld = ['Building'];
     var demo = ['Demolition'];
@@ -114,10 +131,12 @@ $(document).ready(function() {
     var roof = ['Roof'];
     var grad = ['Grading'];
     var datesArray = [];
-    // var bldAdded = false, demoAdded = false, eleAdded = false, otherAdded = false, mechAdded = false,  pspAdded = false, fncAdded = false, roofAdded = false, plmAdded = false, gradAdded = false;
-    var tempArray = [];
+
+    // (C) Enumerates each month
 
     appliedByDayByType.forEach(function(d) {
+
+      // (D) initiates array of months
 
       console.log(d);
       var dArray = d.key;
@@ -136,12 +155,17 @@ $(document).ready(function() {
       gradAdded = false;
 
 
+      // (E) Enumerates each type
+
       d.values.forEach(function(i) {
         
+        // (F) each block will push the value into the type-labeled array and set flag to avoid null addition
+
         if (i.key == "Building") {
           bld.push(i.values);
           bldAdded = true;
         }
+
         if (i.key == "Demolition") {
           demo.push(i.values);
           demoAdded = true;
@@ -183,6 +207,8 @@ $(document).ready(function() {
 
       });
 
+      // (G) Throws a blank into each arrays month if there were no records
+
       if (!bldAdded)
         bld.push(0);
       if (!demoAdded)
@@ -206,6 +232,9 @@ $(document).ready(function() {
 
 
     });
+
+
+    // (H) create the bar chart with months and types breakdown 
 
     var chart = c3.generate({
       bindto: '#byDay',
@@ -250,45 +279,19 @@ $(document).ready(function() {
     
   });
   /********************************************************************************/
-  /* Get all permit details in last 30 days (END)
+  /* Get all permit details in last year (END)
   /********************************************************************************/
   
-  /********************************************************************************/
-  /* Get all inspections in last 30 days (START)
-  /********************************************************************************/
-
-  // forceDelay(1000);
-
-  // var urlLast365InspectionsQuery = "";
-
-  // var urlLast365InspectionsQuery = "SELECT \"PermitNum\",\"InspType\",\"Result\",\"ScheduledDate\",\"InspectedDate\",\"InspectionNotes\" from \"inspectionsResourceId\" where \"InspectedDate\" > \'" + startDate + "' order by \"InspectedDate\" DESC";
-  
-  // var urlLast365Inspections = "";
-
-  // var urlLast365Inspections = baseURI + encodeURIComponent(urlLast365InspectionsQuery.replace("inspectionsResourceId", inspectionsResourceId));
-
-  // requestJSON(urlLast365Inspections, function(json) {
-  //   var records = json.result.records;
-
-  //   $("#inspectionCount").text(records.length);
-
-  // });
-  
-  /********************************************************************************/
-  /* Get all inspections in last 30 days (END)
-  /********************************************************************************/
 
   /********************************************************************************/
-  /* Permits by type (START)
+  /* Permits by type (START) - pie chart showing ratio of types
   /********************************************************************************/ 
-
-  forceDelay(1000);
 
   var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
   var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
-    var records = [];
+  var records = [];
 
   requestJSON(permitTypesQ, function(json) {
     var records = json.result.records 
@@ -314,16 +317,16 @@ $(document).ready(function() {
         type : 'donut',
         onclick: function (d, i) {
           console.log("onclick", d.id, i);
-          requestJSON(urlLast30, function(json) {
+          requestJSON(urlLast365, function(json) {
               var records = json.result.records;
 
               //extract permits applied for in last 30 days
-              var appliedLast30Days = records.filter(function(d) { 
-                return moment(d.AppliedDate) > shortStartDateMoment; 
+              var appliedLast365Days = records.filter(function(d) { 
+                return moment(d.AppliedDate) > startDateMoment; 
               });
 
 
-              appliedLast30Days.forEach(function(record, inc, array) {
+              appliedLast365Days.forEach(function(record, inc, array) {
                 if ($('div#byDay > svg').attr('width') > 768){
                   record.AppliedDate = moment(record.AppliedDate).format('D MMMM');
                 }
@@ -332,11 +335,9 @@ $(document).ready(function() {
                 }
               }); 
               
-              console.log(appliedLast30Days);
-
               //extract permits issued in last 30 days
-              var issuedLast30Days = records.filter(function(d) { 
-                return moment(d.IssuedDate) > shortStartDateMoment; 
+              var issuedLast365Days = records.filter(function(d) { 
+                return moment(d.IssuedDate) > startDateMoment; 
               });
 
               console.log(d);
@@ -344,61 +345,61 @@ $(document).ready(function() {
               switch(d.id) {
 
                 case "Building":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Building";
                   });
                   break;
 
                 case "Electrical":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Electrical";
                   });
                   break;
 
                 case "Plumbing":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Plumbing";
                   });
                   break;
 
                 case "Mechanical":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Mechanical";
                   });
                   break;
 
                 case "Roof":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Roof";
                   });
                   break;
 
                 case "Grading":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Grading";
                   });
                   break;
 
                 case "Demolition":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Demolition";
                   });
                   break;
 
                 case "Pool/Spa":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Pool/Spa";
                   });
                   break;
 
                 case "Fence":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Fence";
                   });
                   break;
 
                 case "Other":
-                  var appliedLastWeek = appliedLast30Days.filter(function(o) {
+                  var appliedLastWeek = appliedLast365Days.filter(function(o) {
                     return o.PermitTypeMapped === "Other";
                   });
                   break;
@@ -1094,11 +1095,11 @@ $(document).ready(function() {
   /********************************************************************************/
 
   // function month_select(){
-  //   var iSD = document.getElementById('monthly-dropdown-menu').value;
-  //   console.log(iSD);
+  //   var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+  //   console.log(initialStartDate);
 
 
-  //   var startDate = moment().subtract(iSD, 'd').format("YYYY-MM-DD");
+  //   var startDate = moment().subtract(initialStartDate, 'd').format("YYYY-MM-DD");
   //   var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
   //   var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
@@ -1146,28 +1147,28 @@ function forceDelay(millis) {
 
 
 function month_select(){
-    var iSD = document.getElementById('monthly-dropdown-menu').value;
-    console.log(iSD);
+    var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+    console.log(initialStartDate);
 
-    var startDate = moment().subtract(iSD, 'M').format("YYYY-MM-DD");
+    var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
     var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
     var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
     
 
-    console.log(startDate, "***", shortStartDate);
+    console.log(startDate, "***", startDate);
 
     var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
-    var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
+    // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
     var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
-    var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
+    // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
 
-    console.log(urlLast30Query, "---");
+    // console.log(urlLast30Query, "---");
     console.log(urlLast365Query, "-------------");
   
     var records = [];
 
-    requestJSON(urlLast30, function(json) {
+    requestJSON(urlLast365, function(json) {
 
       var records = json.result.records 
 
@@ -1187,7 +1188,7 @@ function month_select(){
       permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
     }
 
-    var startDateMoment = moment().subtract(iSD, 'M');
+    var startDateMoment = moment().subtract(initialStartDate, 'M');
 
     console.log(startDateMoment);
 
@@ -1360,7 +1361,7 @@ function month_select(){
           var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
           var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
-          var startDateMoment = moment().subtract(iSD, 'M');
+          var startDateMoment = moment().subtract(initialStartDate, 'M');
 
           requestJSON(urlLast365, function(json) {
               var records = json.result.records;
