@@ -91,7 +91,7 @@
             <div class="row">
                 <div class="col-lg-1"></div>
                 <div class="col-lg-9">
-                    <h1 class="page-header" style="margin-right: auto; margin-left: auto">Dashboard</h1>
+                    <h1 class="page-header">Dashboard</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -103,9 +103,9 @@
 
                 <div class="col-lg-4">
 
-                    <div class="clearfix dropdown"> 
-                        <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"></div> 
-                        <span class="inline">Today is _ <span id="demo"> </span> _</span>
+                    <div> 
+                        <div></div> 
+<!-- CSS -->            <span class="inline">Today's date: <span id="demo" style="color: magenta;"> </span></span>
                     </div>
                     <div>________________________</div>
                 <div class="col-lg-12"> . </div>
@@ -211,43 +211,37 @@
                         <div class="panel-heading">
                             <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last <span id ='pieHeader'>year</span>)</small>
                         </div>
-                        <div class="panel-body">
-                             <div class="container">
-
-            <!-- CSS -->          <div class="dropdown" style="padding-left: 75px;"> 
-                                    <div class="btn-group inline pull-left dropup" data-toggle="buttons-checkbox"> 
-                                       <!--  <ul class="dropdown-menu">
-                                             <li onclick="month_select();">Select months to display: -->
-                                            <select onchange="month_select();" id="monthly-dropdown-menu">
-                                                <optgroup label="Months">    
-                                                    <option value="1">One month</option>
-                                                    <option value="2">Two months</option>
-                                                    <option value="3">Three months</option>
-                                                    <option value="4">Four months</option>
-                                                    <option value="5">Five months</option>
-                                                    <option value="6">Six months</option>
-                                                    <option value="7">Seven months</option>
-                                                    <option value="8">Eight months</option>
-                                                    <option value="9">Nine months</option>
-                                                    <option value="10">Ten months</option>
-                                                    <option value="11">Eleven months</option>
-                                                </optgroup>
-                                            <!-- </li> -->
-                                                <optgroup label="Years">
-                                                    <option value="12" selected="selected">One year</option>
-                                                    <option value="24">Two years</option>
-                                                    <option value="36">Three years</option>
-                                                    <option value="48">Four years</option>
-                                                    <option value="60">Five years</option>
-                                                </optgroup>
-                                            </select>
-                                            <!-- </li> -->
-                                       
+                        <div>    
+                            <div class="panel-body">
+                                <div class="container">
+                                    <div> 
+                                        <select onchange="month_select();" id="monthly-dropdown-menu">
+                                            <optgroup label="Months">    
+                                                <option value="1">One month</option>
+                                                <option value="2">Two months</option>
+                                                <option value="3">Three months</option>
+                                                <option value="4">Four months</option>
+                                                <option value="5">Five months</option>
+                                                <option value="6">Six months</option>
+                                                <option value="7">Seven months</option>
+                                                <option value="8">Eight months</option>
+                                                <option value="9">Nine months</option>
+                                                <option value="10">Ten months</option>
+                                                <option value="11">Eleven months</option>
+                                            </optgroup>
+                                            <optgroup label="Years">
+                                                <option value="12" selected="selected">One year</option>
+                                                <option value="24">Two years</option>
+                                                <option value="36">Three years</option>
+                                                <option value="48">Four years</option>
+                                                <option value="60">Five years</option>
+                                            </optgroup>
+                                        </select>
+                                    of data displayed
                                     </div> 
-                                  <div></div></div>of data displayed</div>
+                                </div></div>
                                 <div id="permitTypes"></div>
                             </div>
-
                         </div>
                         <!-- /.panel-body -->
                     </div>
