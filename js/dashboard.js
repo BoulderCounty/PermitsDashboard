@@ -1149,8 +1149,12 @@ function month_select(){
     var iSD = document.getElementById('monthly-dropdown-menu').value;
     console.log(iSD);
 
-    console.log(startDate, "***", shortStartDate);
+    var startDate = moment().subtract(iSD, 'M').format("YYYY-MM-DD");
+    var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+    var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+    
 
+    console.log(startDate, "***", shortStartDate);
 
     var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
     var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
@@ -1160,24 +1164,17 @@ function month_select(){
 
     console.log(urlLast30Query, "---");
     console.log(urlLast365Query, "-------------");
-
-
-
-
-    var startDate = moment().subtract(iSD, 'M').format("YYYY-MM-DD");
-    var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
-    var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
-      
+  
     var records = [];
 
-    requestJSON(urlLast365, function(json) {
+    requestJSON(urlLast30, function(json) {
 
       var records = json.result.records 
 
       console.log(records, "#");
 
       records.forEach(function(record, inc, array) {
-      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
       console.log(record.AppliedDate, "*");
     })   
   
