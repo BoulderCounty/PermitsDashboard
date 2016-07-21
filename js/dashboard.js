@@ -420,6 +420,8 @@ $(document).ready(function() {
                       });
                     });
 
+                    var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+
                     console.log(returnObj);
 
                     console.log(Object.keys(output)[0],'____________________________');
@@ -447,16 +449,16 @@ $(document).ready(function() {
                         ],
                         type: 'bar',
                         colors: {
-                           '1': 'rgb(44, 160, 44)',
-                           '2': 'rgb(44, 160, 44)',
-                           '3': 'rgb(255, 127, 14)',
-                           // '4': ,
-                           // '5': ,
-                           // '6': ,
-                           // '7': ,
-                           // '8': ,
-                           '9': 'rgb(31, 119, 180)',
-                           // '10':
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
                         }
                       },
                       // grid: {y: {lines: [{value: AVERAGE}]}},
