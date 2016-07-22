@@ -23,7 +23,7 @@
     <!-- Custom Fonts -->
     <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
-    
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/c3/0.3.0/c3.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -86,12 +86,13 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
+        
 
+        <!-- Page Content -->
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-9">
-                    <h1 class="page-header">Dashboard</h1>
+                <div class="col-lg-12">
+                    <h1 class="page-header">Data Metrics</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -101,17 +102,13 @@
 
                 </div>
 
-                <div class="col-lg-4">
+                <div class="col-lg-12">
 
                     <div> 
-                        <div></div> 
-<!-- CSS -->            <span class="inline">Today's date: <span id="demo" style="color: magenta;"> </span></span>
+                    <div></div> 
+<!-- CSS -->        <span class="inline">Today's date: <span id="demo" style="color: magenta;"> </span></span>
                     </div>
-                    <div>________________________</div>
-                <div class="col-lg-12"> . </div>
-<!-- CSS -->            <div style="font-size:24px;">In the last <span>year</span>...</div>
-                </div>
-                <div class="col-lg-12"> . </div>
+                <div class="col-lg-4"> . </div>
 
 <!-- JAVASCRIPT NEEDS TO COME OUT -->
 
@@ -189,9 +186,9 @@
             <!-- /.row -->
             <div class="row">
                 <!-- /.panel -->
-                    <!-- <div class="panel panel-default">
+                    <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Days to Permit Issuance <small>(Last 30 days)</small>
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Days to Permit Issuance <small>(Last calendar year)</small>
                         </div>
                         <div class="panel-body">
                             <div class="row">
@@ -200,122 +197,29 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <!-- /.panel -->
                     <!-- /.panel -->
                 </div>
-                <div class="col-lg-3">
-               
-                    <!-- /.panel -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last <span id ='pieHeader'>year</span>)</small>
-                        </div>
-                        <div>    
-                            <div class="panel-body">
-                                <div class="container">
-                                    <div> 
-                                        <select onchange="month_select();" id="monthly-dropdown-menu">
-                                            <optgroup label="Months">    
-                                                <option value="1">One month</option>
-                                                <option value="2">Two months</option>
-                                                <option value="3">Three months</option>
-                                                <option value="4">Four months</option>
-                                                <option value="5">Five months</option>
-                                                <option value="6">Six months</option>
-                                                <option value="7">Seven months</option>
-                                                <option value="8">Eight months</option>
-                                                <option value="9">Nine months</option>
-                                                <option value="10">Ten months</option>
-                                                <option value="11">Eleven months</option>
-                                            </optgroup>
-                                            <optgroup label="Years">
-                                                <option value="12" selected="selected">One year</option>
-                                                <option value="24">Two years</option>
-                                                <option value="36">Three years</option>
-                                                <option value="48">Four years</option>
-                                                <option value="60">Five years</option>
-                                            </optgroup>
-                                        </select>
-                                    of data displayed
-                                    </div> 
-                                </div></div>
-                                <div id="permitTypes"></div>
-                            </div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
+
+                </div>
+
+                    <div class="col-lg-1"></div>
                     <div class="col-lg-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i><span id='toggleWithPieClick'> Applications by Month </span>
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Days to Permit Issuance <small>(Last calendar year)</small>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            
-                                <div id="byDay"></div>
-                           
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                </div>
-
-                    <div class="col-lg-2"></div>
-                    <div class="col-lg-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bell fa-fw"></i> Recent Permit Applications <small>(Click to view detail)</small>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div class="list-group">
-                                <a href="#" target="_blank" class="list-group-item" id="recent1">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit1">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address1"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent2">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit2">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address2"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent3">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit3">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address3"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent4">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit4">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address4"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent5">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit5">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address5"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent6">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit6">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address6"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent7">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit7">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address7"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent8">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit8">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address8"></em>
-                                    </span>
-                                </a>
-                                <a href="#" target="_blank" class="list-group-item" id="recent9">
-                                    <i class="fa fa-folder-open fa-fw"></i> <span id="permit9">Loading...</span>
-                                    <span class="pull-right text-muted small"><em id="address9"></em>
-                                    </span>
-                                </a>
+                            <div class="row">
+                                <!-- /.col-lg-4 (nested) -->
+                                <div class="col-lg-12">
+                                    <div id="timeFor"></div>
+                                </div>
+                                <!-- /.col-lg-8 (nested) -->
                             </div>
-                            <!-- /.list-group -->
+                            <!-- /.row -->
                         </div>
                         <!-- /.panel-body -->
                     </div>
@@ -325,12 +229,14 @@
             </div>
 
             <!-- /.row -->
+            <br/>
+            <br/>
         </div>
-        <!-- /#page-wrapper -->
+    </div> <!-- /container -->
+        
 
-    </div>
+
     <!-- /#wrapper -->
-
     <!-- jQuery -->
     <script src="js/jquery.js"></script>
 
@@ -350,9 +256,10 @@
     <!-- Momentjs JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
+    <script src="js/metrics.js"></script>
 
-    <script src="js/dashboard.js" charset="utf-8"></script>
 
 </body>
 
 </html>
+

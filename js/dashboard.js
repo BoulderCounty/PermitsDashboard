@@ -1094,9 +1094,9 @@ function month_select(){
                           colors: {
                              'Building': 'rgb(31, 119, 180)',
                              'Demolition': 'rgb(140, 86, 75)',
-                             'Electrical': 'rgb(214, 39, 40)',
+                             'Electrical': 'rgb(44, 160, 44)',
                              'Other': 'rgb(127, 127, 127)',
-                             'Mechanical': 'rgb(44, 160, 44)',
+                             'Mechanical': 'rgb(214, 39, 40)',
                              'Roof': 'rgb(255, 127, 14)',
                              'Plumbing': 'rgb(148, 103, 189)' ,
                              'Pool/Spa': 'rgb(188, 189, 34)',
