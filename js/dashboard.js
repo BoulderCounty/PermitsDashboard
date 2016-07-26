@@ -168,6 +168,8 @@ $(document).ready(function() {
         })
     });
 
+    console.log(types, output);
+
     // (D) Enumerates each month
     // (E) initiates array of months
     // (F) Throws a blank into each arrays month if there were no records
@@ -203,10 +205,21 @@ $(document).ready(function() {
     var chart = c3.generate({
       bindto: '#byDay',
       data: {
+         colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
         columns: columnData,
         type: 'bar',
         onclick: function(d, i) {
-          console.log('%^&%&%^%^&%*&^%*^');
         }
       },
       grid: {
@@ -222,13 +235,13 @@ $(document).ready(function() {
       },
       legend: {
         show: false
-      },
+      }
       
     });
 
-    setTimeout(function () {
-      chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
-    }, 1000);
+    // setTimeout(function () {
+    //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
+    // }, 1000);
     /********************************************************************************/
 
     /********************************************************************************/
@@ -336,7 +349,7 @@ $(document).ready(function() {
             console.log(records, "#");
 
             records.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MMM');
             console.log(record.AppliedDate, "*");
           })   
 
@@ -683,14 +696,28 @@ function month_select(){
 
       console.log(records, "#");
 
-      records.forEach(function(record, inc, array) {
-        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-        console.log(record.AppliedDate, "*");
-      })   
+      switch (document.getElementById('monthly-dropdown-menu').value){
+
+        case '1':
+          records.forEach(function(record, inc, array) {
+            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+            console.log(record.AppliedDate, "%%");
+          });
+        break;
+           
+        default:
+         records.forEach(function(record, inc, array) {
+          record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+          console.log(record.AppliedDate, "*");
+        })   
+
+        };
+   
   
        
 
       console.log(records);
+      console.log('######', records.length)
 
       var permitTypes = [];
 
@@ -699,6 +726,7 @@ function month_select(){
         permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
       }
 
+      console.log(permitTypes)
 
         var startDateMoment = moment().subtract(initialStartDate, 'M');
 
@@ -865,9 +893,9 @@ function month_select(){
         });
 
 
-      setTimeout(function () {
-        chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
-      }, 1000);
+      // setTimeout(function () {
+      //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
+      // }, 1000);
       
       var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
@@ -954,10 +982,22 @@ function month_select(){
 
               console.log(records, "#");
 
-              records.forEach(function(record, inc, array) {
-              record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-              console.log(record.AppliedDate, "*");
-            })   
+            switch (document.getElementById('monthly-dropdown-menu').value){
+
+              case '1':
+                records.forEach(function(record, inc, array) {
+                  record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+                  console.log(record.AppliedDate, "%%");
+                });
+              break;
+                 
+              default:
+               records.forEach(function(record, inc, array) {
+                record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+                console.log(record.AppliedDate, "*");
+              })   
+
+              }; 
 
 
             var initialStartDate = document.getElementById('monthly-dropdown-menu').value;

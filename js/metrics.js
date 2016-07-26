@@ -120,10 +120,11 @@ requestJSON(urlLast365, function(json){
       dateDataObj.permitNum = d.PermitNum;
       dateDataObj.permitType = d.PermitTypeMapped;
       dateDataObj.dateDifference = Math.abs(appliedDate.diff(issuedDate, 'd'));
-      if (dateDataObj.dateDifference > 60){dateDataObj.dateDifference = 60;}// || dateDataObj.dateDifference = dateDataObj.dateDifference}
+      if (dateDataObj.dateDifference > 60) {dateDataObj.dateDifference = 30;}// || dateDataObj.dateDifference = dateDataObj.dateDifference}
       dateDataObj.appliedDate = appliedDate.format('YYYY-MM-DD');
       dateDataObj.issuedDate = issuedDate.format('YYYY-MM-DD');
-      dateData.push(dateDataObj);
+      if (dateDataObj.dateDifference < 60) {dateData.push(dateDataObj);}
+      else {console.log(dateDataObj);}
     });
 
     var daysAnalysisByType = d3.nest()
@@ -136,6 +137,8 @@ requestJSON(urlLast365, function(json){
         standardDeviation: d3.deviation(v, function(d) {return d.dateDifference})
       }; })
       .entries(dateData);
+
+      console.log(daysAnalysisByType);
 
     var avg = ['Average'];
     //var high = ['High'];
@@ -231,8 +234,11 @@ requestJSON(urlLast365, function(json){
       dateDataObj.permitNum = d.PermitNum;
       dateDataObj.permitType = d.PermitTypeMapped;
       dateDataObj.dateDifference = Math.abs(appliedDate.diff(completedDate, 'd'));
+      if (dateDataObj.dateDifference > 180) {dateDataObj.dateDifference = 30;}// || dateDataObj.dateDifference = dateDataObj.dateDifference}
       dateDataObj.appliedDate = appliedDate.format('YYYY-MM-DD');
       dateDataObj.completedDate = completedDate.format('YYYY-MM-DD');
+      if (dateDataObj.dateDifference < 180) {dateData.push(dateDataObj);}
+
       dateData.push(dateDataObj);
     });
 
