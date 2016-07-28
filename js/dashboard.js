@@ -527,132 +527,9 @@ $(document).ready(function() {
     })   
   });
 
-  /********************************************************************************/
-  /* Permits by type (END)
-  /********************************************************************************/ 
-
-  // /********************************************************************************/
-  // /* Average Issuance Days (START)
-  // /********************************************************************************/
-
-  // var urlLast12Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"PermitTypeMapped\" from \"permitsResourceId\" where \"IssuedDate\" > \'" + startDate + "' and \"IssuedDate\" <> '' order by \"IssuedDate\" DESC";
-  // var urlLast12 = baseURI + encodeURIComponent(urlLast12Query.replace("permitsResourceId", permitsResourceId));
   
-  /********************************************************************************/
-  /*  ____    _  _____  _       ____ ____      _    ____  
-  /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-  /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-  /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-  /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
-  /*
-  /********************************************************************************/
-
-  // requestJSON(urlLast12, function(json) {
-  //   var records = json.result.records;
-
-  //   var dateData = [];
-  //   records.forEach(function(d) {
-  //     var dateDataObj = {};
-  //     var appliedDate = moment(d.AppliedDate);
-  //     var issuedDate = moment(d.IssuedDate);
-  //     dateDataObj.permitNum = d.PermitNum;
-  //     dateDataObj.permitType = d.PermitTypeMapped;
-  //     dateDataObj.dateDifference = Math.abs(appliedDate.diff(issuedDate, 'd'));
-  //     dateDataObj.appliedDate = appliedDate.format('YYYY-MM-DD');
-  //     dateDataObj.issuedDate = issuedDate.format('YYYY-MM-DD');
-  //     dateData.push(dateDataObj);
-  //   });
-
-  //   var daysAnalysisByType = d3.nest()
-  //     .key(function(d) { return d.permitType })
-  //     .rollup (function(v) { return {
-  //       avg: d3.mean(v, function(d) {return d.dateDifference}), 
-  //       //high: d3.max(v, function (d) {return d.dateDifference}), 
-  //       //low: d3.min(v, function (d) {return d.dateDifference}), 
-  //       median: d3.median(v, function(d) {return d.dateDifference}), 
-  //       standardDeviation: d3.deviation(v, function(d) {return d.dateDifference})
-  //     }; })
-  //     .entries(dateData);
-
-  //   var avg = ['Average'];
-  //   //var high = ['High'];
-  //   //var low = ['Low'];
-  //   var median = ['Median'];
-  //   var stdDeviation = ['StdDeviation'];
-  //   var permitTypes = [];
-
-  //   daysAnalysisByType.forEach(function(d) {
-  //     if (d.values.avg != undefined)
-  //       avg.push(d.values.avg);
-  //     else
-  //       avg.push(0);
-  //     //high.push(d.values.high);
-  //     //low.push(d.values.low);
-  //     if (d.values.median != undefined)
-  //       median.push(d.values.median);
-  //     else
-  //       median.push(0);
-
-  //     if (d.values.standardDeviation != undefined)
-  //       stdDeviation.push(d.values.standardDeviation);
-  //     else
-  //       stdDeviation.push(0);
-
-  //     permitTypes.push(d.key)
-  //   });
-
-    /*
-    /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-    /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-    /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-    /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-    /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-    /************************************************************************************/
-
-
-  //   var chart = c3.generate({
-  //     bindto: '#timeTo',
-  //     data: {
-  //       columns: [
-  //           avg,
-  //           //high,
-  //           //low,
-  //           median,
-  //           stdDeviation
-  //       ],
-  //       types: {
-  //         Average: 'area-spline',
-  //         //High: 'spline',
-  //         //Low: 'spline',
-  //         Median: 'spline', 
-  //         StdDeviation: 'area-spline'
-  //         // 'line', 'spline', 'step', 'area', 'area-step' are also available to stack
-  //       },
-  //       groups: [permitTypes]
-  //       },
-  //       axis: {
-  //         x: {
-  //           type: 'category',
-  //           categories: permitTypes
-  //         },
-  //       }
-  //   });
-
-  // });
-  // /********************************************************************************/
-  // /* Average Issuance Days (END)
-  // /********************************************************************************/
-
              
 });
-
-function forceDelay(millis) {
-  var date = new Date();
-  var curDate = null;
-
-  do { curDate = new Date(); } 
-    while (curDate - date < millis);
-}
 
 
 function month_select(){
@@ -678,14 +555,14 @@ function month_select(){
     var records = [];
 
 
-  /********************************************************************************/
-  /*  ____    _  _____  _       ____ ____      _    ____  
-  /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-  /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-  /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-  /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
-  /*
-  /********************************************************************************/
+    /********************************************************************************/
+    /*  ____    _  _____  _       ____ ____      _    ____  
+    /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
+    /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
+    /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
+    /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+    /*
+    /********************************************************************************/
 
 
      
@@ -696,207 +573,561 @@ function month_select(){
 
       console.log(records, "#");
 
-      switch (document.getElementById('monthly-dropdown-menu').value){
+      var startDateMoment = moment().subtract(initialStartDate, 'M');
+
+      switch (initialStartDate){
 
         case '1':
-          records.forEach(function(record, inc, array) {
+          records.forEach(function(record, increment, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
             console.log(record.AppliedDate, "%%");
           });
-        break;
-           
-        default:
-         records.forEach(function(record, inc, array) {
-          record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-          console.log(record.AppliedDate, "*");
-        })   
 
-        };
-   
-  
-       
+          var appliedLast365Days = records.filter(function(d) { 
+            return moment(d.AppliedDate) > startDateMoment; 
+          })
 
-      console.log(records);
-      console.log('######', records.length)
+          console.log(appliedLast365Days);
 
-      var permitTypes = [];
-
-      //Get a distinct list of neighborhoods
-      for (var i = 0; i < records.length; i++) {
-        permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
-      }
-
-      console.log(permitTypes)
-
-        var startDateMoment = moment().subtract(initialStartDate, 'M');
-
-        console.log(startDateMoment);
-
-         
-
-        var appliedLast365Days = records.filter(function(d) { 
-          return moment(d.AppliedDate) > startDateMoment; 
-        })
-
-        console.log(appliedLast365Days);
-
-        var appliedByDayByType = d3.nest()
-          .key(function(d) { return d.AppliedDate })
-          .key(function(d) { return d.PermitTypeMapped })
-          .rollup (function(v) { return v.length })
-          .entries(appliedLast365Days);
-
-        console.log(appliedByDayByType);
-
-        var bld = ['Building'];
-        var demo = ['Demolition'];
-        var ele = ['Electrical'];
-        var other = ['Other'];
-        var mech = ['Mechanical'];
-        var plm = ['Plumbing'];
-        var psp = ['Pool/Spa'];
-        var fnc = ['Fence'];
-        var roof = ['Roof'];
-        var grad = ['Grading'];
-        var datesArray = [];
-
-        appliedByDayByType.forEach(function(d) {
-
-          console.log(d);
-          var dArray = d.key;
-          console.log(dArray);
-          datesArray.push(dArray);
-
-          bldAdded = false;
-          demoAdded = false;
-          eleAdded = false;
-          otherAdded = false;
-          mechAdded = false;
-          plmAdded = false;
-          pspAdded = false;
-          fncAdded = false;
-          roofAdded = false;
-          gradAdded = false;
+          appliedLast365Days.forEach(function(rec, i, arr){
+            appliedLast365Days[i]['AppliedDate'] = moment(appliedLast365Days[i]['AppliedDate']).format('MMM-DD');
+          }); //= appliedLast365Days.AppliedDate.format('MM-DD');
 
 
-          d.values.forEach(function(i) {
-            
-            if (i.key == "Building") {
-              bld.push(i.values);
-              bldAdded = true;
-            }
-            if (i.key == "Demolition") {
-              demo.push(i.values);
-              demoAdded = true;
-            }
-            if (i.key == "Electrical") {
-              ele.push(i.values);
-              eleAdded = true;
-            }
-            if (i.key == "Other") {
-              other.push(i.values);
-              otherAdded = true;
-            }
-            if (i.key == "Mechanical") {
-              mech.push(i.values);
-              mechAdded = true;
-            }
-            if (i.key == "Roof") {
-              roof.push(i.values);
-              roofAdded = true;    
-            }
-            if (i.key == "Pool/Spa") {
-              psp.push(i.values);
-              pspAdded = true;    
-            }
-            if (i.key == "Fence") {
-              fnc.push(i.values);
-              fncAdded = true;    
-            }
+          var appliedByDayByType = d3.nest()
+            .key(function(d) { return d.AppliedDate })
+            .key(function(d) { return d.PermitTypeMapped })
+            .rollup (function(v) { return v.length })
+            .entries(appliedLast365Days);
 
-            if (i.key == "Plumbing") {
-              plm.push(i.values);
-              plmAdded = true;    
-            }
+          console.log(appliedByDayByType);
 
-            if (i.key == "Grading") {
-              grad.push(i.values);
-              gradAdded = true;    
-            }
+          var bld = ['Building'];
+          var demo = ['Demolition'];
+          var ele = ['Electrical'];
+          var other = ['Other'];
+          var mech = ['Mechanical'];
+          var plm = ['Plumbing'];
+          var psp = ['Pool/Spa'];
+          var fnc = ['Fence'];
+          var roof = ['Roof'];
+          var grad = ['Grading'];
+          var datesArray = [];
+
+          appliedByDayByType.forEach(function(d) {
+
+            // console.log(d);
+            var dArray = d.key;
+            // console.log(dArray);
+            datesArray.push(dArray);
+
+            bldAdded = false;
+            demoAdded = false;
+            eleAdded = false;
+            otherAdded = false;
+            mechAdded = false;
+            plmAdded = false;
+            pspAdded = false;
+            fncAdded = false;
+            roofAdded = false;
+            gradAdded = false;
+
+
+            d.values.forEach(function(i) {
+              
+              if (i.key == "Building") {
+                bld.push(i.values);
+                bldAdded = true;
+              }
+              if (i.key == "Demolition") {
+                demo.push(i.values);
+                demoAdded = true;
+              }
+              if (i.key == "Electrical") {
+                ele.push(i.values);
+                eleAdded = true;
+              }
+              if (i.key == "Other") {
+                other.push(i.values);
+                otherAdded = true;
+              }
+              if (i.key == "Mechanical") {
+                mech.push(i.values);
+                mechAdded = true;
+              }
+              if (i.key == "Roof") {
+                roof.push(i.values);
+                roofAdded = true;    
+              }
+              if (i.key == "Pool/Spa") {
+                psp.push(i.values);
+                pspAdded = true;    
+              }
+              if (i.key == "Fence") {
+                fnc.push(i.values);
+                fncAdded = true;    
+              }
+
+              if (i.key == "Plumbing") {
+                plm.push(i.values);
+                plmAdded = true;    
+              }
+
+              if (i.key == "Grading") {
+                grad.push(i.values);
+                gradAdded = true;    
+              }
+
+            });
+
+            if (!bldAdded)
+              bld.push(0);
+            if (!demoAdded)
+              demo.push(0);
+            if (!eleAdded)
+              ele.push(0);
+            if (!mechAdded)
+              mech.push(0);
+            if (!otherAdded)
+              other.push(0);
+            if (!plmAdded)
+              plm.push(0);
+            if (!roofAdded)
+              roof.push(0);
+            if (!fncAdded)
+              fnc.push(0);
+            if (!pspAdded)
+              psp.push(0);
+            if (!gradAdded)
+              grad.push(0);
+
 
           });
 
-          if (!bldAdded)
-            bld.push(0);
-          if (!demoAdded)
-            demo.push(0);
-          if (!eleAdded)
-            ele.push(0);
-          if (!mechAdded)
-            mech.push(0);
-          if (!otherAdded)
-            other.push(0);
-          if (!plmAdded)
-            plm.push(0);
-          if (!roofAdded)
-            roof.push(0);
-          if (!fncAdded)
-            fnc.push(0);
-          if (!pspAdded)
-            psp.push(0);
-          if (!gradAdded)
-            grad.push(0);
+          /*  Loads Bar-Chart With Time-Frame Selected Data
+          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
+          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
+          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
+          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
+          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /************************************************************************************/
 
 
-        });
 
-        /*  Loads Bar-Chart With Time-Frame Selected Data
-        /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-        /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-        /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-        /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-        /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-        /************************************************************************************/
-
-
-        var chart = c3.generate({
-          bindto: '#byDay',
-          data: {
-            columns: [
-                bld,
-                roof,
-                mech,
-                ele,
-                plm,
-                demo,
-                grad,
-                other,
-                psp,
-                fnc
-            ],
-            type: 'bar'//,
-          },
-          grid: {
-            y: {
-              lines: [{value:0}]
+          var chart = c3.generate({
+            bindto: '#byDay',
+            data: {
+              columns: [
+                  bld,
+                  roof,
+                  mech,
+                  ele,
+                  plm,
+                  demo,
+                  grad,
+                  other,
+                  psp,
+                  fnc
+              ],
+              type: 'bar'//,
+            },
+            grid: {
+              y: {
+                lines: [{value:0}]
+              }
+            },
+            axis: {
+              x: {
+                type: 'category',
+                categories: datesArray
+              }
+            },
+            legend: {
+              show: false
             }
-          },
-          axis: {
-            x: {
-              type: 'category',
-              categories: datesArray
+          });
+
+
+        break;
+
+
+        case '12':
+        case '24':
+        case '36':
+        case '48':
+        case '60':
+          records.forEach(function(record, inc, array) {
+            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+            console.log(record.AppliedDate, "*");
+          })
+         
+          var appliedLast365Days = records.filter(function(d) { 
+            return moment(d.AppliedDate) > startDateMoment; 
+          })
+
+          console.log(appliedLast365Days);
+
+          var appliedByDayByType = d3.nest()
+            .key(function(d) { return d.AppliedDate })
+            .key(function(d) { return d.PermitTypeMapped })
+            .rollup (function(v) { return v.length })
+            .entries(appliedLast365Days);
+
+          console.log(appliedByDayByType);
+
+          var bld = ['Building'];
+          var demo = ['Demolition'];
+          var ele = ['Electrical'];
+          var other = ['Other'];
+          var mech = ['Mechanical'];
+          var plm = ['Plumbing'];
+          var psp = ['Pool/Spa'];
+          var fnc = ['Fence'];
+          var roof = ['Roof'];
+          var grad = ['Grading'];
+          var datesArray = [];
+
+          appliedByDayByType.forEach(function(d) {
+
+            // console.log(d);
+            var dArray = d.key;
+            // console.log(dArray);
+            datesArray.push(dArray);
+
+            bldAdded = false;
+            demoAdded = false;
+            eleAdded = false;
+            otherAdded = false;
+            mechAdded = false;
+            plmAdded = false;
+            pspAdded = false;
+            fncAdded = false;
+            roofAdded = false;
+            gradAdded = false;
+
+
+            d.values.forEach(function(i) {
+              
+              if (i.key == "Building") {
+                bld.push(i.values);
+                bldAdded = true;
+              }
+              if (i.key == "Demolition") {
+                demo.push(i.values);
+                demoAdded = true;
+              }
+              if (i.key == "Electrical") {
+                ele.push(i.values);
+                eleAdded = true;
+              }
+              if (i.key == "Other") {
+                other.push(i.values);
+                otherAdded = true;
+              }
+              if (i.key == "Mechanical") {
+                mech.push(i.values);
+                mechAdded = true;
+              }
+              if (i.key == "Roof") {
+                roof.push(i.values);
+                roofAdded = true;    
+              }
+              if (i.key == "Pool/Spa") {
+                psp.push(i.values);
+                pspAdded = true;    
+              }
+              if (i.key == "Fence") {
+                fnc.push(i.values);
+                fncAdded = true;    
+              }
+
+              if (i.key == "Plumbing") {
+                plm.push(i.values);
+                plmAdded = true;    
+              }
+
+              if (i.key == "Grading") {
+                grad.push(i.values);
+                gradAdded = true;    
+              }
+
+            });
+
+            if (!bldAdded)
+              bld.push(0);
+            if (!demoAdded)
+              demo.push(0);
+            if (!eleAdded)
+              ele.push(0);
+            if (!mechAdded)
+              mech.push(0);
+            if (!otherAdded)
+              other.push(0);
+            if (!plmAdded)
+              plm.push(0);
+            if (!roofAdded)
+              roof.push(0);
+            if (!fncAdded)
+              fnc.push(0);
+            if (!pspAdded)
+              psp.push(0);
+            if (!gradAdded)
+              grad.push(0);
+
+
+          });
+
+          /*  Loads Bar-Chart With Time-Frame Selected Data
+          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
+          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
+          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
+          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
+          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /************************************************************************************/
+
+
+          var chart = c3.generate({
+            bindto: '#byDay',
+            data: {
+              columns: [
+                  bld,
+                  roof,
+                  mech,
+                  ele,
+                  plm,
+                  demo,
+                  grad,
+                  other,
+                  psp,
+                  fnc
+              ],
+              type: 'bar'//,
+            },
+            grid: {
+              y: {
+                lines: [{value:0}]
+              }
+            },
+            axis: {
+              x: {
+                type: 'category',
+                categories: datesArray
+              }
+            },
+            legend: {
+              show: false
             }
-          },
-          legend: {
-            show: false
+          });
+
+
+        break;
+
+           
+        default:
+          console.log(records, '$$$$$');
+
+          weeklyBunch = [];
+
+
+          for (var  i = 0; i<records.length; i++){
+            var then = records[i].AppliedDate;
+
+
+            var thenYear=then.substr(0,4);
+            var thenMonth=then.substr(5,2);
+            var thenDay=then.substr(8,2);
+
+            var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
+
+            var weeksAgo= Math.floor(daysAgo/7);
+            // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
+            // var p = moment(records[i].AppliedDate).day();
+            // var q = p.day();
+            weeklyBunch.push([records[i]["AppliedDate"], weeksAgo]);
+
+
+            console.log(weeksAgo,'________', records[i].AppliedDate);
           }
-        });
+
+          console.log(weeklyBunch);
+
+          
+          var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
+              return (moment(d[0]) > startDateMoment);
+            });
+          
+          console.log(appliedPerWeekLast365Days);
+         
+          var appliedLast365Days = records.filter(function(d) { 
+            return moment(d.AppliedDate) > startDateMoment; 
+          })
+
+          console.log(appliedLast365Days);
+
+          appliedLast365Days.forEach(function(day, inc, arr){
+            console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
+            appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
+          
+          })
+
+          console.log(appliedLast365Days);
 
 
-      // setTimeout(function () {
-      //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
-      // }, 1000);
-      
+          var appliedByDayByType = d3.nest()
+            .key(function(d) { return d.week })
+            .key(function(d) { return d.PermitTypeMapped })
+            .rollup (function(v) { return v.length })
+            .entries(appliedLast365Days);
+
+          console.log(appliedByDayByType);
+
+          var bld = ['Building'];
+          var demo = ['Demolition'];
+          var ele = ['Electrical'];
+          var other = ['Other'];
+          var mech = ['Mechanical'];
+          var plm = ['Plumbing'];
+          var psp = ['Pool/Spa'];
+          var fnc = ['Fence'];
+          var roof = ['Roof'];
+          var grad = ['Grading'];
+          var datesArray = [];
+
+          appliedByDayByType.forEach(function(d) {
+
+            // console.log(d);
+            var dArray = d.key;
+            // console.log(dArray);
+            datesArray.push(dArray);
+
+            bldAdded = false;
+            demoAdded = false;
+            eleAdded = false;
+            otherAdded = false;
+            mechAdded = false;
+            plmAdded = false;
+            pspAdded = false;
+            fncAdded = false;
+            roofAdded = false;
+            gradAdded = false;
+
+
+            d.values.forEach(function(i) {
+              
+              if (i.key == "Building") {
+                bld.push(i.values);
+                bldAdded = true;
+              }
+              if (i.key == "Demolition") {
+                demo.push(i.values);
+                demoAdded = true;
+              }
+              if (i.key == "Electrical") {
+                ele.push(i.values);
+                eleAdded = true;
+              }
+              if (i.key == "Other") {
+                other.push(i.values);
+                otherAdded = true;
+              }
+              if (i.key == "Mechanical") {
+                mech.push(i.values);
+                mechAdded = true;
+              }
+              if (i.key == "Roof") {
+                roof.push(i.values);
+                roofAdded = true;    
+              }
+              if (i.key == "Pool/Spa") {
+                psp.push(i.values);
+                pspAdded = true;    
+              }
+              if (i.key == "Fence") {
+                fnc.push(i.values);
+                fncAdded = true;    
+              }
+
+              if (i.key == "Plumbing") {
+                plm.push(i.values);
+                plmAdded = true;    
+              }
+
+              if (i.key == "Grading") {
+                grad.push(i.values);
+                gradAdded = true;    
+              }
+
+            });
+
+            if (!bldAdded)
+              bld.push(0);
+            if (!demoAdded)
+              demo.push(0);
+            if (!eleAdded)
+              ele.push(0);
+            if (!mechAdded)
+              mech.push(0);
+            if (!otherAdded)
+              other.push(0);
+            if (!plmAdded)
+              plm.push(0);
+            if (!roofAdded)
+              roof.push(0);
+            if (!fncAdded)
+              fnc.push(0);
+            if (!pspAdded)
+              psp.push(0);
+            if (!gradAdded)
+              grad.push(0);
+
+
+          });
+
+          /*  Loads Bar-Chart With Time-Frame Selected Data
+          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
+          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
+          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
+          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
+          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /************************************************************************************/
+
+
+          var chart = c3.generate({
+            bindto: '#byDay',
+            data: {
+              columns: [
+                  bld,
+                  roof,
+                  mech,
+                  ele,
+                  plm,
+                  demo,
+                  grad,
+                  other,
+                  psp,
+                  fnc
+              ],
+              type: 'bar'//,
+            },
+            grid: {
+              y: {
+                lines: [{value:0}]
+              }
+            },
+            axis: {
+              x: {
+                type: 'category',
+                categories: datesArray
+              }
+            },
+            legend: {
+              show: false
+            }
+          });
+        break;
+
+      };    
+
       var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
       var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
@@ -940,241 +1171,240 @@ function month_select(){
         /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
         /************************************************************************************/
 
-      var chart = c3.generate({
-        bindto: '#permitTypes',
-        legend: function () {return false;},
-        data: {
-          columns: permitTypes,
-          type : 'donut',
-          onclick: function (d, i) {
-            console.log("onclick", d.id, i);
-            var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+        var chart = c3.generate({
+          bindto: '#permitTypes',
+          legend: function () {return false;},
+          data: {
+            columns: permitTypes,
+            type : 'donut',
+            onclick: function (d, i) {
+              console.log("onclick", d.id, i);
+              var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
 
-            var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
-            var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
-            var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
-            
-
-            console.log(startDate, "***");
-
-            // var urlLast365Query = localStorage['yearQuery'] || '0';
-            // var urlLast365 = localStorage['year'];
-
-            // console.log(urlLast30Query, "---");
-            console.log(urlLast365Query, "-------------");
-          
-            var records = [];
-
-
-
-            /********************************************************************************/
-            /*  ____    _  _____  _       ____ ____      _    ____  
-            /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-            /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-            /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-            /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
-            /*
-            /********************************************************************************/
-
-            requestJSON(urlLast365, function(json) {
-
-              var records = json.result.records 
-
-              console.log(records, "#");
-
-            switch (document.getElementById('monthly-dropdown-menu').value){
-
-              case '1':
-                records.forEach(function(record, inc, array) {
-                  record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-                  console.log(record.AppliedDate, "%%");
-                });
-              break;
-                 
-              default:
-               records.forEach(function(record, inc, array) {
-                record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-                console.log(record.AppliedDate, "*");
-              })   
-
-              }; 
-
-
-            var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
-
-            var startDateMoment = moment().subtract(initialStartDate, 'M');
-
-            console.log(startDateMoment);
-
-            var appliedLast365Days = records.filter(function(d) { 
-              return moment(d.AppliedDate) > startDateMoment; 
-            });
-
-
-
-
-            var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-              return o.PermitTypeMapped === d.id;
-            });
-
-   
-
-             //Get a distinct list of neighborhoods
-            for (var i = 0; i < records.length; i++) {
-              permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
-            }
-
-
-            var appliedLast365Days = records.filter(function(d) { 
-              return moment(d.AppliedDate) > startDateMoment; 
-            });
-                
-                var appliedByDayByType = [];
-
-                  // compiles array for bar-graph
-                var appliedByDayByType = d3.nest()
-
-                  // concatenates date
-                  .key(function(d) { return d.AppliedDate })
-
-                  // concatanates type
-                  .key(function(d) { return d.PermitTypeMapped })
-
-                  // takes the records and creates a count
-                  .rollup (function(v) { return v.length })
-
-                  // creates a d3 object from the records
-                  .entries(appliedLastYearByType);
-
-                var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
-
-               var output = [];
-
-                    console.log(appliedLastYearByType);
-                    console.log(appliedByDayByType);
-
-                    output[d.id] = appliedByDayByType.map(function(month) {
-                        var o = {};
-                        o[month.key] = month.values.filter(function(val) {
-                          return val.key == d.id;
-                        }).map(function(m) { return m.values; }).shift() || 0;
-                        return o;
-                      })
-                               
-
-                    var dates = appliedByDayByType.map(function(date) {
-                      return date.key;
-                    });
-
-
-                    var columnData=[];
-                    // console.log(columnData);
-
-                    // dates.forEach(function(date, i){
-                    //   var dArray = date;
-                      // console.log(i);
-                      lcount=0;
-
-                      columnData = output[d.id].map(function(index){
-                            // console.log(lcount,index);
-                            var rObj = {};
-                            rObj[dates[lcount]] = (index[dates[lcount]]);
-                            lcount++;
-
-                            // console.log(rObj);
-
-                            return rObj;
-                          });
-
-                      console.log(columnData);
-
-                      var returnObj = columnData.map(function(obj) {
-                        return Object.keys(obj).sort().map(function(key) { 
-                          return obj[key];
-                        });
-                      });
-
-                      var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-
-                      console.log(returnObj);
-
-                      console.log(Object.keys(output)[0],'____________________________');
-
-                      datesArray=[];
-
-                      output[Object.keys(output)[0]].forEach(function(d, i) {
-
-                        // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
-
-                        var dArray = [dates[i]];
-                        datesArray.push(dArray);
-                    
-                      });
-
-                      console.log(datesArray);
-
-
-                      /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-                      /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-                      /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-                      /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-                      /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-                      /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-                      /************************************************************************************/
-
-
-
-                  var chart = c3.generate({
-                        bindto: '#byDay',
-                        data: {
-                          columns: [
-                              returnObj
-                          ],
-                          type: 'bar',
-                          colors: {
-                             'Building': 'rgb(31, 119, 180)',
-                             'Demolition': 'rgb(140, 86, 75)',
-                             'Electrical': 'rgb(44, 160, 44)',
-                             'Other': 'rgb(127, 127, 127)',
-                             'Mechanical': 'rgb(214, 39, 40)',
-                             'Roof': 'rgb(255, 127, 14)',
-                             'Plumbing': 'rgb(148, 103, 189)' ,
-                             'Pool/Spa': 'rgb(188, 189, 34)',
-                             'Fence': 'rgb(23, 190, 207)',
-                             'Grading': 'rgb(227, 119, 194)'
-                          }
-                        },
-                        // grid: {y: {lines: [{value: AVERAGE}]}},
-                        axis: {
-                            y: {tick : {format: d3.format('d')}},
-                            x: {
-                            type: 'category',
-                            categories: datesArray
-                          }
-                        }
-                        // onclick: function(d, i) {
-                        //   console.log('%^&%&%^%^&%*&^%*^');
-                        //   chart.flush();
-                        // }
-                      });
-
-                $('#toggleWithPieClick').text(' Applications by Day over last Month ');
-            });
-          }
-        },
-        // legend: {
-        //     item: {
-        //       onmouseover: function (id) {
-        //         console.log("onmouseover", id);
-        //         requestJSON(urlLast30, function(json) {
-        //           var records = json.result.records;
-        //           //extract permits applied for in last 7 days
+              var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
+              var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+              var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
               
 
-      donut: {
-       title :  'Select for breakdown'
-      }   
-    }) 
+              console.log(startDate, "***");
+
+              // var urlLast365Query = localStorage['yearQuery'] || '0';
+              // var urlLast365 = localStorage['year'];
+
+              // console.log(urlLast30Query, "---");
+              console.log(urlLast365Query, "-------------");
+            
+              var records = [];
+
+
+
+              /********************************************************************************/
+              /*  ____    _  _____  _       ____ ____      _    ____  
+              /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
+              /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
+              /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
+              /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+              /*
+              /********************************************************************************/
+
+              requestJSON(urlLast365, function(json) {
+
+                var records = json.result.records 
+
+                console.log(records, "#");
+
+                switch (document.getElementById('monthly-dropdown-menu').value){
+
+                  case '1':
+                    records.forEach(function(record, inc, array) {
+                      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+                      console.log(record.AppliedDate, "%%");
+                    });
+                  break;
+                     
+                  default:
+                   records.forEach(function(record, inc, array) {
+                    record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+                    console.log(record.AppliedDate, "*");
+                  })   
+
+                  }; 
+
+                  var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+
+                  var startDateMoment = moment().subtract(initialStartDate, 'M');
+
+                  console.log(startDateMoment);
+
+                  var appliedLast365Days = records.filter(function(d) { 
+                    return moment(d.AppliedDate) > startDateMoment; 
+                  });
+
+
+
+
+                  var appliedLastYearByType = appliedLast365Days.filter(function(o) {
+                    return o.PermitTypeMapped === d.id;
+                  });
+
+         
+
+                   //Get a distinct list of neighborhoods
+                  for (var i = 0; i < records.length; i++) {
+                    permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+                  }
+
+
+                  var appliedLast365Days = records.filter(function(d) { 
+                    return moment(d.AppliedDate) > startDateMoment; 
+                  });
+                    
+                  var appliedByDayByType = [];
+
+                    // compiles array for bar-graph
+                  var appliedByDayByType = d3.nest()
+
+                    // concatenates date
+                    .key(function(d) { return d.AppliedDate })
+
+                    // concatanates type
+                    .key(function(d) { return d.PermitTypeMapped })
+
+                    // takes the records and creates a count
+                    .rollup (function(v) { return v.length })
+
+                    // creates a d3 object from the records
+                    .entries(appliedLastYearByType);
+
+                    var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
+
+                   var output = [];
+
+                        console.log(appliedLastYearByType);
+                        console.log(appliedByDayByType);
+
+                        output[d.id] = appliedByDayByType.map(function(month) {
+                            var o = {};
+                            o[month.key] = month.values.filter(function(val) {
+                              return val.key == d.id;
+                            }).map(function(m) { return m.values; }).shift() || 0;
+                            return o;
+                          })
+                                   
+
+                        var dates = appliedByDayByType.map(function(date) {
+                          return date.key;
+                        });
+
+
+                        var columnData=[];
+                        // console.log(columnData);
+
+                        // dates.forEach(function(date, i){
+                        //   var dArray = date;
+                          // console.log(i);
+                          lcount=0;
+
+                          columnData = output[d.id].map(function(index){
+                                // console.log(lcount,index);
+                                var rObj = {};
+                                rObj[dates[lcount]] = (index[dates[lcount]]);
+                                lcount++;
+
+                                // console.log(rObj);
+
+                                return rObj;
+                              });
+
+                          console.log(columnData);
+
+                          var returnObj = columnData.map(function(obj) {
+                            return Object.keys(obj).sort().map(function(key) { 
+                              return obj[key];
+                            });
+                          });
+
+                          var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+
+                          console.log(returnObj);
+
+                          console.log(Object.keys(output)[0],'____________________________');
+
+                          datesArray=[];
+
+                          output[Object.keys(output)[0]].forEach(function(d, i) {
+
+                            // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
+
+                            var dArray = [dates[i]];
+                            datesArray.push(dArray);
+                        
+                          });
+
+                          console.log(datesArray);
+
+
+                          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
+                          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
+                          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
+                          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
+                          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
+                          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+                          /************************************************************************************/
+
+
+
+                      var chart = c3.generate({
+                            bindto: '#byDay',
+                            data: {
+                              columns: [
+                                  returnObj
+                              ],
+                              type: 'bar',
+                              colors: {
+                                 'Building': 'rgb(31, 119, 180)',
+                                 'Demolition': 'rgb(140, 86, 75)',
+                                 'Electrical': 'rgb(44, 160, 44)',
+                                 'Other': 'rgb(127, 127, 127)',
+                                 'Mechanical': 'rgb(214, 39, 40)',
+                                 'Roof': 'rgb(255, 127, 14)',
+                                 'Plumbing': 'rgb(148, 103, 189)' ,
+                                 'Pool/Spa': 'rgb(188, 189, 34)',
+                                 'Fence': 'rgb(23, 190, 207)',
+                                 'Grading': 'rgb(227, 119, 194)'
+                              }
+                            },
+                            // grid: {y: {lines: [{value: AVERAGE}]}},
+                            axis: {
+                                y: {tick : {format: d3.format('d')}},
+                                x: {
+                                type: 'category',
+                                categories: datesArray
+                              }
+                            }
+                            // onclick: function(d, i) {
+                            //   console.log('%^&%&%^%^&%*&^%*^');
+                            //   chart.flush();
+                            // }
+                          });
+
+                    $('#toggleWithPieClick').text(' Applications by Day over last Month ');
+                });
+              }
+            },
+            // legend: {
+            //     item: {
+            //       onmouseover: function (id) {
+            //         console.log("onmouseover", id);
+            //         requestJSON(urlLast30, function(json) {
+            //           var records = json.result.records;
+            //           //extract permits applied for in last 7 days
+                  
+
+          donut: {
+           title :  'Select for breakdown'
+          }   
+        }) 
 
     setTimeout(function () {
       chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
@@ -1218,7 +1448,17 @@ function month_select(){
   
   });
 
-    function requestJSON(url, callback) {
+
+  function forceDelay(millis) {
+    var date = new Date();
+    var curDate = null;
+
+    do { curDate = new Date(); } 
+      while (curDate - date < millis);
+  }
+
+
+  function requestJSON(url, callback) {
     $.ajax({
       beforeSend: function() {
         // Handle the beforeSend event
@@ -1230,4 +1470,12 @@ function month_select(){
       }
     });
   }
+
+ function timeSpanDays(year, month, day){
+        now = new Date();
+        dateEnd = new Date(year, month - 1, day); // months are zero-based
+        days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
+        return Math.round(days);
+      }
+
 };
