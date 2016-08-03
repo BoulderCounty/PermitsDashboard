@@ -530,7 +530,7 @@ $(document).ready(function() {
               
 
               switch (d.id){
-                case 'Building':
+               case 'Building':
                   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
                                 '<optgroup label="Residential">'+    
                                 '<option value="bNRB">New Residence Building</option>'+
@@ -542,7 +542,7 @@ $(document).ready(function() {
                                 '<option value="bCommercial Remodel">Commercial Remodel</option>'+
                                 '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
                                 '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                '<option value="bobuild">Other</option></select> ');
+                                '<option value="bobuild">Other</option></select>');
                 break;
 
               case 'Mechanical':
@@ -554,8 +554,42 @@ $(document).ready(function() {
                                 '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
                                 '<option value="mstove">Wood Stove</option>'+
                                 '<option value="msolar">Solar Thermal</option>'+
-                                '<option value="momech">Other</option></select> ');
+                                '<option value="momech">Other</option></select>');
                 break;
+
+                case 'Electrical':
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<option value="ecom">Commercial Electric</option>'+
+                                '<option value="els">Electrical Lift Station</option>'+
+                                '<option value="erewire">Electrical Re-Wiring</option>'+
+                                '<option value="eservice">Electrical Service Change</option>'+
+                                '<option value="etemp">Temporary Electrical Service</option>'+
+                                '<option value="egen">Generator</option>'+
+                                '<option value="esolar">Solar Electrical System</option>'+
+                                '<option value="eoelec">Other</option></select>');
+                break;
+
+                case 'Plumbing':
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<option value="pheat">Water Heater</option>'+
+                                '<option value="pgas">Gas Piping</option>'+
+                                '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
+                                '<option value="poplum">Plumbing - Other</option></select>');
+                break;
+
+                case 'Demolition':
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<option value="dcomm">Commercial Deconstruction</option>'+
+                                '<option value="dresdecon">Residential Deconstruction</option>'+
+                                '<option value="dresdemo">Residential Demolition</option></select>');
+                break;
+
+                case 'Other':
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<option value="obridge">Bridge</option>'+
+                                '<option value="olot">Building Lot Determination</option>'+
+                                '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+
 
                 default:
                   console.log(d.id);
@@ -1656,7 +1690,18 @@ function selectSubtype(subtype){
       case "m":
         var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
       break;
-
+      case "e":
+        var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
+      break;
+      case "p":
+        var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
+      break;
+      case "d":
+        var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
+      break;
+      case "o":
+        var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
+      break;
     }
 
     console.log(appliedByDayBySubtype);
