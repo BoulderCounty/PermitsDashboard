@@ -149,7 +149,7 @@ $(document).ready(function() {
 
     // (B) Initiate arrays with type label 
 
-    var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
+    var types = [ "Building", "Roof", "Mechanical", "Electrical", "Plumbing", "Demolition", "Grading", "Other", "Pool/Spa", "Fence"];
 
     console.log(appliedByDayByType);
 
@@ -743,6 +743,18 @@ function month_select(){
           var chart = c3.generate({
             bindto: '#byDay',
             data: {
+              colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
               columns: [
                   bld,
                   roof,
@@ -776,7 +788,9 @@ function month_select(){
 
         break;
 
-
+        case '9':
+        case '10':
+        case '11':
         case '12':
         case '24':
         case '36':
@@ -915,6 +929,18 @@ function month_select(){
           var chart = c3.generate({
             bindto: '#byDay',
             data: {
+             colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
               columns: [
                   bld,
                   roof,
@@ -965,7 +991,10 @@ function month_select(){
 
             var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
 
-            var weeksAgo= Math.floor(daysAgo/7);
+
+            var ago = moment(then);
+            var weeksAgo = ago.startOf('isoWeek').format('MMM-DD');
+            // var weeksAgo= Math.floor(daysAgo/7);
             // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
             // var p = moment(records[i].AppliedDate).day();
             // var q = p.day();
@@ -1121,6 +1150,18 @@ function month_select(){
           var chart = c3.generate({
             bindto: '#byDay',
             data: {
+             colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
               columns: [
                   bld,
                   roof,
@@ -1201,6 +1242,18 @@ function month_select(){
           bindto: '#permitTypes',
           legend: function () {return false;},
           data: {
+           colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
             columns: permitTypes,
             type : 'donut',
             onclick: function (d, i) {
