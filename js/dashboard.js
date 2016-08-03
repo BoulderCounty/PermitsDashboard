@@ -527,17 +527,40 @@ $(document).ready(function() {
               //    \/___/   \/_____/  \/_/    \/_/  \/_____/\/_/\/_/    \/_/\/_/\/___/  \/_/\/ /\/___/ 
               //
               //
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                                '<optgroup label="Residential">'+    
-                                                '<option value="NRB">New Residence Building</option>'+
-                                                '<option value="New Residence">New Residence</option>'+
-                                                '<option value="RA">Residential Accessory</option>'+
-                                                '<option value="Residential Accessory Building">Residential Accessory Building</option>'+
-                                                '<option value="Residential Addition"">Residential Addition</option>'+
-                                                '<option value="Residential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                                '<option value="Commercial Remodel">Commercial Remodel</option>'+
-                                                '<option value="NCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                                '<option value="Accessory Agricultural Building">Accessory Agriculture Building</option></optgroup></select> ');
+              
+
+              switch (d.id){
+                case 'Building':
+                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<optgroup label="Residential">'+    
+                                '<option value="bNRB">New Residence Building</option>'+
+                                '<option value="bNew Residence">New Residence</option>'+
+                                '<option value="bRA">Residential Accessory</option>'+
+                                '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+                                '<option value="bResidential Addition"">Residential Addition</option>'+
+                                '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+                                '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+                                '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+                                '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+                                '<option value="bobuild">Other</option></select> ');
+                break;
+
+              case 'Mechanical':
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                                '<option value="mac">Air Conditioning</option>'+
+                                '<option value="mboil">Boiler</option>'+
+                                '<option value="mevap">Evaporative Cooler</option>'+
+                                '<option value="mfurnace">Furnace</option>'+
+                                '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
+                                '<option value="mstove">Wood Stove</option>'+
+                                '<option value="msolar">Solar Thermal</option>'+
+                                '<option value="momech">Other</option></select> ');
+                break;
+
+                default:
+                  console.log(d.id);
+                break;
+              }
           });
         }
       },
@@ -1562,6 +1585,9 @@ function month_select(){
 function selectSubtype(subtype){
 
   console.log(subtype);
+  var typeM = subtype.substr(0, 1);
+  var subtype = subtype.slice(1);
+
 
     /********************************************************************************/
     /* Get all activity in last year (START)
@@ -1623,7 +1649,15 @@ function selectSubtype(subtype){
 
     // (B) Initiate arrays with type label 
 
-    var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"]
+    switch(typeM) {
+      case "b":
+        var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"]
+      break;
+      case "m":
+        var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
+      break;
+
+    }
 
     console.log(appliedByDayBySubtype);
 
