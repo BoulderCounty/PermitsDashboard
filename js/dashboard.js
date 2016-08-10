@@ -529,72 +529,24 @@ $(document).ready(function() {
               //
               
 
-              switch (d.id){
-               case 'Building':
-                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<optgroup label="Residential">'+    
-                                '<option value="bNRB">New Residence Building</option>'+
-                                '<option value="bNew Residence">New Residence</option>'+
-                                '<option value="bRA">Residential Accessory</option>'+
-                                '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                '<option value="bResidential Addition"">Residential Addition</option>'+
-                                '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                '<option value="bobuild">Other</option></select>');
-                break;
+                document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary'><input type='checkbox' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='checkbox' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
-              case 'Mechanical':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<option value="mac">Air Conditioning</option>'+
-                                '<option value="mboil">Boiler</option>'+
-                                '<option value="mevap">Evaporative Cooler</option>'+
-                                '<option value="mfurnace">Furnace</option>'+
-                                '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
-                                '<option value="mstove">Wood Stove</option>'+
-                                '<option value="msolar">Solar Thermal</option>'+
-                                '<option value="momech">Other</option></select>');
-                break;
-
-                case 'Electrical':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<option value="ecom">Commercial Electric</option>'+
-                                '<option value="els">Electrical Lift Station</option>'+
-                                '<option value="erewire">Electrical Re-Wiring</option>'+
-                                '<option value="eservice">Electrical Service Change</option>'+
-                                '<option value="etemp">Temporary Electrical Service</option>'+
-                                '<option value="egen">Generator</option>'+
-                                '<option value="esolar">Solar Electrical System</option>'+
-                                '<option value="eoelec">Other</option></select>');
-                break;
-
-                case 'Plumbing':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<option value="pheat">Water Heater</option>'+
-                                '<option value="pgas">Gas Piping</option>'+
-                                '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
-                                '<option value="poplum">Plumbing - Other</option></select>');
-                break;
-
-                case 'Demolition':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<option value="dcomm">Commercial Deconstruction</option>'+
-                                '<option value="dresdecon">Residential Deconstruction</option>'+
-                                '<option value="dresdemo">Residential Demolition</option></select>');
-                break;
-
-                case 'Other':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
-                                '<option value="obridge">Bridge</option>'+
-                                '<option value="olot">Building Lot Determination</option>'+
-                                '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+                // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
 
 
-                default:
-                  console.log(d.id);
-                break;
-              }
+                function loadjsfile(filename, filetype){
+                    if (filetype=="js"){ //if filename is a external JavaScript file
+                        var fileref=document.createElement('script');
+                        fileref.setAttribute("type","text/javascript");
+                        fileref.setAttribute("src", filename);
+                        document.getElementsByTagName("head")[0].appendChild(fileref);
+                    }
+                };
+
+                var testpass = d.id;
+
+                loadjsfile("js/subscripts/"+testpass+"script.js", "js") //dynamically load and add this .js file
+
           });
         }
       },
@@ -844,7 +796,7 @@ function monthSelect(){
 
           switch (d.id){
            case 'Building':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<optgroup label="Residential">'+    
                             '<option value="bNRB">New Residence Building</option>'+
                             '<option value="bNew Residence">New Residence</option>'+
@@ -859,7 +811,7 @@ function monthSelect(){
             break;
 
             case 'Mechanical':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="mac">Air Conditioning</option>'+
                             '<option value="mboil">Boiler</option>'+
                             '<option value="mevap">Evaporative Cooler</option>'+
@@ -871,7 +823,7 @@ function monthSelect(){
             break;
 
             case 'Electrical':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="ecom">Commercial Electric</option>'+
                             '<option value="els">Electrical Lift Station</option>'+
                             '<option value="erewire">Electrical Re-Wiring</option>'+
@@ -883,7 +835,7 @@ function monthSelect(){
             break;
 
             case 'Plumbing':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="pheat">Water Heater</option>'+
                             '<option value="pgas">Gas Piping</option>'+
                             '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
@@ -891,14 +843,14 @@ function monthSelect(){
             break;
 
             case 'Demolition':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="dcomm">Commercial Deconstruction</option>'+
                             '<option value="dresdecon">Residential Deconstruction</option>'+
                             '<option value="dresdemo">Residential Demolition</option></select>');
             break;
 
             case 'Other':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="obridge">Bridge</option>'+
                             '<option value="olot">Building Lot Determination</option>'+
                             '<option value="ooilngas">Oil and Gas Development</option></select>'); 
@@ -1098,7 +1050,7 @@ function monthSelect(){
 
           switch (d.id){
            case 'Building':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<optgroup label="Residential">'+    
                             '<option value="bNRB">New Residence Building</option>'+
                             '<option value="bNew Residence">New Residence</option>'+
@@ -1113,7 +1065,7 @@ function monthSelect(){
             break;
 
           case 'Mechanical':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="mac">Air Conditioning</option>'+
                             '<option value="mboil">Boiler</option>'+
                             '<option value="mevap">Evaporative Cooler</option>'+
@@ -1125,7 +1077,7 @@ function monthSelect(){
             break;
 
             case 'Electrical':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="ecom">Commercial Electric</option>'+
                             '<option value="els">Electrical Lift Station</option>'+
                             '<option value="erewire">Electrical Re-Wiring</option>'+
@@ -1137,7 +1089,7 @@ function monthSelect(){
             break;
 
             case 'Plumbing':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="pheat">Water Heater</option>'+
                             '<option value="pgas">Gas Piping</option>'+
                             '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
@@ -1145,14 +1097,14 @@ function monthSelect(){
             break;
 
             case 'Demolition':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="dcomm">Commercial Deconstruction</option>'+
                             '<option value="dresdecon">Residential Deconstruction</option>'+
                             '<option value="dresdemo">Residential Demolition</option></select>');
             break;
 
             case 'Other':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                             '<option value="obridge">Bridge</option>'+
                             '<option value="olot">Building Lot Determination</option>'+
                             '<option value="ooilngas">Oil and Gas Development</option></select>'); 
@@ -1387,7 +1339,7 @@ function monthSelect(){
 
           switch (d.id){
                case 'Building':
-                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<optgroup label="Residential">'+    
                                 '<option value="bNRB">New Residence Building</option>'+
                                 '<option value="bNew Residence">New Residence</option>'+
@@ -1402,7 +1354,7 @@ function monthSelect(){
                 break;
 
                 case 'Mechanical':
-                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<option value="mac">Air Conditioning</option>'+
                                 '<option value="mboil">Boiler</option>'+
                                 '<option value="mevap">Evaporative Cooler</option>'+
@@ -1414,7 +1366,7 @@ function monthSelect(){
                 break;
 
                 case 'Electrical':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<option value="ecom">Commercial Electric</option>'+
                                 '<option value="els">Electrical Lift Station</option>'+
                                 '<option value="erewire">Electrical Re-Wiring</option>'+
@@ -1426,7 +1378,7 @@ function monthSelect(){
                 break;
 
                 case 'Plumbing':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<option value="pheat">Water Heater</option>'+
                                 '<option value="pgas">Gas Piping</option>'+
                                 '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
@@ -1434,14 +1386,14 @@ function monthSelect(){
                 break;
 
                 case 'Demolition':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<option value="dcomm">Commercial Deconstruction</option>'+
                                 '<option value="dresdecon">Residential Deconstruction</option>'+
                                 '<option value="dresdemo">Residential Demolition</option></select>');
                 break;
 
                 case 'Other':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value=""><span id="dropTitle">ALL</span></option>'+
+                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
                                 '<option value="obridge">Bridge</option>'+
                                 '<option value="olot">Building Lot Determination</option>'+
                                 '<option value="ooilngas">Oil and Gas Development</option></select>'); 
@@ -1791,7 +1743,51 @@ function monthSelect(){
 
 
 
-function selectSubtype(subtype){
+
+
+
+
+  function forceDelay(millis) {
+    var date = new Date();
+    var curDate = null;
+
+    do { curDate = new Date(); } 
+      while (curDate - date < millis);
+  }
+
+
+  function requestJSON(url, callback) {
+    $.ajax({
+      beforeSend: function() {
+        // Handle the beforeSend event
+      },
+      url: url,
+      complete: function(xhr) {
+        callback.call(null, xhr.responseJSON);
+         
+      }
+    });
+  }
+
+  function timeSpanDays(year, month, day){
+        now = new Date();
+        dateEnd = new Date(year, month - 1, day); // months are zero-based
+        days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
+        return Math.round(days);
+      }
+
+
+
+};
+
+
+  function enablePie(){
+    MODULE().enablePie();
+    // console.log('pie');
+    monthSelect();
+  }
+
+  function selectSubtype(subtype){
 
   var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
   console.log(initialStartDate);
@@ -1862,27 +1858,111 @@ function selectSubtype(subtype){
     // (B) Initiate arrays with type label 
 
     switch(typeM) {
-      case "b":
-        var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"]
-      break;
-      case "m":
-        var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
-      break;
-      case "e":
-        var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
-      break;
-      case "p":
-        var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
-      break;
-      case "d":
-        var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
-      break;
-      case "o":
-        var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
-      break;
-    }
 
-    console.log(appliedByDayBySubtype);
+      case "b":
+        var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"];
+        document.getElementById("toggleWithPieClick").innerHTML= ("<span>View by month showing <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
+        // document.getElementById('toggleWithPieClick').innerHTML =  'console.log("hi");'
+        function loadjscssfile(filename, filetype){
+          if (filetype=="js"){ //if filename is a external JavaScript file
+              console.log('inside');
+              var fileref=document.createElement('script')
+              fileref.setAttribute("id",'greenDog')
+              fileref.setAttribute("type","text/javascript")
+              fileref.setAttribute("src", filename)
+              document.getElementsByTagName("head")[0].appendChild(fileref)
+          }   
+        }               
+
+        loadjscssfile("js/myscript.js", "js") //dynamically load and add this .js file
+
+
+        function forceDelay(millis) {
+          var date = new Date();
+          var curDate = null;
+
+          do { curDate = new Date(); } 
+            while (curDate - date < millis);
+        }
+
+
+
+        eval($('#greenDog'));
+
+
+        forceDelay(500);
+
+
+        // badBoy();
+
+      break;
+}
+      // case "m":
+      //   var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
+        // $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+        //           '<option value="mac">Air Conditioning</option>'+
+        //           '<option value="mboil">Boiler</option>'+
+        //           '<option value="mevap">Evaporative Cooler</option>'+
+        //           '<option value="mfurnace">Furnace</option>'+
+        //           '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
+        //           '<option value="mstove">Wood Stove</option>'+
+        //           '<option value="msolar">Solar Thermal</option>'+
+        //           '<option value="momech">Other</option></select>');
+      // break;
+
+    //   case "e":
+    //     var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
+    //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu"><option value="">ALL</option>'+
+    //               '<option value="ecom">Commercial Electric</option>'+
+    //               '<option value="els">Electrical Lift Station</option>'+
+    //               '<option value="erewire">Electrical Re-Wiring</option>'+
+    //               '<option value="eservice">Electrical Service Change</option>'+
+    //               '<option value="etemp">Temporary Electrical Service</option>'+
+    //               '<option value="egen">Generator</option>'+
+    //               '<option value="esolar">Solar Electrical System</option>'+
+    //               '<option value="eoelec">Other</option></select>');
+    //   break;
+
+    //   case "p":
+    //     var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
+    //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu"><option value="">ALL</option>'+
+    //               '<option value="pheat">Water Heater</option>'+
+    //               '<option value="pgas">Gas Piping</option>'+
+    //               '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
+    //               '<option value="poplum">Plumbing - Other</option></select>');
+    //   break;
+
+    //   case "d":
+    //     var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
+    //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu"><option value="">ALL</option>'+
+    //             '<option value="dcomm">Commercial Deconstruction</option>'+
+    //             '<option value="dresdecon">Residential Deconstruction</option>'+
+    //             '<option value="dresdemo">Residential Demolition</option></select>');
+    //   break;
+
+    //   case "o":
+    //     var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
+    //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu"><option value="">ALL</option>'+
+    //             '<option value="obridge">Bridge</option>'+
+    //             '<option value="olot">Building Lot Determination</option>'+
+    //             '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+    //   break;
+
+    // }
+
+
+     $("#toggleWithPieClick").on("select", "value", function(){console.log('great')});
+
+    // $("#uniqueSelector select").on("change", gearUp())
+
+    console.log(document.getElementById('toggleWithPieClick').innerHTML);
+
+    // var c = eval(document.getElementById('toggleWithPieClick').innerHTML);
+
+
+    
+
+    // console.log(appliedByDayBySubtype);
 
     var output = {};
   
@@ -1959,28 +2039,6 @@ function selectSubtype(subtype){
   });
   };
 
-  function requestJSON(url, callback) {
-    $.ajax({
-      beforeSend: function() {
-        // Handle the beforeSend event
-      },
-      url: url,
-      complete: function(xhr) {
-        callback.call(null, xhr.responseJSON);
-         
-      }
-    });
-  }
-
-
-  function forceDelay(millis) {
-    var date = new Date();
-    var curDate = null;
-
-    do { curDate = new Date(); } 
-      while (curDate - date < millis);
-  }
-
 
   function requestJSON(url, callback) {
     $.ajax({
@@ -1993,22 +2051,4 @@ function selectSubtype(subtype){
          
       }
     });
-  }
-
-  function timeSpanDays(year, month, day){
-        now = new Date();
-        dateEnd = new Date(year, month - 1, day); // months are zero-based
-        days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
-        return Math.round(days);
-      }
-
-
-
-};
-
-
-  function enablePie(){
-    console.log(MODULE().enablePie());
-    // console.log('pie');
-    monthSelect();
   }
