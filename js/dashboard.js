@@ -17,6 +17,9 @@ var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsRe
 
 var subtype="";
 
+var d={};
+d['id']="Building";
+
 // localStorage['yearQuery'] = urlLast365Query;
 // localStorage['year'] = urlLast365;
 
@@ -580,7 +583,8 @@ $(document).ready(function() {
 });
 
 
-function monthSelect(){
+function monthSelect(months){
+
     var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
     console.log(initialStartDate);
 
@@ -804,72 +808,72 @@ function monthSelect(){
             }
           });
 
-          switch (d.id){
-           case 'Building':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<optgroup label="Residential">'+    
-                            '<option value="bNRB">New Residence Building</option>'+
-                            '<option value="bNew Residence">New Residence</option>'+
-                            '<option value="bRA">Residential Accessory</option>'+
-                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                            '<option value="bResidential Addition"">Residential Addition</option>'+
-                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                            '<option value="bobuild">Other</option></select>');
-            break;
+          // switch (d.id){
+          //  case 'Building':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<optgroup label="Residential">'+    
+          //                   '<option value="bNRB">New Residence Building</option>'+
+          //                   '<option value="bNew Residence">New Residence</option>'+
+          //                   '<option value="bRA">Residential Accessory</option>'+
+          //                   '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+          //                   '<option value="bResidential Addition"">Residential Addition</option>'+
+          //                   '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+          //                   '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+          //                   '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+          //                   '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+          //                   '<option value="bobuild">Other</option></select>');
+          //   break;
 
-            case 'Mechanical':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="mac">Air Conditioning</option>'+
-                            '<option value="mboil">Boiler</option>'+
-                            '<option value="mevap">Evaporative Cooler</option>'+
-                            '<option value="mfurnace">Furnace</option>'+
-                            '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
-                            '<option value="mstove">Wood Stove</option>'+
-                            '<option value="msolar">Solar Thermal</option>'+
-                            '<option value="momech">Other</option></select>');
-            break;
+          //   case 'Mechanical':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="mac">Air Conditioning</option>'+
+          //                   '<option value="mboil">Boiler</option>'+
+          //                   '<option value="mevap">Evaporative Cooler</option>'+
+          //                   '<option value="mfurnace">Furnace</option>'+
+          //                   '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
+          //                   '<option value="mstove">Wood Stove</option>'+
+          //                   '<option value="msolar">Solar Thermal</option>'+
+          //                   '<option value="momech">Other</option></select>');
+          //   break;
 
-            case 'Electrical':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="ecom">Commercial Electric</option>'+
-                            '<option value="els">Electrical Lift Station</option>'+
-                            '<option value="erewire">Electrical Re-Wiring</option>'+
-                            '<option value="eservice">Electrical Service Change</option>'+
-                            '<option value="etemp">Temporary Electrical Service</option>'+
-                            '<option value="egen">Generator</option>'+
-                            '<option value="esolar">Solar Electrical System</option>'+
-                            '<option value="eoelec">Other</option></select>');
-            break;
+          //   case 'Electrical':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="ecom">Commercial Electric</option>'+
+          //                   '<option value="els">Electrical Lift Station</option>'+
+          //                   '<option value="erewire">Electrical Re-Wiring</option>'+
+          //                   '<option value="eservice">Electrical Service Change</option>'+
+          //                   '<option value="etemp">Temporary Electrical Service</option>'+
+          //                   '<option value="egen">Generator</option>'+
+          //                   '<option value="esolar">Solar Electrical System</option>'+
+          //                   '<option value="eoelec">Other</option></select>');
+          //   break;
 
-            case 'Plumbing':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="pheat">Water Heater</option>'+
-                            '<option value="pgas">Gas Piping</option>'+
-                            '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
-                            '<option value="poplum">Plumbing - Other</option></select>');
-            break;
+          //   case 'Plumbing':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="pheat">Water Heater</option>'+
+          //                   '<option value="pgas">Gas Piping</option>'+
+          //                   '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
+          //                   '<option value="poplum">Plumbing - Other</option></select>');
+          //   break;
 
-            case 'Demolition':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="dcomm">Commercial Deconstruction</option>'+
-                            '<option value="dresdecon">Residential Deconstruction</option>'+
-                            '<option value="dresdemo">Residential Demolition</option></select>');
-            break;
+          //   case 'Demolition':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="dcomm">Commercial Deconstruction</option>'+
+          //                   '<option value="dresdecon">Residential Deconstruction</option>'+
+          //                   '<option value="dresdemo">Residential Demolition</option></select>');
+          //   break;
 
-            case 'Other':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="obridge">Bridge</option>'+
-                            '<option value="olot">Building Lot Determination</option>'+
-                            '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+          //   case 'Other':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="obridge">Bridge</option>'+
+          //                   '<option value="olot">Building Lot Determination</option>'+
+          //                   '<option value="ooilngas">Oil and Gas Development</option></select>'); 
 
 
-            default:
-              console.log(d.id);
-            break;
-          }
+          //   default:
+          //     console.log(d.id);
+          //   break;
+          // }
 
 
 
@@ -1058,72 +1062,72 @@ function monthSelect(){
             }
           });
 
-          switch (d.id){
-           case 'Building':
-              $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<optgroup label="Residential">'+    
-                            '<option value="bNRB">New Residence Building</option>'+
-                            '<option value="bNew Residence">New Residence</option>'+
-                            '<option value="bRA">Residential Accessory</option>'+
-                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                            '<option value="bResidential Addition"">Residential Addition</option>'+
-                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                            '<option value="bobuild">Other</option></select>');
-            break;
+          // switch (d.id){
+          //  case 'Building':
+          //     $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<optgroup label="Residential">'+    
+          //                   '<option value="bNRB">New Residence Building</option>'+
+          //                   '<option value="bNew Residence">New Residence</option>'+
+          //                   '<option value="bRA">Residential Accessory</option>'+
+          //                   '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+          //                   '<option value="bResidential Addition"">Residential Addition</option>'+
+          //                   '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+          //                   '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+          //                   '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+          //                   '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+          //                   '<option value="bobuild">Other</option></select>');
+          //   break;
 
-          case 'Mechanical':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="mac">Air Conditioning</option>'+
-                            '<option value="mboil">Boiler</option>'+
-                            '<option value="mevap">Evaporative Cooler</option>'+
-                            '<option value="mfurnace">Furnace</option>'+
-                            '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
-                            '<option value="mstove">Wood Stove</option>'+
-                            '<option value="msolar">Solar Thermal</option>'+
-                            '<option value="momech">Other</option></select>');
-            break;
+          //   case 'Mechanical':
+          //   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="mac">Air Conditioning</option>'+
+          //                   '<option value="mboil">Boiler</option>'+
+          //                   '<option value="mevap">Evaporative Cooler</option>'+
+          //                   '<option value="mfurnace">Furnace</option>'+
+          //                   '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
+          //                   '<option value="mstove">Wood Stove</option>'+
+          //                   '<option value="msolar">Solar Thermal</option>'+
+          //                   '<option value="momech">Other</option></select>');
+          //   break;
 
-            case 'Electrical':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="ecom">Commercial Electric</option>'+
-                            '<option value="els">Electrical Lift Station</option>'+
-                            '<option value="erewire">Electrical Re-Wiring</option>'+
-                            '<option value="eservice">Electrical Service Change</option>'+
-                            '<option value="etemp">Temporary Electrical Service</option>'+
-                            '<option value="egen">Generator</option>'+
-                            '<option value="esolar">Solar Electrical System</option>'+
-                            '<option value="eoelec">Other</option></select>');
-            break;
+          //   case 'Electrical':
+          //   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="ecom">Commercial Electric</option>'+
+          //                   '<option value="els">Electrical Lift Station</option>'+
+          //                   '<option value="erewire">Electrical Re-Wiring</option>'+
+          //                   '<option value="eservice">Electrical Service Change</option>'+
+          //                   '<option value="etemp">Temporary Electrical Service</option>'+
+          //                   '<option value="egen">Generator</option>'+
+          //                   '<option value="esolar">Solar Electrical System</option>'+
+          //                   '<option value="eoelec">Other</option></select>');
+          //   break;
 
-            case 'Plumbing':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="pheat">Water Heater</option>'+
-                            '<option value="pgas">Gas Piping</option>'+
-                            '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
-                            '<option value="poplum">Plumbing - Other</option></select>');
-            break;
+          //   case 'Plumbing':
+          //   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="pheat">Water Heater</option>'+
+          //                   '<option value="pgas">Gas Piping</option>'+
+          //                   '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
+          //                   '<option value="poplum">Plumbing - Other</option></select>');
+          //   break;
 
-            case 'Demolition':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="dcomm">Commercial Deconstruction</option>'+
-                            '<option value="dresdecon">Residential Deconstruction</option>'+
-                            '<option value="dresdemo">Residential Demolition</option></select>');
-            break;
+          //   case 'Demolition':
+          //   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="dcomm">Commercial Deconstruction</option>'+
+          //                   '<option value="dresdecon">Residential Deconstruction</option>'+
+          //                   '<option value="dresdemo">Residential Demolition</option></select>');
+          //   break;
 
-            case 'Other':
-            $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                            '<option value="obridge">Bridge</option>'+
-                            '<option value="olot">Building Lot Determination</option>'+
-                            '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+          //   case 'Other':
+          //   $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                   '<option value="obridge">Bridge</option>'+
+          //                   '<option value="olot">Building Lot Determination</option>'+
+          //                   '<option value="ooilngas">Oil and Gas Development</option></select>'); 
 
 
-            default:
-              console.log(d.id);
-            break;
-          }
+          //   default:
+          //     console.log(d.id);
+          //   break;
+          // }
 
 
 
@@ -1160,8 +1164,6 @@ function monthSelect(){
           }
 
           console.log(weeklyBunch);
-
-          
           var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
               return (moment(d[0]) > startDateMoment);
             });
@@ -1347,72 +1349,73 @@ function monthSelect(){
             }
           });
 
-          switch (d.id){
-               case 'Building':
-                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<optgroup label="Residential">'+    
-                                '<option value="bNRB">New Residence Building</option>'+
-                                '<option value="bNew Residence">New Residence</option>'+
-                                '<option value="bRA">Residential Accessory</option>'+
-                                '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                '<option value="bResidential Addition"">Residential Addition</option>'+
-                                '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                '<option value="bobuild">Other</option></select>');
-                break;
 
-                case 'Mechanical':
-                  $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<option value="mac">Air Conditioning</option>'+
-                                '<option value="mboil">Boiler</option>'+
-                                '<option value="mevap">Evaporative Cooler</option>'+
-                                '<option value="mfurnace">Furnace</option>'+
-                                '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
-                                '<option value="mstove">Wood Stove</option>'+
-                                '<option value="msolar">Solar Thermal</option>'+
-                                '<option value="momech">Other</option></select>');
-                break;
+          // switch (d.id){
+          //      case 'Building':
+          //         $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<optgroup label="Residential">'+    
+          //                       '<option value="bNRB">New Residence Building</option>'+
+          //                       '<option value="bNew Residence">New Residence</option>'+
+          //                       '<option value="bRA">Residential Accessory</option>'+
+          //                       '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+          //                       '<option value="bResidential Addition"">Residential Addition</option>'+
+          //                       '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+          //                       '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+          //                       '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+          //                       '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+          //                       '<option value="bobuild">Other</option></select>');
+          //       break;
 
-                case 'Electrical':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<option value="ecom">Commercial Electric</option>'+
-                                '<option value="els">Electrical Lift Station</option>'+
-                                '<option value="erewire">Electrical Re-Wiring</option>'+
-                                '<option value="eservice">Electrical Service Change</option>'+
-                                '<option value="etemp">Temporary Electrical Service</option>'+
-                                '<option value="egen">Generator</option>'+
-                                '<option value="esolar">Solar Electrical System</option>'+
-                                '<option value="eoelec">Other</option></select>');
-                break;
+          //       case 'Mechanical':
+          //         $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<option value="mac">Air Conditioning</option>'+
+          //                       '<option value="mboil">Boiler</option>'+
+          //                       '<option value="mevap">Evaporative Cooler</option>'+
+          //                       '<option value="mfurnace">Furnace</option>'+
+          //                       '<option value="mg-l-fire">Gas / Log Fireplace</option>'+
+          //                       '<option value="mstove">Wood Stove</option>'+
+          //                       '<option value="msolar">Solar Thermal</option>'+
+          //                       '<option value="momech">Other</option></select>');
+          //       break;
 
-                case 'Plumbing':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<option value="pheat">Water Heater</option>'+
-                                '<option value="pgas">Gas Piping</option>'+
-                                '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
-                                '<option value="poplum">Plumbing - Other</option></select>');
-                break;
+          //       case 'Electrical':
+          //       $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<option value="ecom">Commercial Electric</option>'+
+          //                       '<option value="els">Electrical Lift Station</option>'+
+          //                       '<option value="erewire">Electrical Re-Wiring</option>'+
+          //                       '<option value="eservice">Electrical Service Change</option>'+
+          //                       '<option value="etemp">Temporary Electrical Service</option>'+
+          //                       '<option value="egen">Generator</option>'+
+          //                       '<option value="esolar">Solar Electrical System</option>'+
+          //                       '<option value="eoelec">Other</option></select>');
+          //       break;
 
-                case 'Demolition':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<option value="dcomm">Commercial Deconstruction</option>'+
-                                '<option value="dresdecon">Residential Deconstruction</option>'+
-                                '<option value="dresdemo">Residential Demolition</option></select>');
-                break;
+          //       case 'Plumbing':
+          //       $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<option value="pheat">Water Heater</option>'+
+          //                       '<option value="pgas">Gas Piping</option>'+
+          //                       '<option value="phook">Eldorado Springs Sanitation Hookup</option>'+
+          //                       '<option value="poplum">Plumbing - Other</option></select>');
+          //       break;
 
-                case 'Other':
-                $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                                '<option value="obridge">Bridge</option>'+
-                                '<option value="olot">Building Lot Determination</option>'+
-                                '<option value="ooilngas">Oil and Gas Development</option></select>'); 
+          //       case 'Demolition':
+          //       $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<option value="dcomm">Commercial Deconstruction</option>'+
+          //                       '<option value="dresdecon">Residential Deconstruction</option>'+
+          //                       '<option value="dresdemo">Residential Demolition</option></select>');
+          //       break;
+
+          //       case 'Other':
+          //       $('#toggleWithPieClick').html(' Applications by Day over last Month <select id="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
+          //                       '<option value="obridge">Bridge</option>'+
+          //                       '<option value="olot">Building Lot Determination</option>'+
+          //                       '<option value="ooilngas">Oil and Gas Development</option></select>'); 
 
 
-                default:
-                  console.log(d.id);
-                break;
-              }
+          //       default:
+          //         console.log(d.id);
+          //       break;
+          //     }
 
         break;
 
@@ -1666,9 +1669,9 @@ function monthSelect(){
                               colors: {
                                  'Building': 'rgb(31, 119, 180)',
                                  'Demolition': 'rgb(140, 86, 75)',
-                                 'Electrical': 'rgb(44, 160, 44)',
+                                 'Electrical': 'rgb(214, 39, 40)',
                                  'Other': 'rgb(127, 127, 127)',
-                                 'Mechanical': 'rgb(214, 39, 40)',
+                                 'Mechanical': 'rgb(44, 160, 44)',
                                  'Roof': 'rgb(255, 127, 14)',
                                  'Plumbing': 'rgb(148, 103, 189)' ,
                                  'Pool/Spa': 'rgb(188, 189, 34)',
@@ -1690,7 +1693,65 @@ function monthSelect(){
                             // }
                           });
 
-                    $('#toggleWithPieClick').text(' Applications by Day over last Month ');
+                            $('#toggleWithPieClick').text(' Applications by Day over last Month ');
+
+
+
+                            
+              //
+              // ____    __  __  ______      ______   __  __      ____    __  __  ____            ______  __    __  ____    ____      
+              ///\  _`\ /\ \/\ \/\__  _\    /\__  _\ /\ \/\ \    /\  _`\ /\ \/\ \/\  _`\         /\__  _\/\ \  /\ \/\  _`\ /\  _`\    
+              //\ \ \L\ \ \ \ \ \/_/\ \/    \/_/\ \/ \ \ `\\ \   \ \,\L\_\ \ \ \ \ \ \L\ \       \/_/\ \/\ `\`\\/'/\ \ \L\ \ \ \L\_\  
+              // \ \ ,__/\ \ \ \ \ \ \ \       \ \ \  \ \ , ` \   \/_\__ \\ \ \ \ \ \  _ <'  _______\ \ \ `\ `\ /'  \ \ ,__/\ \  _\L  
+              //  \ \ \/  \ \ \_\ \ \ \ \       \_\ \__\ \ \`\ \    /\ \L\ \ \ \_\ \ \ \L\ \/\______\\ \ \  `\ \ \   \ \ \/  \ \ \L\ \
+              //   \ \_\   \ \_____\ \ \_\      /\_____\\ \_\ \_\   \ `\____\ \_____\ \____/\/______/ \ \_\   \ \_\   \ \_\   \ \____/
+              //    \/_/    \/_____/  \/_/      \/_____/ \/_/\/_/    \/_____/\/_____/\/___/            \/_/    \/_/    \/_/    \/___/ 
+              //                                                                                                                      
+              //                                                                                                                      
+              // ____     __  __  ______  ______  _____   __  __      __  __  ____    ____    ____      
+              ///\  _`\  /\ \/\ \/\__  _\/\__  _\/\  __`\/\ \/\ \    /\ \/\ \/\  _`\ /\  _`\ /\  _`\    
+              //\ \ \L\ \\ \ \ \ \/_/\ \/\/_/\ \/\ \ \/\ \ \ `\\ \   \ \ \_\ \ \ \L\_\ \ \L\ \ \ \L\_\  
+              // \ \  _ <'\ \ \ \ \ \ \ \   \ \ \ \ \ \ \ \ \ , ` \   \ \  _  \ \  _\L\ \ ,  /\ \  _\L  
+              //  \ \ \L\ \\ \ \_\ \ \ \ \   \ \ \ \ \ \_\ \ \ \`\ \   \ \ \ \ \ \ \L\ \ \ \\ \\ \ \L\ \
+              //   \ \____/ \ \_____\ \ \_\   \ \_\ \ \_____\ \_\ \_\   \ \_\ \_\ \____/\ \_\ \_\ \____/
+              //    \/___/   \/_____/  \/_/    \/_/  \/_____/\/_/\/_/    \/_/\/_/\/___/  \/_/\/ /\/___/ 
+              //
+              //
+              
+
+
+
+                        document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+
+                        // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
+
+                        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH');
+
+                        
+                        $('#toggleWithPieClick').on('click', $("#innerSelectSub"), function(){
+                            console.log('OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO');
+                            function loadjsfile(filename, filetype){
+                                if (filetype=="js"){ //if filename is a external JavaScript file
+                                    var fileref=document.createElement('script');
+                                    fileref.setAttribute("type","text/javascript");
+                                    fileref.setAttribute("src", filename);
+                                    document.getElementsByTagName("head")[0].appendChild(fileref);
+                                }
+                            };
+
+                            var testpass = d.id;
+
+                            if (!subtype){
+                              loadjsfile("js/subscripts/"+testpass+"script.js", "js") //dynamically load and add this .js file
+                            }
+
+                        });
+
+
+
+
+
+
                 });
               }
             },
@@ -1779,14 +1840,6 @@ function monthSelect(){
     });
   }
 
-  function timeSpanDays(year, month, day){
-        now = new Date();
-        dateEnd = new Date(year, month - 1, day); // months are zero-based
-        days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
-        return Math.round(days);
-      }
-
-
 
 };
 
@@ -1837,6 +1890,8 @@ requestJSON(urlLast365, function(json) {
     return moment(d.AppliedDate) > startDateMoment; 
   });
 
+  console.log(appliedLast365Days);
+
 
   // format record.AppliedDate to drop days and years
   // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
@@ -1855,16 +1910,61 @@ requestJSON(urlLast365, function(json) {
 
   /********************************************************************************/
   
-  // (A) creates the data object
+  weeklyBunch = [];
+
+
+  for (var  i = 0; i<records.length; i++){
+    var then = records[i].AppliedDate;
+
+
+
+    var thenYear=then.substr(0,4);
+    var thenMonth=then.substr(5,2);
+    var thenDay=then.substr(8,2);
+
+    var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
+
+
+    var ago = moment(then);
+    var weeksAgo = ago.startOf('isoWeek').format('MMM-DD-YY');
+    // var weeksAgo= Math.floor(daysAgo/7);
+    // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
+    // var p = moment(records[i].AppliedDate).day();
+    // var q = p.day();
+    weeklyBunch.push([records[i]["AppliedDate"], ago, weeksAgo]);
+
+
+    console.log(weeksAgo,'________', records[i].AppliedDate);
+  }
+
+  console.log(weeklyBunch);
+
+  var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
+      console.log(moment(d[1]),"*********",startDateMoment);
+      return (moment(d[1]).isBefore(startDateMoment));
+  });
+  
+
+  console.log(appliedPerWeekLast365Days)
+  // var appliedLast365Days = records.filter(function(d) { 
+  //   return moment(d.AppliedDate) > startDateMoment; 
+  // })
+
+  appliedLast365Days.forEach(function(day, inc, arr){
+    console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
+    appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
+  });
+
+  // creates the data object
   // FURTHER DESCRIPTION NECESSARY {key_Month : [ {key_type : numb }]}
 
   var appliedByDayBySubtype = d3.nest()
-    .key(function(d) { return d.AppliedDate })
+    .key(function(d) { return d.week })
     .key(function(d) { return d.PermitType })
     .rollup (function(v) { return v.length })
     .entries(appliedLast365Days);
 
-  // (B) Initiate arrays with type label 
+  // Initiate arrays with type label 
 
   switch(typeM) {
 
@@ -1920,9 +2020,9 @@ requestJSON(urlLast365, function(json) {
 
 
   subtypes.forEach(function(subtyper) {
-    output[subtyper] = appliedByDayBySubtype.map(function(month) {
+    output[subtyper] = appliedByDayBySubtype.map(function(week) {
         var o = {};
-        o[month.key] = month.values.filter(function(val) {
+        o[week.key] = week.values.filter(function(val) {
           return val.key == subtyper;
         }).map(function(m) { return m.values; }).shift() || 0;
         return o;
@@ -1935,11 +2035,11 @@ requestJSON(urlLast365, function(json) {
   // (E) initiates array of months
   // (F) Throws a blank into each arrays month if there were no records
 
-  var months = appliedByDayBySubtype.map(function(month) {
-    return month.key;
+  var weeks = appliedByDayBySubtype.map(function(week) {
+    return week.key;
   });
 
-  console.log(months);
+  console.log(weeks);
 
   // (G) push the value into the type-labeled array
 
@@ -1984,7 +2084,7 @@ requestJSON(urlLast365, function(json) {
     axis: {
       x: {
         type: 'category',
-        categories: months
+        categories: weeks
       }
     },
     // legend: {
@@ -2015,3 +2115,11 @@ requestJSON(urlLast365, function(json) {
     // console.log('pie');
     monthSelect();
   }
+
+
+  function timeSpanDays(year, month, day){
+        now = new Date();
+        dateEnd = new Date(year, month - 1, day); // months are zero-based
+        days = (dateEnd - now) / 1000/60/60/24;   // convert milliseconds to days
+        return Math.round(days);
+      }
