@@ -248,7 +248,7 @@
                     <div class="col-lg-8">
                     <div class="panel panel-default">
                         <div class="panel-heading" id="uniqueSelector">
-                            <i class="fa fa-bar-chart-o fa-fw"></i><span id='subtypeMenu'></span><span id='toggleWithPieClick'> Applications by Month </span>
+                            <i class="fa fa-bar-chart-o fa-fw"></i><span id='innerSelectSub'></span><span id='toggleWithPieClick'> Applications by Month </span>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -351,8 +351,23 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min.js"></script>
 
-    <script src="js/dashboard.js" charset="utf-8"></script>
+
     <script src="js/method.js"  charset="utf-8"></script>
-</body>
+
+
+   <!-- Load modules here -->
+    <script type="text/javascript" src="js/modules/selectSubtype.js"></script>
+    <script type="text/javascript" src="js/modules/building.js"></script>
+    <script type="text/javascript" src="js/modules/demolition.js"></script> 
+    <script type="text/javascript" src="js/modules/electrical.js"></script>
+    <script type="text/javascript" src="js/modules/mechanical.js"></script>
+    <script type="text/javascript" src="js/modules/other.js"></script>
+    <script type="text/javascript" src="js/modules/plumbing.js"></script>
+
+       <!-- Load this penultimate -->
+       <!-- <script type="text/javascript" src="js/modules/index.js"></script> -->
+       <!-- Load this last -->
+    <script type="text/javascript" src="js/dashboard.js" charset="utf-8"></script>
+    </body>
 
 </html>

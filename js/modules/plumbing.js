@@ -1,3 +1,5 @@
+var Plumbing = function Plumbing(){
+	
 var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
 var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
@@ -52,7 +54,7 @@ requestJSON(urlLast365, function(json) {
 
 
   	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-    	return o.PermitTypeMapped === "Mechanical";
+    	return o.PermitTypeMapped === "Plumbing";
   	});
 
   	permitTypes=[];
@@ -84,7 +86,7 @@ requestJSON(urlLast365, function(json) {
     // creates a d3 object from the records
     .entries(appliedLastYearByType);
 
-    var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
+    var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
      
     var output = [];
 
@@ -166,13 +168,12 @@ requestJSON(urlLast365, function(json) {
             
 });
 
-$("#subtypeMenu").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="selectSubtype(value);"><option value="">ALL</option>'+
-                '<option value="mAir Conditioning">Air Conditioning</option>'+
-                '<option value="mBoiler">Boiler</option>'+
-                '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                '<option value="mFurnace">Furnace</option>'+
-                '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                '<option value="mWood Stove">Wood Stove</option>'+
-                '<option value="mSolar Thermal">Solar Thermal</option>'+
-                '<option value="mMechanical - Other">Other</option></select>');
+$("#innerSelectSub").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                '<option value="pWater Heater">Water Heater</option>'+
+                '<option value="pGas Piping">Gas Piping</option>'+
+                '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
+                '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
 
+};
+
+window.Plumbing = Plumbing;
