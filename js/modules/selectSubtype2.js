@@ -73,8 +73,8 @@ var SelectSubtype = function selectSubtype(subtype){
     weeklyBunch = [];
 
 
-    for (var  i = 0; i<appliedLast365Days.length; i++){
-      var then = appliedLast365Days[i].AppliedDate;
+    for (var  i = 0; i<records.length; i++){
+      var then = records[i].AppliedDate;
 
 
 
@@ -91,7 +91,7 @@ var SelectSubtype = function selectSubtype(subtype){
       // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
       // var p = moment(records[i].AppliedDate).day();
       // var q = p.day();
-      weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+      weeklyBunch.push([records[i]["AppliedDate"], ago, weeksAgo]);
 
 
       // console.log(weeksAgo,'________', records[i].AppliedDate);
@@ -99,12 +99,10 @@ var SelectSubtype = function selectSubtype(subtype){
 
     console.log(weeklyBunch.length);
 
-    var appliedPerWeekLast365Days = weeklyBunch;
-
-    // .filter(function(d) {
-    //     // console.log(moment(d[1]),"*********",startDateMoment);
-    //     return (moment(d[1]).diff(startDateMoment) >= 0);
-    // });
+    var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
+        // console.log(moment(d[1]),"*********",startDateMoment);
+        return (moment(d[1]).diff(startDateMoment) >= 0);
+    });
     
 
     console.log(appliedPerWeekLast365Days.length);
@@ -114,7 +112,7 @@ var SelectSubtype = function selectSubtype(subtype){
 
     appliedLast365Days.forEach(function(day, inc, arr){
       // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][1]);
-      appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][2];
+      appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
     });
 
     // creates the data object
@@ -192,10 +190,6 @@ var SelectSubtype = function selectSubtype(subtype){
 
       break;
 
-      default:
-
-      console.log('no subtype!?!?!?!?!?!?!??!?!?!');
-
     }
 
 
@@ -272,7 +266,7 @@ var SelectSubtype = function selectSubtype(subtype){
     var chart = c3.generate({
       bindto: '#byDay',
       data: {
-        columns: [selectedColumnData[0]],
+        columns: selectedColumnData,
         type: 'bar',
         },
       grid: {
