@@ -172,7 +172,7 @@ var Other = function Other(config){
 
   };
 
-  $("#innerSelectSub").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                 '<option value="oBridge">Bridge</option>'+
                 '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
                 '<option value="oOil and Gas Development">Oil and Gas Development</option></select>'); 

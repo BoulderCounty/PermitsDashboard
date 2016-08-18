@@ -171,7 +171,7 @@ var Demolition = function Demolition(config){
 
   }
 
-  $("#innerSelectSub").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                               '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
                               '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
                               '<option value="dResidential Demolition">Residential Demolition</option></select>');

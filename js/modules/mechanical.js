@@ -172,7 +172,7 @@ var Mechanical = function Mechanical (config){
 
 	}
 
-	$("#innerSelectSub").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+	$("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
 	                '<option value="mAir Conditioning">Air Conditioning</option>'+
 	                '<option value="mBoiler">Boiler</option>'+
 	                '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+

@@ -172,7 +172,7 @@ var Plumbing = function Plumbing(config){
 
   };
 
-  $("#innerSelectSub").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                   '<option value="pWater Heater">Water Heater</option>'+
                   '<option value="pGas Piping">Gas Piping</option>'+
                   '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+

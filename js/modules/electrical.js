@@ -172,7 +172,7 @@ var Electrical = function Electrical(config){
 
 	};
 
-	$("#innerSelectSub").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+	$("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
 	                '<option value="eCommercial Electric">Commercial Electric</option>'+
 	                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
 	                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+

@@ -16,6 +16,7 @@ var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsRe
   // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
 var subtype="";
+var toggleSubtype="";
 
 var d={};
 d['id']="Building";
@@ -322,7 +323,13 @@ $(document).ready(function() {
         onclick: function (d, i) {
           console.log("onclick", d.id, i);
 
+          $("#uniqueSelector").empty();
+            // var old_element = document.getElementById("uniqueSelector");
+            // var new_element = old_element.cloneNode(true);
+            // old_element.parentNode.replaceChild(new_element, old_element);
           clearDomElementUS();
+          $(".monthly-dropdown-menu option:selected").val("");     
+          $("#uniqueSelector").html("<i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label>")
 
           var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
 
@@ -533,19 +540,21 @@ $(document).ready(function() {
               //
               
 
-                document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
-                // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
+                // // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
 
 
-                        // $("#innerSelectSub").empty();
+                //         // $("#innerSelectSub").empty();
                
 
 
-                        $(document).on('click', $('#innerSelectSub'), function(e){
-                          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
-                          subtypeRadioButtons();
-                        });
+                //         $(document).on('click', $('#innerSelectSub'), function(e){
+                //           console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
+                //           if ((toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
+                //             subtypeRadioButtons();
+                //           }
+                //         });
 
                         // var old_element = document.getElementById("innerSelectSub");
                         // var new_element = old_element.cloneNode(true);
@@ -593,131 +602,149 @@ $(document).ready(function() {
                         //       }
                         //     }
                         //   });
+                        //   toggleSubtype++;
                         // });
                         
                         
-                        // $('#uniqueSelector').on('change', $("#innerSelectSub"), function(value){
+                        $('#uniqueSelector').on('click', $("#innerSelectSub"), function(value){
 
-                        //   innerValue = $(".monthly-dropdown-menu option:selected").val();
+                          innerValue = $(".monthly-dropdown-menu option:selected").val();
 
-                        //   console.log($(".monthly-dropdown-menu option:selected").val());
-                        //   console.log(value);
-
-
-                        //       switch (d.id){
-                        //         case "Building":
-                        //           var subtype = Building(innerValue);
-
-                        //           console.log(subtype);
+                          console.log($(".monthly-dropdown-menu option:selected").val());
+                          console.log(value);
+                          console.log(d.id,"&&&&&&&&&&&&&")
 
 
-                        //           if (innerValue != ""){
+                          document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+
+
+
+             
+
+
+                        $(document).on('click', $('#innerSelectSub'), function(e){
+                          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
+                          if ((toggleSubtype == 0) || (toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
+                            subtypeRadioButtons();
+                          }
+                        });
+
+
+
+                              switch (d.id){
+                                case "Building":
+                                  var subtype = Building(innerValue);
+
+                                  console.log(subtype);
+
+
+                                  if (innerValue != ""){
                          
-                        //             $("#innerSelectSub").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                         '<optgroup label="Residential">'+    
-                        //                         '<option value="bNRB">New Residence Building</option>'+
-                        //                         '<option value="bNew Residence">New Residence</option>'+
-                        //                         '<option value="bRA">Residential Accessory</option>'+
-                        //                         '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                        //                         '<option value="bResidential Addition"">Residential Addition</option>'+
-                        //                         '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                        //                         '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                        //                         '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                        //                         '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                        //                         '<option value="bobuild">Other</option></select>');                          
-                        //             clearDomElementUS();
-                        //           }
+                                    $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                                '<optgroup label="Residential">'+    
+                                                '<option value="bNRB">New Residence Building</option>'+
+                                                '<option value="bNew Residence">New Residence</option>'+
+                                                '<option value="bRA">Residential Accessory</option>'+
+                                                '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+                                                '<option value="bResidential Addition"">Residential Addition</option>'+
+                                                '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+                                                '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+                                                '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+                                                '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+                                                '<option value="bobuild">Other</option></select>');                          
+                                    clearDomElementUS();
+                                  }
 
-                        //         break;
+                                break;
 
-                        //         case "Demolition":
-                        //           var subtype = Demolition(innerValue);
+                                case "Demolition":
+                                  var subtype = Demolition(innerValue);
 
-                        //           if (innerValue !=""){
-                        //               $("#innerSelectSub").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                         '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                        //                         '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                        //                         '<option value="dResidential Demolition">Residential Demolition</option></select>');
-                        //           clearDomElementUS();
-                        //           }
+                                  if (innerValue !=""){
+                                      $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                                '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
+                                                '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
+                                                '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                                  clearDomElementUS();
+                                  }
 
-                        //         break;
-
-
-
-                        //         case "Electrical":
-                        //           var subtype = Electrical(innerValue);
-
-                        //           if (innerValue != ""){
-                        //               $("#innerSelectSub").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                         '<option value="eCommercial Electric">Commercial Electric</option>'+
-                        //                         '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-                        //                         '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-                        //                         '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-                        //                         '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-                        //                         '<option value="eGenerator">Generator</option>'+
-                        //                         '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-                        //                         '<option value="eElectrical Other">Electical Other</option></select>');
-                        //           clearDomElementUS();
-                        //           }
+                                break;
 
 
-                        //         break;
 
-                        //         case "Mechanical":
-                        //           var subtype = Mechanical(innerValue);
+                                case "Electrical":
+                                  var subtype = Electrical(innerValue);
 
-                        //           if (innerValue != ""){
-                        //               $("#innerSelectSub").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                       '<option value="mAir Conditioning">Air Conditioning</option>'+
-                        //                       '<option value="mBoiler">Boiler</option>'+
-                        //                       '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                        //                       '<option value="mFurnace">Furnace</option>'+
-                        //                       '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                        //                       '<option value="mWood Stove">Wood Stove</option>'+
-                        //                       '<option value="mSolar Thermal">Solar Thermal</option>'+
-                        //                       '<option value="mMechanical - Other">Other</option></select>');
-                        //           clearDomElementUS();
-                        //           }
-
-
-                        //         break;
-
-                        //         case "Other":
-                        //           var subtype = Other(innerValue);
-
-                        //           if (innerValue != ""){
-                        //             $("#innerSelectSub").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                     '<option value="oBridge">Bridge</option>'+
-                        //                     '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
-                        //                     '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
-                        //           clearDomElementUS();
-                        //           } 
+                                  if (innerValue != ""){
+                                      $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                                '<option value="eCommercial Electric">Commercial Electric</option>'+
+                                                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
+                                                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
+                                                '<option value="eElectrical Service Change">Electrical Service Change</option>'+
+                                                '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
+                                                '<option value="eGenerator">Generator</option>'+
+                                                '<option value="eSolar Electrical System">Solar Electrical System</option>'+
+                                                '<option value="eElectrical Other">Electical Other</option></select>');
+                                  clearDomElementUS();
+                                  }
 
 
-                        //         break;
+                                break;
 
-                        //         case "Plumbing":
-                        //           var subtype = Plumbing(innerValue);
+                                case "Mechanical":
+                                  var subtype = Mechanical(innerValue);
 
-                        //           if (innerValue != ""){
-                        //             $("#innerSelectSub").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                        //                   '<option value="pWater Heater">Water Heater</option>'+
-                        //                   '<option value="pGas Piping">Gas Piping</option>'+
-                        //                   '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
-                        //                   '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
-                        //           clearDomElementUS();
-                        //           }
+                                  if (innerValue != ""){
+                                      $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                              '<option value="mAir Conditioning">Air Conditioning</option>'+
+                                              '<option value="mBoiler">Boiler</option>'+
+                                              '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
+                                              '<option value="mFurnace">Furnace</option>'+
+                                              '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
+                                              '<option value="mWood Stove">Wood Stove</option>'+
+                                              '<option value="mSolar Thermal">Solar Thermal</option>'+
+                                              '<option value="mMechanical - Other">Other</option></select>');
+                                  clearDomElementUS();
+                                  }
 
 
-                        //         break;
+                                break;
 
-                        //         default:
-                        //           console.log("no subtypes");
+                                case "Other":
+                                  var subtype = Other(innerValue);
 
-                        //       }
+                                  if (innerValue != ""){
+                                    $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                            '<option value="oBridge">Bridge</option>'+
+                                            '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
+                                            '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
+                                  clearDomElementUS();
+                                  } 
 
-                        //   });
+
+                                break;
+
+                                case "Plumbing":
+                                  var subtype = Plumbing(innerValue);
+
+                                  if (innerValue != ""){
+                                    $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                          '<option value="pWater Heater">Water Heater</option>'+
+                                          '<option value="pGas Piping">Gas Piping</option>'+
+                                          '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
+                                          '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
+                                  clearDomElementUS();
+                                  }
+
+
+                                break;
+
+                                default:
+                                  console.log("no subtypes");
+
+                              }
+
+                          });
 
 
               
@@ -1855,12 +1882,14 @@ function clearDomElementUS(){
 
                           switch (d.id){
                             case "Building":
-                              var subtype = Building(innerValue);
 
                               console.log(d.id);
 
                               if (innerValue != ""){
-                                $("#innerSelectSub").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+
+                                var subtype = Building(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                             '<optgroup label="Residential">'+    
                                             '<option value="bNRB">New Residence Building</option>'+
                                             '<option value="bNew Residence">New Residence</option>'+
@@ -1872,83 +1901,93 @@ function clearDomElementUS(){
                                             '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
                                             '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
                                             '<option value="bobuild">Other</option></select>');
-                              clearDomElementUS();
+                                clearDomElementUS();
                               }
 
                             break;
 
                             case "Demolition":
-                              var subtype = Demolition(innerValue);
+
 
                               if (innerValue !=""){
-                                  $("#innerSelectSub").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                            '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                                            '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                                            '<option value="dResidential Demolition">Residential Demolition</option></select>');
-                              clearDomElementUS();
+
+                                var subtype = Demolition(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                          '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
+                                          '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
+                                          '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                                clearDomElementUS();
                               }
 
                             break;
 
-
-
                             case "Electrical":
-                              var subtype = Electrical(innerValue);
+
 
                               if (innerValue != ""){
-                                  $("#innerSelectSub").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                            '<option value="eCommercial Electric">Commercial Electric</option>'+
-                                            '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-                                            '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-                                            '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-                                            '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-                                            '<option value="eGenerator">Generator</option>'+
-                                            '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-                                            '<option value="eElectrical Other">Electical Other</option></select>');
-                              clearDomElementUS();
+
+                                var subtype = Electrical(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                          '<option value="eCommercial Electric">Commercial Electric</option>'+
+                                          '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
+                                          '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
+                                          '<option value="eElectrical Service Change">Electrical Service Change</option>'+
+                                          '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
+                                          '<option value="eGenerator">Generator</option>'+
+                                          '<option value="eSolar Electrical System">Solar Electrical System</option>'+
+                                          '<option value="eElectrical Other">Electical Other</option></select>');
+                                clearDomElementUS();
                               }
 
 
                             break;
 
                             case "Mechanical":
-                              var subtype = Mechanical(innerValue);
 
                               if (innerValue != ""){
-                                  $("#innerSelectSub").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                          '<option value="mAir Conditioning">Air Conditioning</option>'+
-                                          '<option value="mBoiler">Boiler</option>'+
-                                          '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                                          '<option value="mFurnace">Furnace</option>'+
-                                          '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                                          '<option value="mWood Stove">Wood Stove</option>'+
-                                          '<option value="mSolar Thermal">Solar Thermal</option>'+
-                                          '<option value="mMechanical - Other">Other</option></select>');
-                              clearDomElementUS();
+
+                                var subtype = Mechanical(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                        '<option value="mAir Conditioning">Air Conditioning</option>'+
+                                        '<option value="mBoiler">Boiler</option>'+
+                                        '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
+                                        '<option value="mFurnace">Furnace</option>'+
+                                        '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
+                                        '<option value="mWood Stove">Wood Stove</option>'+
+                                        '<option value="mSolar Thermal">Solar Thermal</option>'+
+                                        '<option value="mMechanical - Other">Other</option></select>');
+                                clearDomElementUS();
                               }
 
 
                             break;
 
                             case "Other":
-                              var subtype = Other(innerValue);
 
                               if (innerValue != ""){
-                                $("#innerSelectSub").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+
+                                var subtype = Other(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                         '<option value="oBridge">Bridge</option>'+
                                         '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
                                         '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
-                              clearDomElementUS();
+                                clearDomElementUS();
                               } 
 
 
                             break;
 
                             case "Plumbing":
-                              var subtype = Plumbing(innerValue);
 
                               if (innerValue != ""){
-                                $("#innerSelectSub").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+
+                                var subtype = Plumbing(innerValue);
+
+                                $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                       '<option value="pWater Heater">Water Heater</option>'+
                                       '<option value="pGas Piping">Gas Piping</option>'+
                                       '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
