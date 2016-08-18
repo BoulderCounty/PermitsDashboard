@@ -199,7 +199,7 @@ var SelectSubtype = function selectSubtype(subtype){
     }
 
 
-    $("#uniqueSelector").on("click", $(".monthly-dropdown-menu"), function(){console.log(subtype, "!!!!")});
+    // $("#uniqueSelector").on("click", $(".monthly-dropdown-menu"), function(){console.log(subtype, "!!!!")});
 
     // // $("#uniqueSelector select").on("change", gearUp())
 
@@ -237,7 +237,7 @@ var SelectSubtype = function selectSubtype(subtype){
       return week.key;
     });
 
-    console.log(weeks);
+    // console.log(weeks);
 
     // (G) push the value into the type-labeled array
 
@@ -248,15 +248,15 @@ var SelectSubtype = function selectSubtype(subtype){
         return [type].concat(a);
       })
 
-    console.log(subtype);
+    // console.log(subtype);
 
-    console.log(columnData);
+    // console.log(columnData);
 
     var selectedColumnData = columnData.filter(function(subtypet){
       return subtypet[0] == subtype;
     });
 
-    console.log(selectedColumnData);
+    // console.log(selectedColumnData);
 
     // (H) create the bar chart with months and types breakdown 
     /*

@@ -171,19 +171,19 @@ var Building = function Building(config){
 	};
 
 
-	$("#innerSelectSub").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onclick ="console.log(value);"><option value=""></option>'+
+	// $("#innerSelectSub").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onclick ="console.log(value);"><option value=""></option>'+
 
-            '<optgroup label="Residential">'+    
-                                            '<option value="bNRB">New Residence Building</option>'+
-                                            '<option value="bNew Residence">New Residence</option>'+
-                                            '<option value="bRA">Residential Accessory</option>'+
-                                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                            '<option value="bResidential Addition"">Residential Addition</option>'+
-                                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                            '<option value="bobuild">Other</option></select>');
+ //            '<optgroup label="Residential">'+    
+ //                                            '<option value="bNRB">New Residence Building</option>'+
+ //                                            '<option value="bNew Residence">New Residence</option>'+
+ //                                            '<option value="bRA">Residential Accessory</option>'+
+ //                                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+ //                                            '<option value="bResidential Addition"">Residential Addition</option>'+
+ //                                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+ //                                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+ //                                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+ //                                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+ //                                            '<option value="bobuild">Other</option></select>');
 
 	console.log('*******  ',config,'  *******');
 	return subtype;
