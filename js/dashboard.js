@@ -16,10 +16,10 @@ var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsRe
   // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
 var subtype="";
-var toggleSubtype="";
+var toggleSubtype=[];
 
 var d={};
-d['id']="Building";
+d['id']="";
 
 // localStorage['yearQuery'] = urlLast365Query;
 // localStorage['year'] = urlLast365;
@@ -329,7 +329,7 @@ $(document).ready(function() {
             // old_element.parentNode.replaceChild(new_element, old_element);
           clearDomElementUS();
           $(".monthly-dropdown-menu option:selected").val("");     
-          $("#uniqueSelector").html("<i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label>")
+          $("#uniqueSelector").html("<i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label>")
 
           var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
 
@@ -549,12 +549,44 @@ $(document).ready(function() {
                
 
 
-                //         $(document).on('click', $('#innerSelectSub'), function(e){
-                //           console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
-                //           if ((toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
-                //             subtypeRadioButtons();
-                //           }
-                //         });
+                        $(document).on('click', $('#innerSelectSub'), function(e){
+                          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
+                          if ((toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
+                            subtypeRadioButtons();
+                          }
+                          else {
+                            var chart = c3.generate({
+                            bindto: '#byDay',
+                            data: {
+                              columns: [
+                                  returnObj
+                              ],
+                              type: 'bar',
+                              colors: {
+                                 'Building': 'rgb(31, 119, 180)',
+                                 'Demolition': 'rgb(140, 86, 75)',
+                                 'Electrical': 'rgb(214, 39, 40)',
+                                 'Other': 'rgb(127, 127, 127)',
+                                 'Mechanical': 'rgb(44, 160, 44)',
+                                 'Roof': 'rgb(255, 127, 14)',
+                                 'Plumbing': 'rgb(148, 103, 189)' ,
+                                 'Pool/Spa': 'rgb(188, 189, 34)',
+                                 'Fence': 'rgb(23, 190, 207)',
+                                 'Grading': 'rgb(227, 119, 194)'
+                              }
+                            },
+                            // grid: {y: {lines: [{value: AVERAGE}]}},
+                            axis: {
+                                y: {tick : {format: d3.format('d')}},
+                                x: {
+                                type: 'category',
+                                categories: datesArray
+                              }
+                            }
+                          });
+                          }
+                        toggleSubtype++;
+                        });
 
                         // var old_element = document.getElementById("innerSelectSub");
                         // var new_element = old_element.cloneNode(true);
@@ -573,35 +605,7 @@ $(document).ready(function() {
                         //   console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH', d.id);
 
 
-                        //   var chart = c3.generate({
-                        //     bindto: '#byDay',
-                        //     data: {
-                        //       columns: [
-                        //           returnObj
-                        //       ],
-                        //       type: 'bar',
-                        //       colors: {
-                        //          'Building': 'rgb(31, 119, 180)',
-                        //          'Demolition': 'rgb(140, 86, 75)',
-                        //          'Electrical': 'rgb(214, 39, 40)',
-                        //          'Other': 'rgb(127, 127, 127)',
-                        //          'Mechanical': 'rgb(44, 160, 44)',
-                        //          'Roof': 'rgb(255, 127, 14)',
-                        //          'Plumbing': 'rgb(148, 103, 189)' ,
-                        //          'Pool/Spa': 'rgb(188, 189, 34)',
-                        //          'Fence': 'rgb(23, 190, 207)',
-                        //          'Grading': 'rgb(227, 119, 194)'
-                        //       }
-                        //     },
-                        //     // grid: {y: {lines: [{value: AVERAGE}]}},
-                        //     axis: {
-                        //         y: {tick : {format: d3.format('d')}},
-                        //         x: {
-                        //         type: 'category',
-                        //         categories: datesArray
-                        //       }
-                        //     }
-                        //   });
+
                         //   toggleSubtype++;
                         // });
                         
@@ -615,19 +619,19 @@ $(document).ready(function() {
                           console.log(d.id,"&&&&&&&&&&&&&")
 
 
-                          document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                          document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
 
 
              
 
 
-                        $(document).on('click', $('#innerSelectSub'), function(e){
-                          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
-                          if ((toggleSubtype == 0) || (toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
-                            subtypeRadioButtons();
-                          }
-                        });
+                        // $(document).on('click', $('#innerSelectSub'), function(e){
+                        //   console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
+                        //   if ((toggleSubtype == 0) || (toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
+                        //     subtypeRadioButtons();
+                        //   }
+                        // });
 
 
 
@@ -1706,7 +1710,7 @@ function monthSelect(months){
 
 
 
-                    document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all'/> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                    document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all'/> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
                 // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
 
@@ -1717,7 +1721,7 @@ function monthSelect(months){
                   // var new_element = old_element.cloneNode(true);
                   // old_element.parentNode.replaceChild(new_element, old_element);
 
-                  $(document).on('click', $('#innerSelectSub'), function(e){
+                  $(document).on('click', $('.innerSelectSub'), function(e){
                     console.log(e);
                     subtypeRadioButtons();
                   });
@@ -1887,7 +1891,7 @@ function clearDomElementUS(){
 
                               if (innerValue != ""){
 
-                                var subtype = Building(innerValue);
+                                // var subtype = Building(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                             '<optgroup label="Residential">'+    
@@ -1902,7 +1906,10 @@ function clearDomElementUS(){
                                             '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
                                             '<option value="bobuild">Other</option></select>');
                                 clearDomElementUS();
+                              
                               }
+
+                              Building(innerValue);
 
                             break;
 
@@ -1911,7 +1918,7 @@ function clearDomElementUS(){
 
                               if (innerValue !=""){
 
-                                var subtype = Demolition(innerValue);
+                                // var subtype = Demolition(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                           '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
@@ -1920,6 +1927,8 @@ function clearDomElementUS(){
                                 clearDomElementUS();
                               }
 
+                              Demolition(innerValue);
+
                             break;
 
                             case "Electrical":
@@ -1927,7 +1936,7 @@ function clearDomElementUS(){
 
                               if (innerValue != ""){
 
-                                var subtype = Electrical(innerValue);
+                                // var subtype = Electrical(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                           '<option value="eCommercial Electric">Commercial Electric</option>'+
@@ -1941,6 +1950,7 @@ function clearDomElementUS(){
                                 clearDomElementUS();
                               }
 
+                              Electrical(innerValue);
 
                             break;
 
@@ -1948,7 +1958,7 @@ function clearDomElementUS(){
 
                               if (innerValue != ""){
 
-                                var subtype = Mechanical(innerValue);
+                                // var subtype = Mechanical(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                         '<option value="mAir Conditioning">Air Conditioning</option>'+
@@ -1962,6 +1972,7 @@ function clearDomElementUS(){
                                 clearDomElementUS();
                               }
 
+                              Mechanical(innerValue);
 
                             break;
 
@@ -1969,7 +1980,7 @@ function clearDomElementUS(){
 
                               if (innerValue != ""){
 
-                                var subtype = Other(innerValue);
+                                // var subtype = Other(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                         '<option value="oBridge">Bridge</option>'+
@@ -1978,6 +1989,7 @@ function clearDomElementUS(){
                                 clearDomElementUS();
                               } 
 
+                              Other(innerValue);
 
                             break;
 
@@ -1985,7 +1997,7 @@ function clearDomElementUS(){
 
                               if (innerValue != ""){
 
-                                var subtype = Plumbing(innerValue);
+                                // var subtype = Plumbing(innerValue);
 
                                 $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
                                       '<option value="pWater Heater">Water Heater</option>'+
@@ -1995,6 +2007,7 @@ function clearDomElementUS(){
                                 clearDomElementUS();
                               }
 
+                              Plumbing(innerValue);
 
                             break;
 
