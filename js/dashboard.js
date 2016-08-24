@@ -9,6 +9,8 @@ var startDate = moment().subtract(initialStartDate, 'd').format("YYYY-MM-DD");
 var startDateMoment = moment().subtract(initialStartDate, 'd');
 // var shortStartDateMoment = moment().subtract(30, 'd');
 
+var PermitDashboard = window.PermitDashboard || {};
+
 var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
   // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
@@ -21,8 +23,6 @@ var toggleSubtype=[];
 var d={};
 d['id']="";
 
-// localStorage['yearQuery'] = urlLast365Query;
-// localStorage['year'] = urlLast365;
 
 /******************************************************************************/
 
@@ -32,35 +32,20 @@ d['id']="";
 
 $(document).ready(function() {
 
+    PermitDashboard.cache = {};
+
   // Grab dropdown length of data to "breakdown"
   initialStartDate = document.getElementById('monthly-dropdown-menu').value;
 
-     
-  // Helper function to make request for JSONP.
-  function requestJSON(url, callback) {
-    $.ajax({
-      beforeSend: function() {
-        // Handle the beforeSend event
-      },
-      url: url,
-      complete: function(xhr) {
-        callback.call(null, xhr.responseJSON);
-         
-      }
-    });
-    return JSON;
-  }
 
   /********************************************************************************/
   /* Get all activity in last year (START)
-  /* ____    _  _____  _       ____ ____      _    ____  
-  /*|  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-  /*| | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-  /*| |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-  /*|____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+  /* 
+  /* DATA GRAB
+  /*
+  /*    // Original data grab
+  /*
   /********************************************************************************/
-
-  // Original data grab
 
       // set up SQL query string
   var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
@@ -72,10 +57,22 @@ $(document).ready(function() {
 
 
   requestJSON(urlLast365, function(json) {
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT");
     var records = json.result.records;
 
+    var firstRecords = clone(records);
+
+    PermitDashboard.cache.last365 = {
+    records: records,
+    url: urlLast365
+    };
+
+    console.log(PermitDashboard.cache.last365.records);
+    console.log(firstRecords);
+    console.log(PermitDashboard.cache.last365.records === firstRecords);
+
     //extract permits applied for the last year
-    var appliedLast365Days = records.filter(function(d) { 
+    var appliedLast365Days = firstRecords.filter(function(d) { 
       return moment(d.AppliedDate) > startDateMoment; 
     });
 
@@ -85,7 +82,7 @@ $(document).ready(function() {
     // });
     
     //extract permits issued in last year
-    var issuedLast365Days = records.filter(function(d) { 
+    var issuedLast365Days = firstRecords.filter(function(d) { 
       return moment(d.IssuedDate) > startDateMoment; 
     });
 
@@ -103,7 +100,7 @@ $(document).ready(function() {
     // format record.AppliedDate to drop days and years
     // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
 
-    records.forEach(function(record, inc, array) {
+    firstRecords.forEach(function(record, inc, array) {
       record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
     })
 
@@ -200,54 +197,10 @@ $(document).ready(function() {
     // (H) create the bar chart with months and types breakdown 
     /*
     /*  Bar Graph - Initial Load
-    /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-    /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-    /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-    /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-    /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-    /************************************************************************************/
+    /*
+    /* DATA PLOT
 
-
-    var chart = c3.generate({
-      bindto: '#byDay',
-      data: {
-         colors: {
-                           'Building': 'rgb(31, 119, 180)',
-                           'Demolition': 'rgb(140, 86, 75)',
-                           'Electrical': 'rgb(214, 39, 40)',
-                           'Other': 'rgb(127, 127, 127)',
-                           'Mechanical': 'rgb(44, 160, 44)',
-                           'Roof': 'rgb(255, 127, 14)',
-                           'Plumbing': 'rgb(148, 103, 189)' ,
-                           'Pool/Spa': 'rgb(188, 189, 34)',
-                           'Fence': 'rgb(23, 190, 207)',
-                           'Grading': 'rgb(227, 119, 194)'
-                        },
-        columns: columnData,
-        type: 'bar',
-        onclick: function(d, i) {
-        }
-      },
-      grid: {
-        y: {
-          lines: [{value:0}]
-        }
-      },
-      axis: {
-        x: {
-          type: 'category',
-          categories: months
-        }
-      },
-      legend: {
-        show: false
-      }
-      
-    });
-
-    // setTimeout(function () {
-    //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
-    // }, 1000);
+   
     /********************************************************************************/
 
     /********************************************************************************/
@@ -259,7 +212,44 @@ $(document).ready(function() {
 
 
     /********************************************************************************/
-    
+                        
+                        var chart = c3.generate({
+                          bindto: '#byDay',
+                          data: {
+                             colors: {
+                                               'Building': 'rgb(31, 119, 180)',
+                                               'Demolition': 'rgb(140, 86, 75)',
+                                               'Electrical': 'rgb(214, 39, 40)',
+                                               'Other': 'rgb(127, 127, 127)',
+                                               'Mechanical': 'rgb(44, 160, 44)',
+                                               'Roof': 'rgb(255, 127, 14)',
+                                               'Plumbing': 'rgb(148, 103, 189)' ,
+                                               'Pool/Spa': 'rgb(188, 189, 34)',
+                                               'Fence': 'rgb(23, 190, 207)',
+                                               'Grading': 'rgb(227, 119, 194)'
+                                            },
+                            columns: columnData,
+                            type: 'bar',
+                            onclick: function(d, i) {
+                            }
+                          },
+                          grid: {
+                            y: {
+                              lines: [{value:0}]
+                            }
+                          },
+                          axis: {
+                            x: {
+                              type: 'category',
+                              categories: months
+                            }
+                          },
+                          legend: {
+                            show: false
+                          }
+                          
+                        });
+
   });
   /********************************************************************************/
   /* Get all permit details in last year (END)
@@ -269,11 +259,8 @@ $(document).ready(function() {
   /********************************************************************************/
   /* Permits by type (START) - pie chart showing ratio of types
   /*
-  /* ____    _  _____  _       ____ ____      _    ____  
-  /*|  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-  /*| | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-  /*| |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-  /*|____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+  
+  /* DATA GRAB
   /********************************************************************************/ 
 
   // Get the number of instances of each type
@@ -287,11 +274,16 @@ $(document).ready(function() {
   var records = [];
 
   requestJSON(permitTypesQ, function(json) {
-    var records = json.result.records 
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT");
+    var records = json.result.records; 
+    PermitDashboard.cache.permitTypesQ = {
+      records: records,
+      url: permitTypesQ
+    };
 
-    records.forEach(function(record, inc, array) {
-      record.AppliedDate = moment(record.AppliedDate).format('MMMM');
-    })   
+    // records.forEach(function(record, inc, array) {
+    //   record.AppliedDate = moment(record.AppliedDate);
+    // })   
   
     console.log(records);
 
@@ -303,15 +295,8 @@ $(document).ready(function() {
     }
 
     console.log(permitTypes);
-
-
-    /*    Pie chart - Initial Load
-    /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-    /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-    /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-    /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-    /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-    /************************************************************************************/
+    /* PIE CHART INITIAL LOAD
+    /* DATA PLOT */
 
 
     var chart = c3.generate({
@@ -324,9 +309,6 @@ $(document).ready(function() {
           console.log("onclick", d.id, i);
 
           $("#uniqueSelector").empty();
-            // var old_element = document.getElementById("uniqueSelector");
-            // var new_element = old_element.cloneNode(true);
-            // old_element.parentNode.replaceChild(new_element, old_element);
           clearDomElementUS();
           $(".monthly-dropdown-menu option:selected").val("");     
           $("#uniqueSelector").html("<i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label>")
@@ -340,36 +322,37 @@ $(document).ready(function() {
 
           console.log(startDate, "***");
 
-          // var urlLast365Query = localStorage['yearQuery'] || '0';
-          // var urlLast365 = localStorage['year'];
-
-          // console.log(urlLast30Query, "---");
           console.log(urlLast365Query, "-------------");
         
           var records = [];
 
           /******************************************************************************/
-          /* ___     _  _____  _       ____ ____      _    ____  
-          /*|  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-          /*| | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-          /*| |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-          /*|____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+          /* 
+          /* DATA GRAB
           /*
           /******************************************************************************/
 
-          requestJSON(urlLast365, function(json) {
+          var grabLast365 = PermitDashboard.cache.last365;  
 
-            var records = json.result.records 
+          console.log(grabLast365)  
 
-            console.log(records, "#");
+          requestJSONa(grabLast365, function(grabLast365) {
+
+            console.log("1-", grabLast365);
+            // console.log("2-", json);
+
+            var records = grabLast365.records;
+
+            console.log("3-", records);
+
+
 
             records.forEach(function(record, inc, array) {
-              record.AppliedDate = moment(record.AppliedDate).format('YYYY-MMM');
-              // console.log(record.AppliedDate, "*");
+              record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+              console.log(record.AppliedDate);
             })   
 
-
-            var startDateMoment = moment().subtract(initialStartDate, 'M');
+            var startDateMoment = moment().subtract(initialStartDate, 'months');
 
             console.log(startDateMoment);
 
@@ -435,58 +418,52 @@ $(document).ready(function() {
 
 
                 var columnData=[];
-                // console.log(columnData);
 
-                // dates.forEach(function(date, i){
-                //   var dArray = date;
-                  // console.log(i);
-                  lcount=0;
+                lcount=0;
 
-                  columnData = output[d.id].map(function(index){
-                        // console.log(lcount,index);
-                        var rObj = {};
-                        rObj[dates[lcount]] = (index[dates[lcount]]);
-                        lcount++;
+                columnData = output[d.id].map(function(index){
+                      // console.log(lcount,index);
+                      var rObj = {};
+                      rObj[dates[lcount]] = (index[dates[lcount]]);
+                      lcount++;
 
-                        // console.log(rObj);
+                      // console.log(rObj);
 
-                        return rObj;
-                      });
-
-                  console.log(columnData);
-
-                  var returnObj = columnData.map(function(obj) {
-                    return Object.keys(obj).sort().map(function(key) { 
-                      return obj[key];
+                      return rObj;
                     });
+
+                console.log(columnData);
+
+                var returnObj = columnData.map(function(obj) {
+                  return Object.keys(obj).sort().map(function(key) { 
+                    return obj[key];
                   });
+                });
 
-                  var returnObj = ([Object.keys(output)[0]]).concat(returnObj);
+                var returnObj = ([Object.keys(output)[0]]).concat(returnObj);
 
-                  console.log(returnObj);
+                console.log(returnObj);
 
-                  console.log(Object.keys(output)[0],'____________________________');
+                console.log(Object.keys(output)[0],'____________________________');
 
-                  datesArray=[];
+                datesArray=[];
 
-                  output[Object.keys(output)[0]].forEach(function(d, i) {
+                output[Object.keys(output)[0]].forEach(function(d, i) {
 
-                    // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
+                  // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
 
-                    var dArray = [dates[i]];
-                    datesArray.push(dArray);
-                
-                  });
+                  var dArray = [dates[i]];
+                  datesArray.push(dArray);
+              
+                });
 
-                  console.log(datesArray);
+                console.log(datesArray);
 
 
       /*  On Pie-Chart Click - Reloads The Bar-Chart With A Single Type
-      /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-      /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-      /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-      /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-      /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+      /*
+      /*  DATA PLOT
+      /*     
       /************************************************************************************/
 
                   var chart = c3.generate({
@@ -509,7 +486,6 @@ $(document).ready(function() {
                              'Grading': 'rgb(227, 119, 194)'
                           }
                         },
-                        // grid: {y: {lines: [{value: AVERAGE}]}},
                         axis: {
                             y: {tick : {format: d3.format('d')}},
                             x: {
@@ -519,33 +495,22 @@ $(document).ready(function() {
                         }
                       });
 
-              //
-              // ____    __  __  ______      ______   __  __      ____    __  __  ____            ______  __    __  ____    ____      
-              ///\  _`\ /\ \/\ \/\__  _\    /\__  _\ /\ \/\ \    /\  _`\ /\ \/\ \/\  _`\         /\__  _\/\ \  /\ \/\  _`\ /\  _`\    
-              //\ \ \L\ \ \ \ \ \/_/\ \/    \/_/\ \/ \ \ `\\ \   \ \,\L\_\ \ \ \ \ \ \L\ \       \/_/\ \/\ `\`\\/'/\ \ \L\ \ \ \L\_\  
-              // \ \ ,__/\ \ \ \ \ \ \ \       \ \ \  \ \ , ` \   \/_\__ \\ \ \ \ \ \  _ <'  _______\ \ \ `\ `\ /'  \ \ ,__/\ \  _\L  
-              //  \ \ \/  \ \ \_\ \ \ \ \       \_\ \__\ \ \`\ \    /\ \L\ \ \ \_\ \ \ \L\ \/\______\\ \ \  `\ \ \   \ \ \/  \ \ \L\ \
-              //   \ \_\   \ \_____\ \ \_\      /\_____\\ \_\ \_\   \ `\____\ \_____\ \____/\/______/ \ \_\   \ \_\   \ \_\   \ \____/
-              //    \/_/    \/_____/  \/_/      \/_____/ \/_/\/_/    \/_____/\/_____/\/___/            \/_/    \/_/    \/_/    \/___/ 
-              //                                                                                                                      
-              //                                                                                                                      
-              // ____     __  __  ______  ______  _____   __  __      __  __  ____    ____    ____      
-              ///\  _`\  /\ \/\ \/\__  _\/\__  _\/\  __`\/\ \/\ \    /\ \/\ \/\  _`\ /\  _`\ /\  _`\    
-              //\ \ \L\ \\ \ \ \ \/_/\ \/\/_/\ \/\ \ \/\ \ \ `\\ \   \ \ \_\ \ \ \L\_\ \ \L\ \ \ \L\_\  
-              // \ \  _ <'\ \ \ \ \ \ \ \   \ \ \ \ \ \ \ \ \ , ` \   \ \  _  \ \  _\L\ \ ,  /\ \  _\L  
-              //  \ \ \L\ \\ \ \_\ \ \ \ \   \ \ \ \ \ \_\ \ \ \`\ \   \ \ \ \ \ \ \L\ \ \ \\ \\ \ \L\ \
-              //   \ \____/ \ \_____\ \ \_\   \ \_\ \ \_____\ \_\ \_\   \ \_\ \_\ \____/\ \_\ \_\ \____/
-              //    \/___/   \/_____/  \/_/    \/_/  \/_____/\/_/\/_/    \/_/\/_/\/___/  \/_/\/ /\/___/ 
-              //
-              //
-              
+                      //
+                      // SUBTYPE BUTTON
+                      //
+                                
+                      $('#uniqueSelector').on('click', $("#innerSelectSub"), function(value){
 
-                // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                        innerValue = $(".monthly-dropdown-menu option:selected").val();
 
-                // // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
+                        console.log($(".monthly-dropdown-menu option:selected").val());
+                        console.log(value);
+                        console.log(d.id,"&&&&&&&&&&&&&")
 
 
-                //         // $("#innerSelectSub").empty();
+                        document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+
+
                
 
 
@@ -586,29 +551,7 @@ $(document).ready(function() {
                           });
                           }
                         toggleSubtype++;
-                        });
-
-                        // var old_element = document.getElementById("innerSelectSub");
-                        // var new_element = old_element.cloneNode(true);
-                        // old_element.parentNode.replaceChild(new_element, old_element);
-
-
-
-   
-                        // var old_element = document.getElementById("innerSelectAll");
-                        // var new_element = old_element.cloneNode(true);
-                        // old_element.parentNode.replaceChild(new_element, old_element);
-
-
-
-                        // $(document).on('click', $('#innerSelectAll'), function(e){
-                        //   console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH', d.id);
-
-
-
-                        //   toggleSubtype++;
-                        // });
-                        
+                        });                        
                         
                         $('#uniqueSelector').on('click', $("#innerSelectSub"), function(value){
 
@@ -622,134 +565,121 @@ $(document).ready(function() {
                           document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
 
+                            switch (d.id){
+                              case "Building":
+                                var subtype = Building(innerValue);
 
-             
-
-
-                        // $(document).on('click', $('#innerSelectSub'), function(e){
-                        //   console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
-                        //   if ((toggleSubtype == 0) || (toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
-                        //     subtypeRadioButtons();
-                        //   }
-                        // });
+                                console.log(subtype);
 
 
-
-                              switch (d.id){
-                                case "Building":
-                                  var subtype = Building(innerValue);
-
-                                  console.log(subtype);
-
-
-                                  if (innerValue != ""){
-                         
-                                    $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                                '<optgroup label="Residential">'+    
-                                                '<option value="bNRB">New Residence Building</option>'+
-                                                '<option value="bNew Residence">New Residence</option>'+
-                                                '<option value="bRA">Residential Accessory</option>'+
-                                                '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                                '<option value="bResidential Addition"">Residential Addition</option>'+
-                                                '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                                '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                                '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                                '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                                '<option value="bobuild">Other</option></select>');                          
-                                    clearDomElementUS();
-                                  }
-
-                                break;
-
-                                case "Demolition":
-                                  var subtype = Demolition(innerValue);
-
-                                  if (innerValue !=""){
-                                      $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                                '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                                                '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                                                '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                                if (innerValue != ""){
+                       
+                                  $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                              '<optgroup label="Residential">'+    
+                                              '<option value="bNRB">New Residence Building</option>'+
+                                              '<option value="bNew Residence">New Residence</option>'+
+                                              '<option value="bRA">Residential Accessory</option>'+
+                                              '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+                                              '<option value="bResidential Addition"">Residential Addition</option>'+
+                                              '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+                                              '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+                                              '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+                                              '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+                                              '<option value="bobuild">Other</option></select>');                          
                                   clearDomElementUS();
-                                  }
+                                }
 
-                                break;
+                              break;
 
+                              case "Demolition":
+                                var subtype = Demolition(innerValue);
 
+                                if (innerValue !=""){
+                                    $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                              '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
+                                              '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
+                                              '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                                clearDomElementUS();
+                                }
 
-                                case "Electrical":
-                                  var subtype = Electrical(innerValue);
-
-                                  if (innerValue != ""){
-                                      $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                                '<option value="eCommercial Electric">Commercial Electric</option>'+
-                                                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-                                                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-                                                '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-                                                '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-                                                '<option value="eGenerator">Generator</option>'+
-                                                '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-                                                '<option value="eElectrical Other">Electical Other</option></select>');
-                                  clearDomElementUS();
-                                  }
+                              break;
 
 
-                                break;
 
-                                case "Mechanical":
-                                  var subtype = Mechanical(innerValue);
+                              case "Electrical":
+                                var subtype = Electrical(innerValue);
 
-                                  if (innerValue != ""){
-                                      $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                              '<option value="mAir Conditioning">Air Conditioning</option>'+
-                                              '<option value="mBoiler">Boiler</option>'+
-                                              '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                                              '<option value="mFurnace">Furnace</option>'+
-                                              '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                                              '<option value="mWood Stove">Wood Stove</option>'+
-                                              '<option value="mSolar Thermal">Solar Thermal</option>'+
-                                              '<option value="mMechanical - Other">Other</option></select>');
-                                  clearDomElementUS();
-                                  }
-
-
-                                break;
-
-                                case "Other":
-                                  var subtype = Other(innerValue);
-
-                                  if (innerValue != ""){
-                                    $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                            '<option value="oBridge">Bridge</option>'+
-                                            '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
-                                            '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
-                                  clearDomElementUS();
-                                  } 
+                                if (innerValue != ""){
+                                    $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                              '<option value="eCommercial Electric">Commercial Electric</option>'+
+                                              '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
+                                              '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
+                                              '<option value="eElectrical Service Change">Electrical Service Change</option>'+
+                                              '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
+                                              '<option value="eGenerator">Generator</option>'+
+                                              '<option value="eSolar Electrical System">Solar Electrical System</option>'+
+                                              '<option value="eElectrical Other">Electical Other</option></select>');
+                                clearDomElementUS();
+                                }
 
 
-                                break;
+                              break;
 
-                                case "Plumbing":
-                                  var subtype = Plumbing(innerValue);
+                              case "Mechanical":
+                                var subtype = Mechanical(innerValue);
 
-                                  if (innerValue != ""){
-                                    $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                          '<option value="pWater Heater">Water Heater</option>'+
-                                          '<option value="pGas Piping">Gas Piping</option>'+
-                                          '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
-                                          '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
-                                  clearDomElementUS();
-                                  }
+                                if (innerValue != ""){
+                                    $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                            '<option value="mAir Conditioning">Air Conditioning</option>'+
+                                            '<option value="mBoiler">Boiler</option>'+
+                                            '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
+                                            '<option value="mFurnace">Furnace</option>'+
+                                            '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
+                                            '<option value="mWood Stove">Wood Stove</option>'+
+                                            '<option value="mSolar Thermal">Solar Thermal</option>'+
+                                            '<option value="mMechanical - Other">Other</option></select>');
+                                clearDomElementUS();
+                                }
 
 
-                                break;
+                              break;
 
-                                default:
-                                  console.log("no subtypes");
+                              case "Other":
+                                var subtype = Other(innerValue);
 
-                              }
+                                if (innerValue != ""){
+                                  $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                          '<option value="oBridge">Bridge</option>'+
+                                          '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
+                                          '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
+                                clearDomElementUS();
+                                } 
 
-                          });
 
+                              break;
+
+                              case "Plumbing":
+                                var subtype = Plumbing(innerValue);
+
+                                if (innerValue != ""){
+                                  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                        '<option value="pWater Heater">Water Heater</option>'+
+                                        '<option value="pGas Piping">Gas Piping</option>'+
+                                        '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
+                                        '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
+                                clearDomElementUS();
+                                }
+
+
+                              break;
+
+                              default:
+                                console.log("no subtypes");
+
+                            }
+
+                        });
+                      });
 
               
 
@@ -758,14 +688,7 @@ $(document).ready(function() {
                 });
         }
       },
-      // legend: {
-      //     item: {
-      //       onmouseover: function (id) {
-      //         console.log("onmouseover", id);
-      //         requestJSON(urlLast30, function(json) {
-      //           var records = json.result.records;
-      //           //extract permits applied for in last 7 days
-              
+ 
 
       donut: {
        title :  'Select for breakdown'
@@ -783,7 +706,7 @@ function monthSelect(months){
     var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
     console.log(initialStartDate);
 
-    var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");    
+    var startDate = moment().subtract(initialStartDate, 'months').format("YYYY-MM-DD");    
 
     console.log(startDate, "***");
 
@@ -800,34 +723,30 @@ function monthSelect(months){
 
 
     /********************************************************************************/
-    /*  ____    _  _____  _       ____ ____      _    ____  
-    /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-    /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-    /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-    /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+    /*  
+    /*  DATA GRAB
     /*
     /********************************************************************************/
 
+    var grabLast365 = window.PermitDashboard.cache.last365;     
 
-     
+    requestJSONa(grabLast365, function(last365) {
 
-    requestJSON(urlLast365, function(json) {
+      var records = grabLast365.records; 
 
-      var records = json.result.records 
+      var timeRecords = clone(records);
 
-      console.log(records, "#");
-
-      var startDateMoment = moment().subtract(initialStartDate, 'M');
+      var startDateMoment = moment().subtract(initialStartDate, 'months');
 
       switch (initialStartDate){
 
         case '1':
-          records.forEach(function(record, increment, array) {
+          timeRecords.forEach(function(record, increment, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
             console.log(record.AppliedDate, "%%");
           });
 
-          var appliedLast365Days = records.filter(function(d) { 
+          var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
@@ -860,9 +779,7 @@ function monthSelect(months){
 
           appliedByDayByType.forEach(function(d) {
 
-            // console.log(d);
             var dArray = d.key;
-            // console.log(dArray);
             datesArray.push(dArray);
 
             bldAdded = false;
@@ -949,11 +866,8 @@ function monthSelect(months){
           });
 
           /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /*
+          /*   DATA PLOT
           /************************************************************************************/
 
 
@@ -1013,12 +927,12 @@ function monthSelect(months){
         case '36':
         case '48':
         case '60':
-          records.forEach(function(record, inc, array) {
+          timeRecords.forEach(function(record, inc, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
             console.log(record.AppliedDate, "*");
           })
          
-          var appliedLast365Days = records.filter(function(d) { 
+          var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
@@ -1046,9 +960,7 @@ function monthSelect(months){
 
           appliedByDayByType.forEach(function(d) {
 
-            // console.log(d);
             var dArray = d.key;
-            // console.log(dArray);
             datesArray.push(dArray);
 
             bldAdded = false;
@@ -1135,11 +1047,8 @@ function monthSelect(months){
           });
 
           /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /*
+          /*   DATA PLOT
           /************************************************************************************/
 
 
@@ -1197,8 +1106,8 @@ function monthSelect(months){
           weeklyBunch = [];
 
 
-          for (var  i = 0; i<records.length; i++){
-            var then = records[i].AppliedDate;
+          for (var  i = 0; i<timeRecords.length; i++){
+            var then = timeRecords[i].AppliedDate;
 
 
             var thenYear=then.substr(0,4);
@@ -1214,10 +1123,10 @@ function monthSelect(months){
             // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
             // var p = moment(records[i].AppliedDate).day();
             // var q = p.day();
-            weeklyBunch.push([records[i]["AppliedDate"], weeksAgo]);
+            weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgo]);
 
 
-            console.log(weeksAgo,'________', records[i].AppliedDate);
+            console.log(weeksAgo,'________', timeRecords[i].AppliedDate);
           }
 
           console.log(weeklyBunch);
@@ -1225,9 +1134,9 @@ function monthSelect(months){
               return (moment(d[0]) > startDateMoment);
             });
           
-          console.log(appliedPerWeekLast365Days);
+          // console.log(appliedPerWeekLast365Days);
          
-          var appliedLast365Days = records.filter(function(d) { 
+          var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
@@ -1236,7 +1145,6 @@ function monthSelect(months){
           appliedLast365Days.forEach(function(day, inc, arr){
             console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
             appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
-          
           })
 
           console.log(appliedLast365Days);
@@ -1264,9 +1172,7 @@ function monthSelect(months){
 
           appliedByDayByType.forEach(function(d) {
 
-            // console.log(d);
             var dArray = d.key;
-            // console.log(dArray);
             datesArray.push(dArray);
 
             bldAdded = false;
@@ -1353,11 +1259,8 @@ function monthSelect(months){
           });
 
           /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+          /*
+          /*    DATA PLOT
           /************************************************************************************/
 
 
@@ -1419,19 +1322,20 @@ function monthSelect(months){
 
 
       /********************************************************************************/
-      /*  ____    _  _____  _       ____ ____      _    ____  
-      /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-      /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-      /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-      /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
-      /*
+      
+      /*  DATA GRAB
+      
       /********************************************************************************/
 
-      requestJSON(permitTypesQ, function(json) {
-        var records = json.result.records 
+      var grabPermitTypesQ = PermitDashboard.cache.permitTypesQ;
 
+      console.log(grabPermitTypesQ);
 
-        records.forEach(function(record, inc, array) {
+      requestJSONa(grabPermitTypesQ, function(json) {
+        var records = grabPermitTypesQ.records;
+        var repieRecords = clone(records); 
+
+        repieRecords.forEach(function(record, inc, array) {
           record.AppliedDate = moment(record.AppliedDate).format('MMMM');
         })   
       
@@ -1440,17 +1344,15 @@ function monthSelect(months){
         var permitTypes = [];
 
         //Get a distinct list of neighborhoods
-        for (var i = 0; i < records.length; i++) {
-          permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+        for (var i = 0; i < repieRecords.length; i++) {
+          permitTypes.push([repieRecords[i]["PermitTypeMapped"], repieRecords[i].count]);
         }
       
 
         /*    Reloads Pie-Chart With Time-Frame Selected Data
-        /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-        /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-        /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-        /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-        /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+        /*
+        /*     DATA PLOT     
+        /*
         /************************************************************************************/
 
         var chart = c3.generate({
@@ -1482,10 +1384,6 @@ function monthSelect(months){
 
               console.log(startDate, "***");
 
-              // var urlLast365Query = localStorage['yearQuery'] || '0';
-              // var urlLast365 = localStorage['year'];
-
-              // console.log(urlLast30Query, "---");
               console.log(urlLast365Query, "-------------");
             
               var records = [];
@@ -1493,233 +1391,186 @@ function monthSelect(months){
 
 
               /********************************************************************************/
-              /*  ____    _  _____  _       ____ ____      _    ____  
-              /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-              /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-              /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-              /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
-              /*
+              
+              /*  DATA GRAB 
+
               /********************************************************************************/
 
-              requestJSON(urlLast365, function(json) {
+
+              var grabLast365 = PermitDashboard.cache.last365;
+
+              requestJSONa(grabLast365, function(json) {
 
                 var records = json.result.records 
+                var rebarRecords = clone(records); 
+
 
                 console.log(records, "#");
 
                 switch (document.getElementById('monthly-dropdown-menu').value){
 
                   case '1':
-                    records.forEach(function(record, inc, array) {
+                    rebarRecords.forEach(function(record, inc, array) {
                       record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
                       console.log(record.AppliedDate, "%%");
                     });
                   break;
                      
                   default:
-                   records.forEach(function(record, inc, array) {
+                    rebarRecords.forEach(function(record, inc, array) {
                     record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
                     console.log(record.AppliedDate, "*");
                   })   
 
-                  }; 
+                }; 
 
-                  var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+                var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
 
-                  var startDateMoment = moment().subtract(initialStartDate, 'M');
+                var startDateMoment = moment().subtract(initialStartDate, 'M');
 
-                  console.log(startDateMoment);
+                console.log(startDateMoment);
 
-                  var appliedLast365Days = records.filter(function(d) { 
-                    return moment(d.AppliedDate) > startDateMoment; 
+                var appliedLast365Days = rebarRecords.filter(function(d) { 
+                  return moment(d.AppliedDate) > startDateMoment; 
+                });
+
+
+                var appliedLastYearByType = appliedLast365Days.filter(function(o) {
+                  return o.PermitTypeMapped === d.id;
+                });
+
+       
+                 //Get a distinct list of neighborhoods
+                for (var i = 0; i < records.length; i++) {
+                  permitTypes.push([rebarRecords[i]["PermitTypeMapped"], rebarRecords[i].count]);
+                }
+
+
+                var appliedLast365Days = rebarRecords.filter(function(d) { 
+                  return moment(d.AppliedDate) > startDateMoment; 
+                });
+                  
+                var appliedByDayByType = [];
+
+                  // compiles array for bar-graph
+                var appliedByDayByType = d3.nest()
+
+                  // concatenates date
+                  .key(function(d) { return d.AppliedDate })
+
+                  // concatanates type
+                  .key(function(d) { return d.PermitTypeMapped })
+
+                  // takes the records and creates a count
+                  .rollup (function(v) { return v.length })
+
+                  // creates a d3 object from the records
+                  .entries(appliedLastYearByType);
+
+                var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
+
+                var output = [];
+
+                console.log(appliedLastYearByType);
+                console.log(appliedByDayByType);
+
+                output[d.id] = appliedByDayByType.map(function(month) {
+                    var o = {};
+                    o[month.key] = month.values.filter(function(val) {
+                      return val.key == d.id;
+                    }).map(function(m) { return m.values; }).shift() || 0;
+                    return o;
+                  })
+                           
+
+                var dates = appliedByDayByType.map(function(date) {
+                  return date.key;
+                });
+
+
+                var columnData=[];
+
+                lcount=0;
+
+                columnData = output[d.id].map(function(index){
+                  var rObj = {};
+                  rObj[dates[lcount]] = (index[dates[lcount]]);
+                  lcount++;
+
+                  return rObj;
+                });
+
+                console.log(columnData);
+
+                var returnObj = columnData.map(function(obj) {
+                  return Object.keys(obj).sort().map(function(key) { 
+                    return obj[key];
                   });
+                });
+
+                var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+
+                console.log(returnObj);
+
+                console.log(Object.keys(output)[0],'____________________________');
+
+                datesArray=[];
+
+                output[Object.keys(output)[0]].forEach(function(d, i) {
 
 
+                var dArray = [dates[i]];
+                datesArray.push(dArray);
+            
+              });
+
+              console.log(datesArray);
 
 
-                  var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-                    return o.PermitTypeMapped === d.id;
-                  });
-
-         
-
-                   //Get a distinct list of neighborhoods
-                  for (var i = 0; i < records.length; i++) {
-                    permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
-                  }
-
-
-                  var appliedLast365Days = records.filter(function(d) { 
-                    return moment(d.AppliedDate) > startDateMoment; 
-                  });
-                    
-                  var appliedByDayByType = [];
-
-                    // compiles array for bar-graph
-                  var appliedByDayByType = d3.nest()
-
-                    // concatenates date
-                    .key(function(d) { return d.AppliedDate })
-
-                    // concatanates type
-                    .key(function(d) { return d.PermitTypeMapped })
-
-                    // takes the records and creates a count
-                    .rollup (function(v) { return v.length })
-
-                    // creates a d3 object from the records
-                    .entries(appliedLastYearByType);
-
-                    var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
-
-                    var output = [];
-
-                        console.log(appliedLastYearByType);
-                        console.log(appliedByDayByType);
-
-                        output[d.id] = appliedByDayByType.map(function(month) {
-                            var o = {};
-                            o[month.key] = month.values.filter(function(val) {
-                              return val.key == d.id;
-                            }).map(function(m) { return m.values; }).shift() || 0;
-                            return o;
-                          })
-                                   
-
-                        var dates = appliedByDayByType.map(function(date) {
-                          return date.key;
-                        });
-
-
-                        var columnData=[];
-                        // console.log(columnData);
-
-                        // dates.forEach(function(date, i){
-                        //   var dArray = date;
-                          // console.log(i);
-                          lcount=0;
-
-                          columnData = output[d.id].map(function(index){
-                                // console.log(lcount,index);
-                                var rObj = {};
-                                rObj[dates[lcount]] = (index[dates[lcount]]);
-                                lcount++;
-
-                                // console.log(rObj);
-
-                                return rObj;
-                              });
-
-                          console.log(columnData);
-
-                          var returnObj = columnData.map(function(obj) {
-                            return Object.keys(obj).sort().map(function(key) { 
-                              return obj[key];
-                            });
-                          });
-
-                          var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-
-                          console.log(returnObj);
-
-                          console.log(Object.keys(output)[0],'____________________________');
-
-                          datesArray=[];
-
-                          output[Object.keys(output)[0]].forEach(function(d, i) {
-
-                            // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
-
-                            var dArray = [dates[i]];
-                            datesArray.push(dArray);
-                        
-                          });
-
-                          console.log(datesArray);
-
-
-                          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-                          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-                          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-                          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-                          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-                          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
-                          /************************************************************************************/
-
-
-
-                      var chart = c3.generate({
-                            bindto: '#byDay',
-                            data: {
-                              columns: [
-                                  returnObj
-                              ],
-                              type: 'bar',
-                              colors: {
-                                 'Building': 'rgb(31, 119, 180)',
-                                 'Demolition': 'rgb(140, 86, 75)',
-                                 'Electrical': 'rgb(214, 39, 40)',
-                                 'Other': 'rgb(127, 127, 127)',
-                                 'Mechanical': 'rgb(44, 160, 44)',
-                                 'Roof': 'rgb(255, 127, 14)',
-                                 'Plumbing': 'rgb(148, 103, 189)' ,
-                                 'Pool/Spa': 'rgb(188, 189, 34)',
-                                 'Fence': 'rgb(23, 190, 207)',
-                                 'Grading': 'rgb(227, 119, 194)'
-                              }
-                            },
-                            // grid: {y: {lines: [{value: AVERAGE}]}},
-                            axis: {
-                                y: {tick : {format: d3.format('d')}},
-                                x: {
-                                type: 'category',
-                                categories: datesArray
-                              }
-                            }
-                            // onclick: function(d, i) {
-                            //   console.log('%^&%&%^%^&%*&^%*^');
-                            //   chart.flush();
-                            // }
-                          });
-
-                            // $('#toggleWithPieClick').text(' Applications by Day over last Month ');
-
-
-
-                            
-              //
-              // ____    __  __  ______      ______   __  __      ____    __  __  ____            ______  __    __  ____    ____      
-              ///\  _`\ /\ \/\ \/\__  _\    /\__  _\ /\ \/\ \    /\  _`\ /\ \/\ \/\  _`\         /\__  _\/\ \  /\ \/\  _`\ /\  _`\    
-              //\ \ \L\ \ \ \ \ \/_/\ \/    \/_/\ \/ \ \ `\\ \   \ \,\L\_\ \ \ \ \ \ \L\ \       \/_/\ \/\ `\`\\/'/\ \ \L\ \ \ \L\_\  
-              // \ \ ,__/\ \ \ \ \ \ \ \       \ \ \  \ \ , ` \   \/_\__ \\ \ \ \ \ \  _ <'  _______\ \ \ `\ `\ /'  \ \ ,__/\ \  _\L  
-              //  \ \ \/  \ \ \_\ \ \ \ \       \_\ \__\ \ \`\ \    /\ \L\ \ \ \_\ \ \ \L\ \/\______\\ \ \  `\ \ \   \ \ \/  \ \ \L\ \
-              //   \ \_\   \ \_____\ \ \_\      /\_____\\ \_\ \_\   \ `\____\ \_____\ \____/\/______/ \ \_\   \ \_\   \ \_\   \ \____/
-              //    \/_/    \/_____/  \/_/      \/_____/ \/_/\/_/    \/_____/\/_____/\/___/            \/_/    \/_/    \/_/    \/___/ 
-              //                                                                                                                      
-              //                                                                                                                      
-              // ____     __  __  ______  ______  _____   __  __      __  __  ____    ____    ____      
-              ///\  _`\  /\ \/\ \/\__  _\/\__  _\/\  __`\/\ \/\ \    /\ \/\ \/\  _`\ /\  _`\ /\  _`\    
-              //\ \ \L\ \\ \ \ \ \/_/\ \/\/_/\ \/\ \ \/\ \ \ `\\ \   \ \ \_\ \ \ \L\_\ \ \L\ \ \ \L\_\  
-              // \ \  _ <'\ \ \ \ \ \ \ \   \ \ \ \ \ \ \ \ \ , ` \   \ \  _  \ \  _\L\ \ ,  /\ \  _\L  
-              //  \ \ \L\ \\ \ \_\ \ \ \ \   \ \ \ \ \ \_\ \ \ \`\ \   \ \ \ \ \ \ \L\ \ \ \\ \\ \ \L\ \
-              //   \ \____/ \ \_____\ \ \_\   \ \_\ \ \_____\ \_\ \_\   \ \_\ \_\ \____/\ \_\ \_\ \____/
-              //    \/___/   \/_____/  \/_/    \/_/  \/_____/\/_/\/_/    \/_/\/_/\/___/  \/_/\/ /\/___/ 
-              //
-              //
+              /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
               
+              /*    DATA PLOT
+              
+              /************************************************************************************/
 
 
 
+              var chart = c3.generate({
+                bindto: '#byDay',
+                data: {
+                  columns: [
+                      returnObj
+                  ],
+                  type: 'bar',
+                  colors: {
+                     'Building': 'rgb(31, 119, 180)',
+                     'Demolition': 'rgb(140, 86, 75)',
+                     'Electrical': 'rgb(214, 39, 40)',
+                     'Other': 'rgb(127, 127, 127)',
+                     'Mechanical': 'rgb(44, 160, 44)',
+                     'Roof': 'rgb(255, 127, 14)',
+                     'Plumbing': 'rgb(148, 103, 189)' ,
+                     'Pool/Spa': 'rgb(188, 189, 34)',
+                     'Fence': 'rgb(23, 190, 207)',
+                     'Grading': 'rgb(227, 119, 194)'
+                  }
+                },
+                axis: {
+                    y: {tick : {format: d3.format('d')}},
+                    x: {
+                    type: 'category',
+                    categories: datesArray
+                  }
+                }
+              });
+
+              
+              //
+              //     SUBTYPE BUTTON
+              //
+                           
                     document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all'/> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
-                // document.getElementById("toggleWithPieClick").innerHTML= ("<span>Optional view toggle shows: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='checkbox' autocomplete='off' checked> Checkbox 1 </label><label class='btn btn-primary'><input type='checkbox' autocomplete='off'> Checkbox 2 </label></div>");
-
-               
-                  // console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH', d.id);
-                        
-                  // var old_element = document.getElementById("innerSelectSub");
-                  // var new_element = old_element.cloneNode(true);
-                  // old_element.parentNode.replaceChild(new_element, old_element);
 
                   $(document).on('click', $('.innerSelectSub'), function(e){
                     console.log(e);
@@ -1727,91 +1578,23 @@ function monthSelect(months){
                   });
 
 
-                  // $(document).on('click', $('#innerSelectAll'), function(e){
-                  //   var chart = c3.generate({
-                  //           bindto: '#byDay',
-                  //           data: {
-                  //             columns: [
-                  //                 returnObj
-                  //             ],
-                  //             type: 'bar',
-                  //             colors: {
-                  //                'Building': 'rgb(31, 119, 180)',
-                  //                'Demolition': 'rgb(140, 86, 75)',
-                  //                'Electrical': 'rgb(214, 39, 40)',
-                  //                'Other': 'rgb(127, 127, 127)',
-                  //                'Mechanical': 'rgb(44, 160, 44)',
-                  //                'Roof': 'rgb(255, 127, 14)',
-                  //                'Plumbing': 'rgb(148, 103, 189)' ,
-                  //                'Pool/Spa': 'rgb(188, 189, 34)',
-                  //                'Fence': 'rgb(23, 190, 207)',
-                  //                'Grading': 'rgb(227, 119, 194)'
-                  //             }
-                  //           },
-                  //           // grid: {y: {lines: [{value: AVERAGE}]}},
-                  //           axis: {
-                  //               y: {tick : {format: d3.format('d')}},
-                  //               x: {
-                  //               type: 'category',
-                  //               categories: datesArray
-                  //             }
-                  //           }
-                  //         });
-                  //       });
-
-
-
-
-                });
+                })
               }
             },
-            // legend: {
-            //     item: {
-            //       onmouseover: function (id) {
-            //         console.log("onmouseover", id);
-            //         requestJSON(urlLast30, function(json) {
-            //           var records = json.result.records;
-            //           //extract permits applied for in last 7 days
-                  
 
           donut: {
            title :  'Select for breakdown'
           }   
         }) 
 
-    setTimeout(function () {
-      chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
-    }, 1000);
+    // setTimeout(function () {
+    //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
+    // }, 1000);
 
 
     var records = [];
 
-    // requestJSON(urlLast365, function(json) {
-
-    //   var records = json.result.records 
-
-    //   console.log(records, "#");
-
-    //   records.forEach(function(record, inc, array) {
-    //     record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-    //     console.log(record.AppliedDate, "*");
-    //   })   
     
-    //   console.log(records);
-
-    //   var permitTypes = [];
-
-    //   //Get a distinct list of neighborhoods
-    //   for (var i = 0; i < records.length; i++) {
-    //     permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
-    //   }
-
-    //   console.log(permitTypes);
-
-    //   return permitTypes;
-
-    // })
-
 
     forceDelay(1500);
 
@@ -1830,22 +1613,10 @@ function monthSelect(months){
   }
 
 
-  function requestJSON(url, callback) {
-    $.ajax({
-      beforeSend: function() {
-        // Handle the beforeSend event
-      },
-      url: url,
-      complete: function(xhr) {
-        callback.call(null, xhr.responseJSON);
-         
-      }
-    });
-  }
-
-
 };
 
+
+  // Helper function to make request for JSONP.
 
 function requestJSON(url, callback) {
     $.ajax({
@@ -1859,6 +1630,32 @@ function requestJSON(url, callback) {
       }
     });
 }
+
+
+ function clone(obj) {
+      if (obj === null || typeof(obj) !== 'object' || 'isActiveClone' in obj)
+        return obj;
+
+      if (obj instanceof Date)
+        var temp = new obj.constructor(); //or new Date(obj);
+      else
+        var temp = obj.constructor();
+
+      for (var key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          obj['isActiveClone'] = null;
+          temp[key] = clone(obj[key]);
+          delete obj['isActiveClone'];
+        }
+      }
+
+      return temp;
+    }
+
+function requestJSONa(JSONa, callback) {
+  callback(JSONa);
+  return JSONa;
+};
 
 function timeSpanDays(year, month, day){
   now = new Date();
@@ -2017,5 +1814,6 @@ function clearDomElementUS(){
                             break;
 
   }
+
 
 }
