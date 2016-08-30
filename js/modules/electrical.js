@@ -1,58 +1,52 @@
 var Electrical = function Electrical(config){
-	
-	var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
-
-	var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
 	        
 	var records = [];
 
 
 
 	      /********************************************************************************/
-	      /*  ____    _  _____  _       ____ ____      _    ____  
-	      /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-	      /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-	      /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-	      /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+	      /*
+	      /* DATA GRAB
 	      /*
 	      /********************************************************************************/
 
 	if (!config){
 
-		requestJSON(urlLast365, function(json) {
+		var grabLast365 = PermitDashboard.cache.last365;
+		console.log(grabLast365);
 
-		    var records = json.result.records 
+		requestJSONa(grabLast365, function(json) {
 
-		    console.log(records, "#");
+	        var records = json.records;
+            var eleRecords = clone(records); 
 
-			switch (document.getElementById('monthly-dropdown-menu').value){
+		    console.log(eleRecords, "#");
+
+			switch (document.getElementById('monthList-dropdown-menu').value){
 
 		  		case '1':
-		    		records.forEach(function(record, inc, array) {
+		    		eleRecords.forEach(function(record, inc, array) {
 		     		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-		     		// console.log(record.AppliedDate, "%%");
 		    	});
 		  		break;
 		     
 		  		default:
-		   			records.forEach(function(record, inc, array) {
+		   			eleRecords.forEach(function(record, inc, array) {
 		    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
 		    		// console.log(record.AppliedDate, "*");
 		  		})   
 
 		  	}; 
 
-		  	var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
 		  	var startDateMoment = moment().subtract(initialStartDate, 'M');
 
 		 	console.log(startDateMoment);
 
-			var appliedLast365Days = records.filter(function(d) { 
+			var appliedLast365Days = eleRecords.filter(function(d) { 
 			   return moment(d.AppliedDate) > startDateMoment; 
 			});
-
-
 
 
 		  	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
@@ -62,12 +56,12 @@ var Electrical = function Electrical(config){
 		  	permitTypes=[];
 
 			//Get a distinct list of neighborhoods
-			for (var i = 0; i < records.length; i++) {
-			    permitTypes.push([records[i]["PermitType"], records[i].count]);
+			for (var i = 0; i < eleRecords.length; i++) {
+			    permitTypes.push([eleRecords[i]["PermitType"], eleRecords[i].count]);
 			}
 
 
-			var appliedLast365Days = records.filter(function(d) { 
+			var appliedLast365Days = eleRecords.filter(function(d) { 
 			   return moment(d.AppliedDate) > startDateMoment; 
 			});
 			    
@@ -142,11 +136,9 @@ var Electrical = function Electrical(config){
 
 
 		          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-		          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-		          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-		          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-		          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-		          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+		          /*
+		          /*  DATA PLOT
+		          /*
 		          /************************************************************************************/
 
 
@@ -176,38 +168,40 @@ var Electrical = function Electrical(config){
 
 	else {
 
+		var grabLast365 = PermitDashboard.cache.last365;
+
 		config = config.slice(1);
 
-		requestJSON(urlLast365, function(json) {
+		requestJSONa(grabLast365, function(json) {
 
-		    var records = json.result.records 
+            var records = json.records 
+            var eleRecords = clone(records); 
 
-		    console.log(records, "#");
+		    console.log(eleRecords, "#");
 
-			switch (document.getElementById('monthly-dropdown-menu').value){
+			switch (document.getElementById('monthList-dropdown-menu').value){
 
 		  		case '1':
-		    		records.forEach(function(record, inc, array) {
+		    		eleRecords.forEach(function(record, inc, array) {
 		     		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-		     		// console.log(record.AppliedDate, "%%");
 		    	});
 		  		break;
 		     
 		  		default:
-		   			records.forEach(function(record, inc, array) {
+		   			eleRecords.forEach(function(record, inc, array) {
 		    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
 		    		// console.log(record.AppliedDate, "*");
 		  		})   
 
 		  	}; 
 
-		  	var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
 		  	var startDateMoment = moment().subtract(initialStartDate, 'M');
 
 		 	console.log(startDateMoment);
 
-			var appliedLast365Days = records.filter(function(d) { 
+			var appliedLast365Days = eleRecords.filter(function(d) { 
 			   return moment(d.AppliedDate) > startDateMoment; 
 			});
 
@@ -221,12 +215,12 @@ var Electrical = function Electrical(config){
 		  	permitTypes=[];
 
 			//Get a distinct list of neighborhoods
-			for (var i = 0; i < records.length; i++) {
-			    permitTypes.push([records[i]["PermitType"], records[i].count]);
+			for (var i = 0; i < eleRecords.length; i++) {
+			    permitTypes.push([eleRecords[i]["PermitType"], eleRecords[i].count]);
 			}
 
 
-			var appliedLast365Days = records.filter(function(d) { 
+			var appliedLast365Days = eleRecords.filter(function(d) { 
 			   return moment(d.AppliedDate) > startDateMoment; 
 			});
 			    
@@ -272,11 +266,6 @@ var Electrical = function Electrical(config){
 
 
 		    var columnData=[];
-		    // console.log(columnData);
-
-		    // dates.forEach(function(date, i){
-		    //   var dArray = date;
-		      // console.log(i);
 			lcount=0;
 
 			columnData = Object.keys(output).map(function(type) {
@@ -301,11 +290,9 @@ var Electrical = function Electrical(config){
 
 
 	          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-	          /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-	          /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-	          /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-	          /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-	          /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+	          /*
+	          /*   DATA PLOT
+	          /*
 	          /************************************************************************************/
 
 
@@ -333,7 +320,7 @@ var Electrical = function Electrical(config){
 
 
 
-	$("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+	$("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
 	                '<option value="eCommercial Electric">Commercial Electric</option>'+
 	                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
 	                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+

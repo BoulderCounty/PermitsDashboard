@@ -1,58 +1,52 @@
 var Plumbing = function Plumbing(config){
 	
-  var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
-
-  var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
-          
   var records = [];
 
 
 
         /********************************************************************************/
-        /*  ____    _  _____  _       ____ ____      _    ____  
-        /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-        /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-        /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-        /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+        /*
+        /* DATA GRAB
         /*
         /********************************************************************************/
 
   if (!config){
 
-    requestJSON(urlLast365, function(json) {
+    var grabLast365 = PermitDashboard.cache.last365;
+    console.log(grabLast365);
 
-      var records = json.result.records 
+    requestJSONa(grabLast365, function(json) {
 
-      console.log(records, "#");
+      var records = json.records;
+      var plumRecords = clone(records); 
 
-    	switch (document.getElementById('monthly-dropdown-menu').value){
+      console.log(plumRecords, "#");
 
-      		case '1':
-        		records.forEach(function(record, inc, array) {
-         		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-         		// console.log(record.AppliedDate, "%%");
-        	});
-      		break;
-         
-      		default:
-       			records.forEach(function(record, inc, array) {
-        		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-        		// console.log(record.AppliedDate, "*");
-      		})   
+      switch (document.getElementById('monthList-dropdown-menu').value){
 
-      	}; 
+        case '1':
+          plumRecords.forEach(function(record, inc, array) {
+          record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+        });
+        break;
+       
+        default:
+          plumRecords.forEach(function(record, inc, array) {
+      		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+      		// console.log(record.AppliedDate, "*");
+    		})   
 
-      	var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+    	}; 
 
-      	var startDateMoment = moment().subtract(initialStartDate, 'M');
+    	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+
+    	var startDateMoment = moment().subtract(initialStartDate, 'M');
 
      	console.log(startDateMoment);
 
-    	var appliedLast365Days = records.filter(function(d) { 
+    	var appliedLast365Days = plumRecords.filter(function(d) { 
     	   return moment(d.AppliedDate) > startDateMoment; 
     	});
-
-
 
 
       	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
@@ -62,12 +56,12 @@ var Plumbing = function Plumbing(config){
       	permitTypes=[];
 
     	//Get a distinct list of neighborhoods
-    	for (var i = 0; i < records.length; i++) {
-    	    permitTypes.push([records[i]["PermitType"], records[i].count]);
+    	for (var i = 0; i < plumRecords.length; i++) {
+    	    permitTypes.push([plumRecords[i]["PermitType"], plumRecords[i].count]);
     	}
 
 
-    	var appliedLast365Days = records.filter(function(d) { 
+    	var appliedLast365Days = plumRecords.filter(function(d) { 
     	   return moment(d.AppliedDate) > startDateMoment; 
     	});
     	    
@@ -131,22 +125,20 @@ var Plumbing = function Plumbing(config){
 
     	
 
-      	var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-    	  datesArray=[];
-    	  output[Object.keys(output)[0]].forEach(function(d, i) {
-    		    var dArray = [dates[i]];
-    	    	datesArray.push(dArray);
+    	var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+  	  datesArray=[];
+  	  output[Object.keys(output)[0]].forEach(function(d, i) {
+  		    var dArray = [dates[i]];
+  	    	datesArray.push(dArray);
     	});
 
         console.log(datesArray);
 
 
               /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-              /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-              /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-              /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-              /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-              /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+              /*
+              /*   DATA PLOT
+              /*
               /************************************************************************************/
 
 
@@ -174,57 +166,60 @@ var Plumbing = function Plumbing(config){
 
   else {
 
+
+    var grabLast365 = PermitDashboard.cache.last365;
+
     config = config.slice(1);
 
-    requestJSON(urlLast365, function(json) {
+    requestJSONa(grabLast365, function(json) {
 
-      var records = json.result.records 
+      var records = json.records 
+      var plumRecords = clone(records); 
 
-      console.log(records, "#");
+      console.log(plumRecords, "#");
 
-      switch (document.getElementById('monthly-dropdown-menu').value){
+      switch (document.getElementById('monthList-dropdown-menu').value){
 
-          case '1':
-            records.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-            // console.log(record.AppliedDate, "%%");
-          });
-          break;
-         
-          default:
-            records.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-            // console.log(record.AppliedDate, "*");
-          })   
+        case '1':
+          plumRecords.forEach(function(record, inc, array) {
+          record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+        });
+        break;
+       
+        default:
+          plumRecords.forEach(function(record, inc, array) {
+          record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+          // console.log(record.AppliedDate, "*");
+        })   
 
-        }; 
+      }; 
 
-        var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+      var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
-        var startDateMoment = moment().subtract(initialStartDate, 'M');
+      var startDateMoment = moment().subtract(initialStartDate, 'M');
 
       console.log(startDateMoment);
 
-      var appliedLast365Days = records.filter(function(d) { 
+      var appliedLast365Days = plumRecords.filter(function(d) { 
          return moment(d.AppliedDate) > startDateMoment; 
       });
 
 
 
 
-        var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-          return o.PermitTypeMapped === "Plumbing";
-        });
+      var appliedLastYearByType = appliedLast365Days.filter(function(o) {
+        return o.PermitTypeMapped === "Plumbing";
+      });
 
-        permitTypes=[];
+      permitTypes=[];
 
       //Get a distinct list of neighborhoods
-      for (var i = 0; i < records.length; i++) {
-          permitTypes.push([records[i]["PermitType"], records[i].count]);
+      for (var i = 0; i < plumRecords.length; i++) {
+          permitTypes.push([plumRecords[i]["PermitType"], plumRecords[i].count]);
       }
 
 
-      var appliedLast365Days = records.filter(function(d) { 
+      var appliedLast365Days = plumRecords.filter(function(d) { 
          return moment(d.AppliedDate) > startDateMoment; 
       });
           
@@ -299,11 +294,9 @@ var Plumbing = function Plumbing(config){
 
 
               /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-              /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-              /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-              /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-              /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-              /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+              /*
+              /*  DATA PLOT    
+              /*
               /************************************************************************************/
 
 
@@ -329,7 +322,7 @@ var Plumbing = function Plumbing(config){
 
   }
 
-  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                   '<option value="pWater Heater">Water Heater</option>'+
                   '<option value="pGas Piping">Gas Piping</option>'+
                   '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+

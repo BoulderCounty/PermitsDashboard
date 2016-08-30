@@ -9,64 +9,64 @@ var Demolition = function Demolition(config){
 
 
         /********************************************************************************/
-        /*  ____    _  _____  _       ____ ____      _    ____  
-        /* |  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-        /* | | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-        /* | |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-        /* |____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+        /*
+        /*  DATA GRAB
         /*
         /********************************************************************************/
+
   if (!config){      
-  
-    requestJSON(urlLast365, function(json) {
 
-      var records = json.result.records 
+    var grabLast365 = PermitDashboard.cache.last365;
+    console.log(grabLast365);
 
-      console.log(records, "#");
+    requestJSONa(grabLast365, function(json) {
 
-    	switch (document.getElementById('monthly-dropdown-menu').value){
+      var records = json.records;
+      var demoRecords = clone(records); 
 
-      		case '1':
-        		records.forEach(function(record, inc, array) {
-         		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-         		// console.log(record.AppliedDate, "%%");
+      console.log(demoRecords, "#");
+
+    	switch (document.getElementById('monthList-dropdown-menu').value){
+
+    		case '1':
+      		demoRecords.forEach(function(record, inc, array) {
+       		 record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
         	});
-      		break;
-         
-      		default:
-       			records.forEach(function(record, inc, array) {
+    		break;
+       
+    		default:
+     			demoRecords.forEach(function(record, inc, array) {
         		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-        		// console.log(record.AppliedDate, "*");
       		})   
 
-      	}; 
+    	}; 
 
-      	var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+    	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
-      	var startDateMoment = moment().subtract(initialStartDate, 'M');
+    	var startDateMoment = moment().subtract(initialStartDate, 'M');
 
      	console.log(startDateMoment);
 
-    	var appliedLast365Days = records.filter(function(d) { 
+    	var appliedLast365Days = demoRecords.filter(function(d) { 
     	   return moment(d.AppliedDate) > startDateMoment; 
     	});
 
 
 
 
-      	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-        	return o.PermitTypeMapped === "Demolition";
-      	});
+    	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
+      	return o.PermitTypeMapped === "Demolition";
+    	});
 
-      	permitTypes=[];
+    	permitTypes=[];
 
     	//Get a distinct list of neighborhoods
-    	for (var i = 0; i < records.length; i++) {
-    	    permitTypes.push([records[i]["PermitType"], records[i].count]);
+    	for (var i = 0; i < demoRecords.length; i++) {
+    	    permitTypes.push([demoRecords[i]["PermitType"], demoRecords[i].count]);
     	}
 
 
-    	var appliedLast365Days = records.filter(function(d) { 
+    	var appliedLast365Days = demoRecords.filter(function(d) { 
     	   return moment(d.AppliedDate) > startDateMoment; 
     	});
     	    
@@ -87,65 +87,58 @@ var Demolition = function Demolition(config){
         // creates a d3 object from the records
         .entries(appliedLastYearByType);
 
-        var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
-         
-        var output = [];
+      var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
+       
+      var output = [];
 
-        console.log(appliedLastYearByType);
-        console.log(appliedByDayByType);
+      console.log(appliedLastYearByType);
+      console.log(appliedByDayByType);
 
-                   
-      	subtypes.forEach(function(subtype) {
-          output[subtype] = appliedByDayByType.map(function(month) {
-              var o = {};
-              o[month.key] = month.values.filter(function(val) {
-                return val.key == subtype;
-              }).map(function(m) { return m.values; }).shift() || 0;
-              return o;
-            })
-        });
-
-
-        var dates = appliedByDayByType.map(function(date) {
-          return date.key;
-        });
+                 
+    	subtypes.forEach(function(subtype) {
+        output[subtype] = appliedByDayByType.map(function(month) {
+            var o = {};
+            o[month.key] = month.values.filter(function(val) {
+              return val.key == subtype;
+            }).map(function(m) { return m.values; }).shift() || 0;
+            return o;
+          })
+      });
 
 
-        var columnData=[];
-        // console.log(columnData);
+      var dates = appliedByDayByType.map(function(date) {
+        return date.key;
+      });
 
-        // dates.forEach(function(date, i){
-        //   var dArray = date;
-          // console.log(i);
+
+      var columnData=[];
     	lcount=0;
 
     	columnData = Object.keys(output).map(function(type) {
-            var a = output[type].map(function(month){
-              return month[Object.keys(month)[0]];
-            });
-            return [type].concat(a);
+        var a = output[type].map(function(month){
+          return month[Object.keys(month)[0]];
+        });
+        return [type].concat(a);
     	});
 
     	console.log(columnData);
 
     	
 
-      	var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-    	  datesArray=[];
-    	  output[Object.keys(output)[0]].forEach(function(d, i) {
-    		    var dArray = [dates[i]];
-    	    	datesArray.push(dArray);
-    	});
+    	var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+  	  datesArray=[];
+  	  output[Object.keys(output)[0]].forEach(function(d, i) {
+  		    var dArray = [dates[i]];
+  	    	datesArray.push(dArray);
+  	  });
 
       console.log(datesArray);
 
 
               /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-              /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-              /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-              /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-              /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-              /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+              /*
+              /*    DATA PLOT
+              /*
               /************************************************************************************/
 
 
@@ -173,39 +166,38 @@ var Demolition = function Demolition(config){
 
   else {
 
-    var config = config.slice(1);
+            var grabLast365 = PermitDashboard.cache.last365;
 
-    requestJSON(urlLast365, function(json) {
+            requestJSONa(grabLast365, function(json) {
 
-      
-      var records = json.result.records 
+            var records = json.records 
+            var demoRecords = clone(records); 
 
-      console.log(records, "#");
+        console.log(demoRecords, "#");
 
-      switch (document.getElementById('monthly-dropdown-menu').value){
+      switch (document.getElementById('monthList-dropdown-menu').value){
 
           case '1':
-            records.forEach(function(record, inc, array) {
+            demoRecords.forEach(function(record, inc, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-            // console.log(record.AppliedDate, "%%");
           });
           break;
          
           default:
-            records.forEach(function(record, inc, array) {
+            demoRecords.forEach(function(record, inc, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
             // console.log(record.AppliedDate, "*");
           })   
 
         }; 
 
-        var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+        var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
         var startDateMoment = moment().subtract(initialStartDate, 'M');
 
       console.log(startDateMoment);
 
-      var appliedLast365Days = records.filter(function(d) { 
+      var appliedLast365Days = demoRecords.filter(function(d) { 
          return moment(d.AppliedDate) > startDateMoment; 
       });
 
@@ -219,12 +211,12 @@ var Demolition = function Demolition(config){
         permitTypes=[];
 
       //Get a distinct list of neighborhoods
-      for (var i = 0; i < records.length; i++) {
-          permitTypes.push([records[i]["PermitType"], records[i].count]);
+      for (var i = 0; i < demoRecords.length; i++) {
+          permitTypes.push([demoRecords[i]["PermitType"], demoRecords[i].count]);
       }
 
 
-      var appliedLast365Days = records.filter(function(d) { 
+      var appliedLast365Days = demoRecords.filter(function(d) { 
          return moment(d.AppliedDate) > startDateMoment; 
       });
           
@@ -299,12 +291,11 @@ var Demolition = function Demolition(config){
 
 
               /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-              /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-              /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-              /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-              /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-              /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+              /*
+              /*   DATA PLOT
+              /*
               /************************************************************************************/
+
 
 
 
@@ -330,7 +321,7 @@ var Demolition = function Demolition(config){
   }
 
 
-  $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                               '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
                               '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
                               '<option value="dResidential Demolition">Residential Demolition</option></select>');

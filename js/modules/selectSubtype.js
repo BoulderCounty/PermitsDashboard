@@ -7,7 +7,7 @@ var SelectSubtype = function selectSubtype(subtype){
     // console.log(c);
     // $('#subtypeMenu').unbind('change');
 
-  var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+  var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
   console.log(initialStartDate);
 
   console.log(subtype,"^^");
@@ -17,11 +17,9 @@ var SelectSubtype = function selectSubtype(subtype){
 
     /********************************************************************************/
     /* Get all activity in last year (START)
-    /* ____    _  _____  _       ____ ____      _    ____  
-    /*|  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
-    /*| | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
-    /*| |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
-    /*|____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
+    /*
+    /* DATA GRAB
+    /*
     /********************************************************************************/
 
     // Original data grab
@@ -30,23 +28,26 @@ var SelectSubtype = function selectSubtype(subtype){
   var startDateMoment = moment().subtract(initialStartDate, 'M');
 
       // set up SQL query string
-  var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
+  // var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
   // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
-  var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
+  // var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
   // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
   var records=[];
 
-  requestJSON(urlLast365, function(json) {
-    var records = json.result.records;
+  var grabLast365 = PermitDashboard.cache.last365;  
+
+  requestJSONa(grabLast365, function(json) {
+      var records = json.records;
+      var subRecords = clone(records); 
 
 
-  console.log(records.length)
+  console.log(subRecords.length)
 
 
     //extract permits applied for the last year
-    var appliedLast365Days = records.filter(function(d) { 
+    var appliedLast365Days = subRecords.filter(function(d) { 
       return moment(d.AppliedDate) > startDateMoment; 
     });
 
@@ -78,23 +79,10 @@ var SelectSubtype = function selectSubtype(subtype){
 
 
 
-      // var thenYear=then.substr(0,4);
-      // var thenMonth=then.substr(5,2);
-      // var thenDay=then.substr(8,2);
-
-      // var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
-
-
       var ago = moment(then);
       var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
-      // var weeksAgo= Math.floor(daysAgo/7);
-      // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
-      // var p = moment(records[i].AppliedDate).day();
-      // var q = p.day();
       weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
 
-
-      // console.log(weeksAgo,'________', records[i].AppliedDate);
     }
 
     console.log(weeklyBunch.length);
@@ -113,7 +101,7 @@ var SelectSubtype = function selectSubtype(subtype){
     // })
 
     appliedLast365Days.forEach(function(day, inc, arr){
-      // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][1]);
+      // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
       appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][2];
     });
 
@@ -261,11 +249,9 @@ var SelectSubtype = function selectSubtype(subtype){
     // (H) create the bar chart with months and types breakdown 
     /*
     /*  Bar Graph - Initial Load
-    /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
-    /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
-    /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
-    /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
-    /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
+    /*
+    /*  DATA PLOT    
+    /*
     /************************************************************************************/
 
 

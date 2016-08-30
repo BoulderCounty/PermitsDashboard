@@ -3,15 +3,17 @@
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
+var fullStartDate = 1826;
 var initialStartDate = 365;
-var startDate = moment().subtract(initialStartDate, 'd').format("YYYY-MM-DD");
+var fstartDate = moment().subtract(fullStartDate, 'd').startOf('month').format("YYYY-MM-DD");
+var startDate = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 // var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
-var startDateMoment = moment().subtract(initialStartDate, 'd');
+var startDateMoment = moment().subtract(initialStartDate, 'd').startOf('month');
 // var shortStartDateMoment = moment().subtract(30, 'd');
 
 var PermitDashboard = window.PermitDashboard || {};
 
-var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
+var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + fstartDate + "' order by \"AppliedDate\"";
   // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
 var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
@@ -35,7 +37,7 @@ $(document).ready(function() {
     PermitDashboard.cache = {};
 
   // Grab dropdown length of data to "breakdown"
-  initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+  initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
 
   /********************************************************************************/
@@ -48,7 +50,7 @@ $(document).ready(function() {
   /********************************************************************************/
 
       // set up SQL query string
-  var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
+  var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + fstartDate + "' order by \"AppliedDate\"";
   // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
   var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
@@ -267,7 +269,7 @@ $(document).ready(function() {
 
 
 
-  var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+  var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + fstartDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
   var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
@@ -307,13 +309,16 @@ $(document).ready(function() {
         type : 'donut',
         onclick: function (d, i) {
           console.log("onclick", d.id, i);
-
+          $("#innerSelectSubs").empty();
           $("#uniqueSelector").empty();
           clearDomElementUS();
-          $(".monthly-dropdown-menu option:selected").val("");     
-          $("#uniqueSelector").html("<i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label>")
+          $(".monthly-dropdown-menu option:selected").val("");   
 
-          var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+              // REMOVE CSS STYLE
+
+          $("#uniqueSelector").html("<div syle='display: inline-block'><i class='fa fa-bar-chart-o fa-fw'></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick' class>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></div>")
+
+          var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
           var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
           var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
@@ -342,25 +347,24 @@ $(document).ready(function() {
             // console.log("2-", json);
 
             var records = grabLast365.records;
+            var baRecords = clone(records);
 
-            console.log("3-", records);
+            console.log("3-", baRecords);
 
 
 
-            records.forEach(function(record, inc, array) {
+            baRecords.forEach(function(record, inc, array) {
               record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-              console.log(record.AppliedDate);
+              // console.log(record.AppliedDate);
             })   
 
             var startDateMoment = moment().subtract(initialStartDate, 'months');
 
             console.log(startDateMoment);
 
-            var appliedLast365Days = records.filter(function(d) { 
+            var appliedLast365Days = baRecords.filter(function(d) { 
               return moment(d.AppliedDate) > startDateMoment; 
             });
-
-
 
 
             var appliedLastYearByType = appliedLast365Days.filter(function(o) {
@@ -368,14 +372,13 @@ $(document).ready(function() {
             });
 
    
-
              //Get a distinct list of neighborhoods
-            for (var i = 0; i < records.length; i++) {
-              permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
+            for (var i = 0; i < baRecords.length; i++) {
+              permitTypes.push([baRecords[i]["PermitTypeMapped"], baRecords[i].count]);
             }
 
 
-            var appliedLast365Days = records.filter(function(d) { 
+            var appliedLast365Days = baRecords.filter(function(d) { 
               return moment(d.AppliedDate) > startDateMoment; 
             });
                 
@@ -421,6 +424,8 @@ $(document).ready(function() {
 
                 lcount=0;
 
+                console.log(d.id);
+
                 columnData = output[d.id].map(function(index){
                       // console.log(lcount,index);
                       var rObj = {};
@@ -460,113 +465,124 @@ $(document).ready(function() {
                 console.log(datesArray);
 
 
-      /*  On Pie-Chart Click - Reloads The Bar-Chart With A Single Type
-      /*
-      /*  DATA PLOT
-      /*     
-      /************************************************************************************/
+                  /*  On Pie-Chart Click - Reloads The Bar-Chart With A Single Type
+                  /*
+                  /*  DATA PLOT
+                  /*     
+                  /************************************************************************************/
 
-                  var chart = c3.generate({
-                        bindto: '#byDay',
-                        data: {
-                          columns: [
-                              returnObj
-                          ],
-                          type: 'bar',
-                          colors: {
-                             'Building': 'rgb(31, 119, 180)',
-                             'Demolition': 'rgb(140, 86, 75)',
-                             'Electrical': 'rgb(214, 39, 40)',
-                             'Other': 'rgb(127, 127, 127)',
-                             'Mechanical': 'rgb(44, 160, 44)',
-                             'Roof': 'rgb(255, 127, 14)',
-                             'Plumbing': 'rgb(148, 103, 189)' ,
-                             'Pool/Spa': 'rgb(188, 189, 34)',
-                             'Fence': 'rgb(23, 190, 207)',
-                             'Grading': 'rgb(227, 119, 194)'
-                          }
-                        },
-                        axis: {
-                            y: {tick : {format: d3.format('d')}},
-                            x: {
-                            type: 'category',
-                            categories: datesArray
-                          }
-                        }
-                      });
+                var chart = c3.generate({
+                  bindto: '#byDay',
+                  data: {
+                    columns: [
+                        returnObj
+                    ],
+                    type: 'bar',
+                    colors: {
+                       'Building': 'rgb(31, 119, 180)',
+                       'Demolition': 'rgb(140, 86, 75)',
+                       'Electrical': 'rgb(214, 39, 40)',
+                       'Other': 'rgb(127, 127, 127)',
+                       'Mechanical': 'rgb(44, 160, 44)',
+                       'Roof': 'rgb(255, 127, 14)',
+                       'Plumbing': 'rgb(148, 103, 189)' ,
+                       'Pool/Spa': 'rgb(188, 189, 34)',
+                       'Fence': 'rgb(23, 190, 207)',
+                       'Grading': 'rgb(227, 119, 194)'
+                    }
+                  },
+                  axis: {
+                      y: {tick : {format: d3.format('d')}},
+                      x: {
+                      type: 'category',
+                      categories: datesArray
+                    }
+                  }
+                });     
 
                       //
                       // SUBTYPE BUTTON
                       //
                                 
-                      $('#uniqueSelector').on('click', $("#innerSelectSub"), function(value){
+                        toggleSubtype = [];           
+                        console.log('OOOOOOPS!');
+                        $("#present").on('click', $(".monthly-dropdown-menu"), function(value){
+                        console.log('fed up');
+                          console.log(toggleSubtype);
 
-                        innerValue = $(".monthly-dropdown-menu option:selected").val();
-
-                        console.log($(".monthly-dropdown-menu option:selected").val());
-                        console.log(value);
-                        console.log(d.id,"&&&&&&&&&&&&&")
-
-
-                        document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' id='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
-
-
-               
-
-
-                        $(document).on('click', $('#innerSelectSub'), function(e){
-                          console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB', toggleSubtype);
-                          if ((toggleSubtype/2)==(Math.floor(toggleSubtype/2))){
-                            subtypeRadioButtons();
-                          }
-                          else {
-                            var chart = c3.generate({
-                            bindto: '#byDay',
-                            data: {
-                              columns: [
-                                  returnObj
-                              ],
-                              type: 'bar',
-                              colors: {
-                                 'Building': 'rgb(31, 119, 180)',
-                                 'Demolition': 'rgb(140, 86, 75)',
-                                 'Electrical': 'rgb(214, 39, 40)',
-                                 'Other': 'rgb(127, 127, 127)',
-                                 'Mechanical': 'rgb(44, 160, 44)',
-                                 'Roof': 'rgb(255, 127, 14)',
-                                 'Plumbing': 'rgb(148, 103, 189)' ,
-                                 'Pool/Spa': 'rgb(188, 189, 34)',
-                                 'Fence': 'rgb(23, 190, 207)',
-                                 'Grading': 'rgb(227, 119, 194)'
-                              }
-                            },
-                            // grid: {y: {lines: [{value: AVERAGE}]}},
-                            axis: {
-                                y: {tick : {format: d3.format('d')}},
-                                x: {
-                                type: 'category',
-                                categories: datesArray
-                              }
-                            }
-                          });
-                          }
-                        toggleSubtype++;
-                        });                        
-                        
-                        $('#uniqueSelector').on('click', $("#innerSelectSub"), function(value){
 
                           innerValue = $(".monthly-dropdown-menu option:selected").val();
 
                           console.log($(".monthly-dropdown-menu option:selected").val());
                           console.log(value);
-                          console.log(d.id,"&&&&&&&&&&&&&")
+                          console.log(d.id, "+++++++++++++++");
+                          console.log(value.target.id,"&&&&&&&&&&&&&");
+                          subtypeVar = value.target.id  || d.id;
+                          subtypeVar = subtypeVar.charAt(0);
+                          console.log(subtypeVar);
 
 
-                          document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all' checked /> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                          if (toggleSubtype==0){
+                            SubtypeRadioButtons(subtypeVar);
+                            console.log(toggleSubtype);
+                            console.log("ZERO");
+                            toggleSubtype++;
+                          }
 
 
-                            switch (d.id){
-                              case "Building":
+
+                          else if ((toggleSubtype%2) != 0){
+                            console.log(subtypeVar);
+                            console.log(toggleSubtype);
+                            console.log("EVEN");
+
+
+                            // REMOVE CSS STYLE
+                            $('#toggleWithPieClick').empty();
+                            document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off' id='" + subtypeVar + "'> Subtype(s) </label>");
+
+
+                            var chart = c3.generate({
+                              bindto: '#byDay',
+                              data: {
+                                columns: [
+                                    returnObj
+                                ],
+                                type: 'bar',
+                                colors: {
+                                   'Building': 'rgb(31, 119, 180)',
+                                   'Demolition': 'rgb(140, 86, 75)',
+                                   'Electrical': 'rgb(214, 39, 40)',
+                                   'Other': 'rgb(127, 127, 127)',
+                                   'Mechanical': 'rgb(44, 160, 44)',
+                                   'Roof': 'rgb(255, 127, 14)',
+                                   'Plumbing': 'rgb(148, 103, 189)' ,
+                                   'Pool/Spa': 'rgb(188, 189, 34)',
+                                   'Fence': 'rgb(23, 190, 207)',
+                                   'Grading': 'rgb(227, 119, 194)'
+                                }
+                              },
+                              // grid: {y: {lines: [{value: AVERAGE}]}},
+                              axis: {
+                                  y: {tick : {format: d3.format('d')}},
+                                  x: {
+                                  type: 'category',
+                                  categories: datesArray
+                                  }
+                              } 
+                            });
+                            toggleSubtype++; 
+
+                            
+                          }
+
+                          else {
+
+                            console.log("TOTALS");
+
+                            switch (subtypeVar){
+                              case "b":
+                              case "B":
                                 var subtype = Building(innerValue);
 
                                 console.log(subtype);
@@ -574,100 +590,105 @@ $(document).ready(function() {
 
                                 if (innerValue != ""){
                        
-                                  $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                              '<optgroup label="Residential">'+    
-                                              '<option value="bNRB">New Residence Building</option>'+
-                                              '<option value="bNew Residence">New Residence</option>'+
-                                              '<option value="bRA">Residential Accessory</option>'+
-                                              '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                              '<option value="bResidential Addition"">Residential Addition</option>'+
-                                              '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                              '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                              '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                              '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                              '<option value="bobuild">Other</option></select>');                          
+                                  $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<optgroup label="Residential">'+    
+                                    '<option value="bNRB">New Residence Building</option>'+
+                                    '<option value="bNew Residence">New Residence</option>'+
+                                    '<option value="bRA">Residential Accessory</option>'+
+                                    '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
+                                    '<option value="bResidential Addition"">Residential Addition</option>'+
+                                    '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+                                    '<option value="bCommercial Remodel">Commercial Remodel</option>'+
+                                    '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+                                    '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+                                    '<option value="bobuild">Other</option></select>');                          
                                   clearDomElementUS();
                                 }
 
                               break;
 
-                              case "Demolition":
+                              case "d":
+                              case "D":
                                 var subtype = Demolition(innerValue);
 
                                 if (innerValue !=""){
-                                    $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                              '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                                              '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                                              '<option value="dResidential Demolition">Residential Demolition</option></select>');
-                                clearDomElementUS();
+                                  $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
+                                    '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
+                                    '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                                 clearDomElementUS();
                                 }
 
                               break;
 
 
 
-                              case "Electrical":
+                              case "e":
+                              case "E":
                                 var subtype = Electrical(innerValue);
 
                                 if (innerValue != ""){
-                                    $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                              '<option value="eCommercial Electric">Commercial Electric</option>'+
-                                              '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-                                              '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-                                              '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-                                              '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-                                              '<option value="eGenerator">Generator</option>'+
-                                              '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-                                              '<option value="eElectrical Other">Electical Other</option></select>');
-                                clearDomElementUS();
+                                  $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<option value="eCommercial Electric">Commercial Electric</option>'+
+                                    '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
+                                    '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
+                                    '<option value="eElectrical Service Change">Electrical Service Change</option>'+
+                                    '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
+                                    '<option value="eGenerator">Generator</option>'+
+                                    '<option value="eSolar Electrical System">Solar Electrical System</option>'+
+                                    '<option value="eElectrical Other">Electical Other</option></select>');
+                                  clearDomElementUS();
                                 }
 
 
                               break;
 
-                              case "Mechanical":
+                              case "m":
+                              case "M":
                                 var subtype = Mechanical(innerValue);
 
                                 if (innerValue != ""){
-                                    $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                            '<option value="mAir Conditioning">Air Conditioning</option>'+
-                                            '<option value="mBoiler">Boiler</option>'+
-                                            '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                                            '<option value="mFurnace">Furnace</option>'+
-                                            '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                                            '<option value="mWood Stove">Wood Stove</option>'+
-                                            '<option value="mSolar Thermal">Solar Thermal</option>'+
-                                            '<option value="mMechanical - Other">Other</option></select>');
-                                clearDomElementUS();
+                                  $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<option value="mAir Conditioning">Air Conditioning</option>'+
+                                    '<option value="mBoiler">Boiler</option>'+
+                                    '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
+                                    '<option value="mFurnace">Furnace</option>'+
+                                    '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
+                                    '<option value="mWood Stove">Wood Stove</option>'+
+                                    '<option value="mSolar Thermal">Solar Thermal</option>'+
+                                    '<option value="mMechanical - Other">Other</option></select>');
+                                  clearDomElementUS();
                                 }
 
 
                               break;
 
-                              case "Other":
+                              case "o":
+                              case "O":
                                 var subtype = Other(innerValue);
 
                                 if (innerValue != ""){
-                                  $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                          '<option value="oBridge">Bridge</option>'+
-                                          '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
-                                          '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
-                                clearDomElementUS();
+                                  $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<option value="oBridge">Bridge</option>'+
+                                    '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
+                                    '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
+                                  clearDomElementUS();
                                 } 
 
 
                               break;
 
-                              case "Plumbing":
+                              case "p":
+                              case "P":
                                 var subtype = Plumbing(innerValue);
 
                                 if (innerValue != ""){
-                                  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                        '<option value="pWater Heater">Water Heater</option>'+
-                                        '<option value="pGas Piping">Gas Piping</option>'+
-                                        '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
-                                        '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
-                                clearDomElementUS();
+                                  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+                                    '<option value="pWater Heater">Water Heater</option>'+
+                                    '<option value="pGas Piping">Gas Piping</option>'+
+                                    '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
+                                    '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
+                                  clearDomElementUS();
                                 }
 
 
@@ -675,17 +696,24 @@ $(document).ready(function() {
 
                               default:
                                 console.log("no subtypes");
+                              break;
 
                             }
 
+                            toggleSubtype++;
+
+
+
+                           }
+
+                          });
                         });
-                      });
 
               
 
-                console.log('****^^*****', $("#monthly-dropdown-menu").value)
+                console.log('****^^*****', $("#monthList-dropdown-menu").value)
 
-                });
+                // });
         }
       },
  
@@ -703,21 +731,14 @@ $(document).ready(function() {
 
 function monthSelect(months){
 
-    var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+    var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
     console.log(initialStartDate);
 
     var startDate = moment().subtract(initialStartDate, 'months').format("YYYY-MM-DD");    
 
     console.log(startDate, "***");
-
-    var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
-    // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
-    var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
-    // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
-
-
-    // console.log(urlLast30Query, "---");
-    console.log(urlLast365Query, "-------------");
+    $('#toggleWithPieClick').empty();
+    $('#toggleWithPieClick').text(" Applications by Month ");
   
     var records = [];
 
@@ -927,10 +948,14 @@ function monthSelect(months){
         case '36':
         case '48':
         case '60':
+
+          console.log(timeRecords.length);
           timeRecords.forEach(function(record, inc, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
             console.log(record.AppliedDate, "*");
           })
+
+          console.log(timeRecords.length);
          
           var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
@@ -1110,26 +1135,22 @@ function monthSelect(months){
             var then = timeRecords[i].AppliedDate;
 
 
-            var thenYear=then.substr(0,4);
-            var thenMonth=then.substr(5,2);
-            var thenDay=then.substr(8,2);
+            // var thenYear=then.substr(0,4);
+            // var thenMonth=then.substr(5,2);
+            // var thenDay=then.substr(8,2);
 
-            var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
+            // var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
 
 
             var ago = moment(then);
-            var weeksAgo = ago.startOf('isoWeek').format('MMM-DD');
-            // var weeksAgo= Math.floor(daysAgo/7);
-            // records[i].AppliedDate = moment(records[i].AppliedDate).format('YYYY-MM-DD');
-            // var p = moment(records[i].AppliedDate).day();
-            // var q = p.day();
-            weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgo]);
+            var weeksAgoLabel = ago.startOf('isoWeek').format('MMM-DD');
+            weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgoLabel]);
 
 
-            console.log(weeksAgo,'________', timeRecords[i].AppliedDate);
           }
 
-          console.log(weeklyBunch);
+          startDateMoment = startDateMoment.startOf('isoWeek');
+          // console.log(weeksAgoLabel, startDateMoment);
           var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
               return (moment(d[0]) > startDateMoment);
             });
@@ -1143,7 +1164,7 @@ function monthSelect(months){
           console.log(appliedLast365Days);
 
           appliedLast365Days.forEach(function(day, inc, arr){
-            console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
+            // console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
             appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
           })
 
@@ -1313,9 +1334,9 @@ function monthSelect(months){
 
       };    
 
-      var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
+      // var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
-      var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+      // var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
         
       var records = [];
 
@@ -1336,10 +1357,10 @@ function monthSelect(months){
         var repieRecords = clone(records); 
 
         repieRecords.forEach(function(record, inc, array) {
-          record.AppliedDate = moment(record.AppliedDate).format('MMMM');
+          record.AppliedDate = moment(record.AppliedDate);
         })   
       
-        console.log(records);
+        console.log(repieRecords);
 
         var permitTypes = [];
 
@@ -1349,6 +1370,8 @@ function monthSelect(months){
         }
       
 
+        console.log(permitTypes);
+
         /*    Reloads Pie-Chart With Time-Frame Selected Data
         /*
         /*     DATA PLOT     
@@ -1357,7 +1380,8 @@ function monthSelect(months){
 
         var chart = c3.generate({
           bindto: '#permitTypes',
-          legend: function () {return false;},
+          legend: {show: true},
+          // legend: function () {return false;},
           data: {
            colors: {
                            'Building': 'rgb(31, 119, 180)',
@@ -1375,7 +1399,7 @@ function monthSelect(months){
             type : 'donut',
             onclick: function (d, i) {
               console.log("onclick", d.id, i);
-              var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+              var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
               var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
               var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
@@ -1400,14 +1424,13 @@ function monthSelect(months){
               var grabLast365 = PermitDashboard.cache.last365;
 
               requestJSONa(grabLast365, function(json) {
-
-                var records = json.result.records 
+                var records = json.records 
                 var rebarRecords = clone(records); 
 
 
                 console.log(records, "#");
 
-                switch (document.getElementById('monthly-dropdown-menu').value){
+                switch (document.getElementById('monthList-dropdown-menu').value){
 
                   case '1':
                     rebarRecords.forEach(function(record, inc, array) {
@@ -1424,7 +1447,7 @@ function monthSelect(months){
 
                 }; 
 
-                var initialStartDate = document.getElementById('monthly-dropdown-menu').value;
+                var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
                 var startDateMoment = moment().subtract(initialStartDate, 'M');
 
@@ -1565,16 +1588,21 @@ function monthSelect(months){
               });
 
               
-              //
-              //     SUBTYPE BUTTON
-              //
-                           
-                    document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div clas='btn-group' data-toggle='buttons'><label class='btn btn-primary active'><input type='radio' id='innerSelectAll' value='all'/> Type Totals </label><label class='btn btn-primary'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                    //
+                    //     SUBTYPE BUTTON
+                    //
+                    //             
+                    //     REMOVE INLINE CSS
+                    
+
+                    $('#toggleWithPieClick').empty();
+
+                    document.getElementById("toggleWithPieClick").innerHTML= ("<span style='display: inline-block'><span id='innerSelectSubs'></span><span id='toggleWithPieClick' class>Graph options - toggle between: <span+ class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
 
 
                   $(document).on('click', $('.innerSelectSub'), function(e){
                     console.log(e);
-                    subtypeRadioButtons();
+                    SubtypeRadioButtons(d.id);
                   });
 
 
@@ -1671,149 +1699,3 @@ function clearDomElementUS(){
   old_element.parentNode.replaceChild(new_element, old_element);
   console.log("replaced");
 };
-
-  function subtypeRadioButtons(value){
-                          console.log('change radio');
-
-                          innerValue = $(".monthly-dropdown-menu option:selected").val();
-
-                          console.log($(".monthly-dropdown-menu option:selected").val());
-                          console.log(value);
-
-
-                          switch (d.id){
-                            case "Building":
-
-                              console.log(d.id);
-
-                              if (innerValue != ""){
-
-                                // var subtype = Building(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                            '<optgroup label="Residential">'+    
-                                            '<option value="bNRB">New Residence Building</option>'+
-                                            '<option value="bNew Residence">New Residence</option>'+
-                                            '<option value="bRA">Residential Accessory</option>'+
-                                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                            '<option value="bResidential Addition"">Residential Addition</option>'+
-                                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                            '<option value="bobuild">Other</option></select>');
-                                clearDomElementUS();
-                              
-                              }
-
-                              Building(innerValue);
-
-                            break;
-
-                            case "Demolition":
-
-
-                              if (innerValue !=""){
-
-                                // var subtype = Demolition(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                          '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                                          '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                                          '<option value="dResidential Demolition">Residential Demolition</option></select>');
-                                clearDomElementUS();
-                              }
-
-                              Demolition(innerValue);
-
-                            break;
-
-                            case "Electrical":
-
-
-                              if (innerValue != ""){
-
-                                // var subtype = Electrical(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                          '<option value="eCommercial Electric">Commercial Electric</option>'+
-                                          '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-                                          '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-                                          '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-                                          '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-                                          '<option value="eGenerator">Generator</option>'+
-                                          '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-                                          '<option value="eElectrical Other">Electical Other</option></select>');
-                                clearDomElementUS();
-                              }
-
-                              Electrical(innerValue);
-
-                            break;
-
-                            case "Mechanical":
-
-                              if (innerValue != ""){
-
-                                // var subtype = Mechanical(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                        '<option value="mAir Conditioning">Air Conditioning</option>'+
-                                        '<option value="mBoiler">Boiler</option>'+
-                                        '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
-                                        '<option value="mFurnace">Furnace</option>'+
-                                        '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-                                        '<option value="mWood Stove">Wood Stove</option>'+
-                                        '<option value="mSolar Thermal">Solar Thermal</option>'+
-                                        '<option value="mMechanical - Other">Other</option></select>');
-                                clearDomElementUS();
-                              }
-
-                              Mechanical(innerValue);
-
-                            break;
-
-                            case "Other":
-
-                              if (innerValue != ""){
-
-                                // var subtype = Other(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                        '<option value="oBridge">Bridge</option>'+
-                                        '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
-                                        '<option value="oOil and Gas Development">Oil and Gas Development</option></select>');
-                                clearDomElementUS();
-                              } 
-
-                              Other(innerValue);
-
-                            break;
-
-                            case "Plumbing":
-
-                              if (innerValue != ""){
-
-                                // var subtype = Plumbing(innerValue);
-
-                                $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
-                                      '<option value="pWater Heater">Water Heater</option>'+
-                                      '<option value="pGas Piping">Gas Piping</option>'+
-                                      '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
-                                      '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
-                                clearDomElementUS();
-                              }
-
-                              Plumbing(innerValue);
-
-                            break;
-
-                            default:
-                              console.log("no subtypes");
-
-                            break;
-
-  }
-
-
-}

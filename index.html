@@ -215,7 +215,7 @@
                             <div class="panel-body">
                                 <div class="container">
                                     <div> 
-                                        <select onchange="monthSelect(value)" id="monthly-dropdown-menu">
+                                        <select onchange="monthSelect(value)" id="monthList-dropdown-menu">
                                             <optgroup label="Months">    
                                                 <option value="1">One month</option>
                                                 <option value="2">Two months</option>
@@ -246,7 +246,7 @@
                         <!-- /.panel-body -->
                     </div>
                     <div class="col-lg-8">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default" id="present">
                         <div class="panel-heading" id="uniqueSelector">
                             <i class="fa fa-bar-chart-o fa-fw"></i><span id='innerSelectSubs'></span><span id='toggleWithPieClick'> Applications by Month </span>
                         </div>
@@ -356,6 +356,7 @@
 
 
    <!-- Load modules here -->
+    <script type="text/javascript" src="js/modules/subtypeRadioButtons.js"></script>
     <script type="text/javascript" src="js/modules/selectSubtype.js"></script>
     <script type="text/javascript" src="js/modules/building.js"></script>
     <script type="text/javascript" src="js/modules/demolition.js"></script> 
