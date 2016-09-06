@@ -334,8 +334,8 @@ var Other = function Other(config){
   console.log($('.btn-primary').attr('id'));
   document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-  $("#innerSelectSubs").empty();
-  $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $(".monthly-dropdown-menu").empty();
+  $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                 '<option value="oBridge">Bridge</option>'+
                 '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
                 '<option value="oOil and Gas Development">Oil and Gas Development</option></select>'); 

@@ -326,11 +326,11 @@ var Mechanical = function Mechanical (config){
 	console.log($('.btn-primary').attr('id'));
 	document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-	$("#innerSelectSubs").empty();
-	$("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+	$(".monthly-dropdown-menu").empty();
+	$("#innerSelectSubs").append('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
 	                '<option value="mAir Conditioning">Air Conditioning</option>'+
 	                '<option value="mBoiler">Boiler</option>'+
-	                '<option value="mEvaportive Cooler">Evaporative Cooler</option>'+
+	                '<option value="mEvaporative Cooler">Evaporative Cooler</option>'+
 	                '<option value="mFurnace">Furnace</option>'+
 	                '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
 	                '<option value="mWood Stove">Wood Stove</option>'+

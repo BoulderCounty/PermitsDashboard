@@ -336,8 +336,8 @@ var Building = function Building(config){
 	console.log($('.btn-primary').attr('id'));
     document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-    $("#innerSelectSubs").empty();
-	$("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value=""></option>'+
+    $(".monthly-dropdown-menu").empty();
+	$("#innerSelectSubs").append('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value=""></option>'+
       									    '<optgroup label="Residential">'+    
                                             '<option value="bNRB">New Residence Building</option>'+
                                             '<option value="bNew Residence">New Residence</option>'+

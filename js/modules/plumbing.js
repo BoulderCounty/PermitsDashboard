@@ -336,8 +336,8 @@ var Plumbing = function Plumbing(config){
   console.log($('.btn-primary').attr('id'));
   document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-  $("#innerSelectSubs").empty();
-  $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $(".monthly-dropdown-menu").empty();
+  $("#innerSelectSubs").append('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                   '<option value="pWater Heater">Water Heater</option>'+
                   '<option value="pGas Piping">Gas Piping</option>'+
                   '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+

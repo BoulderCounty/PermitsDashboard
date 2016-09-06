@@ -63,7 +63,9 @@ $(document).ready(function() {
 
 
   requestJSON(urlLast365, function(json) {
-    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT");
+
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT_#1");
+
     var records = json.result.records;
 
     var firstRecords = clone(records);
@@ -73,9 +75,9 @@ $(document).ready(function() {
     url: urlLast365
     };
 
-    console.log(PermitDashboard.cache.last365.records);
-    console.log(firstRecords);
-    console.log(PermitDashboard.cache.last365.records === firstRecords);
+    // console.log(PermitDashboard.cache.last365.records);
+    // console.log(firstRecords);
+    // console.log(PermitDashboard.cache.last365.records === firstRecords);
 
     //extract permits applied for the last year
     var appliedLast365Days = firstRecords.filter(function(d) { 
@@ -160,8 +162,6 @@ $(document).ready(function() {
 
     var types = [ "Building", "Roof", "Mechanical", "Electrical", "Plumbing", "Demolition", "Grading", "Other", "Pool/Spa", "Fence"];
 
-    console.log(appliedByDayByType);
-
     var output = {};
   
     // (C) Enumerates each type
@@ -177,7 +177,6 @@ $(document).ready(function() {
         })
     });
 
-    console.log(types, output);
 
     // (D) Enumerates each month
     // (E) initiates array of months
@@ -186,8 +185,6 @@ $(document).ready(function() {
     var months = appliedByDayByType.map(function(month) {
       return month.key;
     });
-
-    console.log(months);
 
     // (G) push the value into the type-labeled array
   
@@ -198,7 +195,6 @@ $(document).ready(function() {
         return [type].concat(a);
       })
 
-    console.log(columnData);
 
     // (H) create the bar chart with months and types breakdown 
     /*
@@ -272,7 +268,6 @@ $(document).ready(function() {
   // Get the number of instances of each type
 
 
-
   var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + fstartDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
   var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
@@ -280,18 +275,13 @@ $(document).ready(function() {
   var records = [];
 
   requestJSON(permitTypesQ, function(json) {
-    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT");
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT_#2");
     var records = json.result.records; 
     PermitDashboard.cache.permitTypesQ = {
       records: records,
       url: permitTypesQ
     };
-
-    // records.forEach(function(record, inc, array) {
-    //   record.AppliedDate = moment(record.AppliedDate);
-    // })   
   
-    console.log(records);
 
     var permitTypes = [];
 
@@ -300,7 +290,7 @@ $(document).ready(function() {
       permitTypes.push([records[i]["PermitTypeMapped"], records[i].count]);
     }
 
-    console.log(permitTypes);
+
     /* PIE CHART INITIAL LOAD
     /* DATA PLOT */
 
@@ -324,20 +314,10 @@ $(document).ready(function() {
 
           var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
-          // if (initialStartDate==12){
-          //   $("#uniqueSelector").append("<span id='innerSelectSubs'></span>");
-          // }
-
-          console.log(initialStartDate);
-
           var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
           var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
           var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
           
-
-          console.log(startDate, "***");
-
-          console.log(urlLast365Query, "-------------");
         
           var records = [];
 
@@ -349,19 +329,10 @@ $(document).ready(function() {
 
           var grabLast365 = PermitDashboard.cache.last365;  
 
-          console.log(grabLast365)  
-
           requestJSONa(grabLast365, function(grabLast365) {
-
-            console.log("1-", grabLast365);
-            // console.log("2-", json);
 
             var records = grabLast365.records;
             var baRecords = clone(records);
-
-            console.log("3-", baRecords);
-
-
 
             baRecords.forEach(function(record, inc, array) {
               record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
@@ -369,8 +340,6 @@ $(document).ready(function() {
             })   
 
             var startDateMoment = moment().subtract(initialStartDate, 'months');
-
-            console.log(startDateMoment);
 
             var appliedLast365Days = baRecords.filter(function(d) { 
               return moment(d.AppliedDate) > startDateMoment; 
@@ -413,9 +382,6 @@ $(document).ready(function() {
 
             var output = [];
 
-                console.log(appliedLastYearByType);
-                console.log(appliedByDayByType);
-
                 output[d.id] = appliedByDayByType.map(function(month) {
                     var o = {};
                     o[month.key] = month.values.filter(function(val) {
@@ -447,8 +413,6 @@ $(document).ready(function() {
                       return rObj;
                     });
 
-                console.log(columnData);
-
                 var returnObj = columnData.map(function(obj) {
                   return Object.keys(obj).sort().map(function(key) { 
                     return obj[key];
@@ -457,24 +421,19 @@ $(document).ready(function() {
 
                 var returnObj = ([Object.keys(output)[0]]).concat(returnObj);
 
-                console.log(returnObj);
-
                 window.returningObj = returnObj;
 
-                console.log(Object.keys(output)[0],'____________________________');
+                console.log(Object.keys(output)[0],'_____');
 
                 datesArray=[];
 
                 output[Object.keys(output)[0]].forEach(function(d, i) {
-
-                  // console.log(moment([dates[i]], 'D MMM').format('D MMM'));
 
                   var dArray = [dates[i]];
                   datesArray.push(dArray);
               
                 });
 
-                console.log(datesArray);
 
 
                   /*  On Pie-Chart Click - Reloads The Bar-Chart With A Single Type
@@ -512,26 +471,24 @@ $(document).ready(function() {
                   }
                 });     
 
-                      //
-                      // SUBTYPE BUTTON
-                      //
-                                
-                        toggleSubtype = [];           
-                        console.log('OOOOOOPS!');
-                        $("#uniqueSelector").on('click', $(".monthly-dropdown-menu"),
-                          function (){
-                            var selectedSubtype = this.querySelector("div").querySelector("span").querySelector("div").querySelector("label").id;
-                            console.log(selectedSubtype);
-                            returnedObj = ToggleBarGraph(selectedSubtype, toggleSubtype, returnObj);
-                            console.log('***', returnedObj, '***');
-                          })
-                      });
+                //
+                // SUBTYPE BUTTON
+                //
+                          
+                  toggleSubtype = [];           
+                  $("#uniqueSelector").on('click', $(".monthly-dropdown-menu"),
+                    function (){
+                      var selectedSubtype = this.querySelector("div").querySelector("span").querySelector("div").querySelector("label").id;
+                      console.log(selectedSubtype);
+                      returnedObj = ToggleBarGraph(selectedSubtype, toggleSubtype, returnObj);
+                      console.log('***', returnedObj, '***');
+                    })
+                });
 
-              
+        
 
                 console.log('****^^*****', $("#monthList-dropdown-menu").value)
 
-                // });
         }
       },
  
@@ -550,7 +507,6 @@ $(document).ready(function() {
 function monthSelect(months){
 
     var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
-    console.log(initialStartDate);
 
     var startDate = moment().subtract(initialStartDate, 'months').format("YYYY-MM-DD");    
 
@@ -582,14 +538,12 @@ function monthSelect(months){
         case '1':
           timeRecords.forEach(function(record, increment, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-            console.log(record.AppliedDate, "%%");
           });
 
           var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
-          console.log(appliedLast365Days);
 
           appliedLast365Days.forEach(function(rec, i, arr){
             appliedLast365Days[i]['AppliedDate'] = moment(appliedLast365Days[i]['AppliedDate']).format('MMM-DD');
@@ -601,8 +555,6 @@ function monthSelect(months){
             .key(function(d) { return d.PermitTypeMapped })
             .rollup (function(v) { return v.length })
             .entries(appliedLast365Days);
-
-          console.log(appliedByDayByType);
 
           var bld = ['Building'];
           var demo = ['Demolition'];
@@ -770,16 +722,12 @@ function monthSelect(months){
           console.log(timeRecords.length);
           timeRecords.forEach(function(record, inc, array) {
             record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-            console.log(record.AppliedDate, "*");
           })
 
-          console.log(timeRecords.length);
          
           var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
-
-          console.log(appliedLast365Days);
 
           var appliedByDayByType = d3.nest()
             .key(function(d) { return d.AppliedDate })
@@ -787,7 +735,6 @@ function monthSelect(months){
             .rollup (function(v) { return v.length })
             .entries(appliedLast365Days);
 
-          console.log(appliedByDayByType);
 
           var bld = ['Building'];
           var demo = ['Demolition'];
@@ -944,20 +891,12 @@ function monthSelect(months){
 
            
         default:
-          console.log(records, '$$$$$');
 
           weeklyBunch = [];
 
 
           for (var  i = 0; i<timeRecords.length; i++){
             var then = timeRecords[i].AppliedDate;
-
-
-            // var thenYear=then.substr(0,4);
-            // var thenMonth=then.substr(5,2);
-            // var thenDay=then.substr(8,2);
-
-            // var daysAgo = (timeSpanDays(thenYear, thenMonth, thenDay));
 
 
             var ago = moment(then);
@@ -979,14 +918,11 @@ function monthSelect(months){
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
-          console.log(appliedLast365Days);
 
           appliedLast365Days.forEach(function(day, inc, arr){
             // console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
             appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
           })
-
-          console.log(appliedLast365Days);
 
 
           var appliedByDayByType = d3.nest()
@@ -994,8 +930,6 @@ function monthSelect(months){
             .key(function(d) { return d.PermitTypeMapped })
             .rollup (function(v) { return v.length })
             .entries(appliedLast365Days);
-
-          console.log(appliedByDayByType);
 
           var bld = ['Building'];
           var demo = ['Demolition'];
@@ -1168,7 +1102,6 @@ function monthSelect(months){
 
       var grabPermitTypesQ = PermitDashboard.cache.permitTypesQ;
 
-      console.log(grabPermitTypesQ);
 
       requestJSONa(grabPermitTypesQ, function(json) {
         var records = grabPermitTypesQ.records;
@@ -1178,7 +1111,6 @@ function monthSelect(months){
           record.AppliedDate = moment(record.AppliedDate);
         })   
       
-        console.log(repieRecords);
 
         var permitTypes = [];
 
@@ -1187,8 +1119,6 @@ function monthSelect(months){
           permitTypes.push([repieRecords[i]["PermitTypeMapped"], repieRecords[i].count]);
         }
       
-
-        console.log(permitTypes);
 
         /*    Reloads Pie-Chart With Time-Frame Selected Data
         /*
@@ -1559,9 +1489,7 @@ function timeSpanDays(year, month, day){
 }
 
 function clearDomElementUS(){
-  console.log("replacing");  
   var old_element = document.getElementById("uniqueSelector");
   var new_element = old_element.cloneNode(true);
   old_element.parentNode.replaceChild(new_element, old_element);
-  console.log("replaced");
 };

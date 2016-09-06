@@ -331,8 +331,8 @@ var Electrical = function Electrical(config){
 	console.log($('.btn-primary').attr('id'));
     document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-    $("#innerSelectSubs").empty();
-	$("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+    $(".monthly-dropdown-menu").empty();
+	$("#innerSelectSubs").append('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
 	                '<option value="eCommercial Electric">Commercial Electric</option>'+
 	                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
 	                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+

@@ -238,11 +238,14 @@ var SelectSubtype = function selectSubtype(subtype){
 
     // console.log(subtype);
 
-    // console.log(columnData);
+    console.log(columnData);
 
     var selectedColumnData = columnData.filter(function(subtypet){
       return subtypet[0] == subtype;
     });
+
+    console.log(selectedColumnData);
+    console.log(weeks);
 
     // console.log(selectedColumnData);
 

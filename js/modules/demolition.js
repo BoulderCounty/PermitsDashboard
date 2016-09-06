@@ -327,12 +327,12 @@ var Demolition = function Demolition(config){
 
   columnData = check(config);
 
-  
+  console.log(config);
   console.log($('.btn-primary').attr('id'));
   document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
-  $("#innerSelectSubs").empty();
-  $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+  $(".monthly-dropdown-menu").empty();
+  $("#innerSelectSubs").append('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                               '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
                               '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
                               '<option value="dResidential Demolition">Residential Demolition</option></select>');
@@ -356,7 +356,7 @@ var Demolition = function Demolition(config){
 
     if (clicker%2 == 0){
 
-      $('#demo-monthly-dropdown-menu').hide();
+      $('#dem-monthly-dropdown-menu').hide();
       $('#Demolition').text('Subtype(s)');
 
         console.log(e);
@@ -410,7 +410,7 @@ var Demolition = function Demolition(config){
                 }
             });
 
-          $('#demo-monthly-dropdown-menu').show();
+          $('#dem-monthly-dropdown-menu').show();
 
           $('#Demolition').text('Totals');
         };
