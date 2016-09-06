@@ -215,42 +215,42 @@ $(document).ready(function() {
 
     /********************************************************************************/
                         
-                        var chart = c3.generate({
-                          bindto: '#byDay',
-                          data: {
-                             colors: {
-                                               'Building': 'rgb(31, 119, 180)',
-                                               'Demolition': 'rgb(140, 86, 75)',
-                                               'Electrical': 'rgb(214, 39, 40)',
-                                               'Other': 'rgb(127, 127, 127)',
-                                               'Mechanical': 'rgb(44, 160, 44)',
-                                               'Roof': 'rgb(255, 127, 14)',
-                                               'Plumbing': 'rgb(148, 103, 189)' ,
-                                               'Pool/Spa': 'rgb(188, 189, 34)',
-                                               'Fence': 'rgb(23, 190, 207)',
-                                               'Grading': 'rgb(227, 119, 194)'
-                                            },
-                            columns: columnData,
-                            type: 'bar',
-                            onclick: function(d, i) {
-                            }
-                          },
-                          grid: {
-                            y: {
-                              lines: [{value:0}]
-                            }
-                          },
-                          axis: {
-                            x: {
-                              type: 'category',
-                              categories: months
-                            }
-                          },
-                          legend: {
-                            show: false
-                          }
-                          
-                        });
+    var chart = c3.generate({
+      bindto: '#byDay',
+      data: {
+         colors: {
+                           'Building': 'rgb(31, 119, 180)',
+                           'Demolition': 'rgb(140, 86, 75)',
+                           'Electrical': 'rgb(214, 39, 40)',
+                           'Other': 'rgb(127, 127, 127)',
+                           'Mechanical': 'rgb(44, 160, 44)',
+                           'Roof': 'rgb(255, 127, 14)',
+                           'Plumbing': 'rgb(148, 103, 189)' ,
+                           'Pool/Spa': 'rgb(188, 189, 34)',
+                           'Fence': 'rgb(23, 190, 207)',
+                           'Grading': 'rgb(227, 119, 194)'
+                        },
+        columns: columnData,
+        type: 'bar',
+        onclick: function(d, i) {
+        }
+      },
+      grid: {
+        y: {
+          lines: [{value:0}]
+        }
+      },
+      axis: {
+        x: {
+          type: 'category',
+          categories: months
+        }
+      },
+      legend: {
+        show: false
+      }
+      
+    });
 
   });
   /********************************************************************************/
@@ -441,35 +441,7 @@ $(document).ready(function() {
                   /*  DATA PLOT
                   /*     
                   /************************************************************************************/
-
-                var chart = c3.generate({
-                  bindto: '#byDay',
-                  data: {
-                    columns: [
-                        returnObj
-                    ],
-                    type: 'bar',
-                    colors: {
-                       'Building': 'rgb(31, 119, 180)',
-                       'Demolition': 'rgb(140, 86, 75)',
-                       'Electrical': 'rgb(214, 39, 40)',
-                       'Other': 'rgb(127, 127, 127)',
-                       'Mechanical': 'rgb(44, 160, 44)',
-                       'Roof': 'rgb(255, 127, 14)',
-                       'Plumbing': 'rgb(148, 103, 189)' ,
-                       'Pool/Spa': 'rgb(188, 189, 34)',
-                       'Fence': 'rgb(23, 190, 207)',
-                       'Grading': 'rgb(227, 119, 194)'
-                    }
-                  },
-                  axis: {
-                      y: {tick : {format: d3.format('d')}},
-                      x: {
-                      type: 'category',
-                      categories: datesArray
-                    }
-                  }
-                });     
+                returnObjChart(returnObj, datesArray)    
 
                 //
                 // SUBTYPE BUTTON
@@ -535,181 +507,39 @@ function monthSelect(months){
 
       switch (initialStartDate){
 
+
         case '1':
-          timeRecords.forEach(function(record, increment, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-          });
 
           var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
-
           appliedLast365Days.forEach(function(rec, i, arr){
             appliedLast365Days[i]['AppliedDate'] = moment(appliedLast365Days[i]['AppliedDate']).format('MMM-DD');
-          }); //= appliedLast365Days.AppliedDate.format('MM-DD');
-
-
-          var appliedByDayByType = d3.nest()
-            .key(function(d) { return d.AppliedDate })
-            .key(function(d) { return d.PermitTypeMapped })
-            .rollup (function(v) { return v.length })
-            .entries(appliedLast365Days);
-
-          var bld = ['Building'];
-          var demo = ['Demolition'];
-          var ele = ['Electrical'];
-          var other = ['Other'];
-          var mech = ['Mechanical'];
-          var plm = ['Plumbing'];
-          var psp = ['Pool/Spa'];
-          var fnc = ['Fence'];
-          var roof = ['Roof'];
-          var grad = ['Grading'];
-          var datesArray = [];
-
-          appliedByDayByType.forEach(function(d) {
-
-            var dArray = d.key;
-            datesArray.push(dArray);
-
-            bldAdded = false;
-            demoAdded = false;
-            eleAdded = false;
-            otherAdded = false;
-            mechAdded = false;
-            plmAdded = false;
-            pspAdded = false;
-            fncAdded = false;
-            roofAdded = false;
-            gradAdded = false;
-
-
-            d.values.forEach(function(i) {
-              
-              if (i.key == "Building") {
-                bld.push(i.values);
-                bldAdded = true;
-              }
-              if (i.key == "Demolition") {
-                demo.push(i.values);
-                demoAdded = true;
-              }
-              if (i.key == "Electrical") {
-                ele.push(i.values);
-                eleAdded = true;
-              }
-              if (i.key == "Other") {
-                other.push(i.values);
-                otherAdded = true;
-              }
-              if (i.key == "Mechanical") {
-                mech.push(i.values);
-                mechAdded = true;
-              }
-              if (i.key == "Roof") {
-                roof.push(i.values);
-                roofAdded = true;    
-              }
-              if (i.key == "Pool/Spa") {
-                psp.push(i.values);
-                pspAdded = true;    
-              }
-              if (i.key == "Fence") {
-                fnc.push(i.values);
-                fncAdded = true;    
-              }
-
-              if (i.key == "Plumbing") {
-                plm.push(i.values);
-                plmAdded = true;    
-              }
-
-              if (i.key == "Grading") {
-                grad.push(i.values);
-                gradAdded = true;    
-              }
-
-            });
-
-            if (!bldAdded)
-              bld.push(0);
-            if (!demoAdded)
-              demo.push(0);
-            if (!eleAdded)
-              ele.push(0);
-            if (!mechAdded)
-              mech.push(0);
-            if (!otherAdded)
-              other.push(0);
-            if (!plmAdded)
-              plm.push(0);
-            if (!roofAdded)
-              roof.push(0);
-            if (!fncAdded)
-              fnc.push(0);
-            if (!pspAdded)
-              psp.push(0);
-            if (!gradAdded)
-              grad.push(0);
-
-
           });
 
-          /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*
-          /*   DATA PLOT
-          /************************************************************************************/
+          var returnedData = BreakItDown(timeRecords, appliedLast365Days);
 
-
-
-          var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-              colors: {
-                           'Building': 'rgb(31, 119, 180)',
-                           'Demolition': 'rgb(140, 86, 75)',
-                           'Electrical': 'rgb(214, 39, 40)',
-                           'Other': 'rgb(127, 127, 127)',
-                           'Mechanical': 'rgb(44, 160, 44)',
-                           'Roof': 'rgb(255, 127, 14)',
-                           'Plumbing': 'rgb(148, 103, 189)' ,
-                           'Pool/Spa': 'rgb(188, 189, 34)',
-                           'Fence': 'rgb(23, 190, 207)',
-                           'Grading': 'rgb(227, 119, 194)'
-                        },
-              columns: [
-                  bld,
-                  roof,
-                  mech,
-                  ele,
-                  plm,
-                  demo,
-                  grad,
-                  other,
-                  psp,
-                  fnc
-              ],
-              type: 'bar'//,
-            },
-            grid: {
-              y: {
-                lines: [{value:0}]
-              }
-            },
-            axis: {
-              x: {
-                type: 'category',
-                categories: datesArray
-              }
-            },
-            legend: {
-              show: false
-            }
+          timeRecords.forEach(function(record, increment, array) {
+            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
           });
+
+          var bld = returnedData.bld;
+          var roof = returnedData.roof;
+          var mech = returnedData.mech;
+          var ele = returnedData.ele;
+          var plm = returnedData.plm;
+          var demo = returnedData.demo;
+          var grad = returnedData.grad;
+          var other = returnedData.other;
+          var spa = returnedData.spa;
+          var fnc = returnedData.fnc;
+          var datesArray = returnedData.datesArray;
 
         break;
 
+        case '7':
+        case '8':
         case '9':
         case '10':
         case '11':
@@ -719,175 +549,36 @@ function monthSelect(months){
         case '48':
         case '60':
 
-          console.log(timeRecords.length);
-          timeRecords.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-          })
+          startDateMoment = moment(startDateMoment).startOf('month');
 
-         
           var appliedLast365Days = timeRecords.filter(function(d) { 
             return moment(d.AppliedDate) > startDateMoment; 
           })
 
-          var appliedByDayByType = d3.nest()
-            .key(function(d) { return d.AppliedDate })
-            .key(function(d) { return d.PermitTypeMapped })
-            .rollup (function(v) { return v.length })
-            .entries(appliedLast365Days);
-
-
-          var bld = ['Building'];
-          var demo = ['Demolition'];
-          var ele = ['Electrical'];
-          var other = ['Other'];
-          var mech = ['Mechanical'];
-          var plm = ['Plumbing'];
-          var psp = ['Pool/Spa'];
-          var fnc = ['Fence'];
-          var roof = ['Roof'];
-          var grad = ['Grading'];
-          var datesArray = [];
-
-          appliedByDayByType.forEach(function(d) {
-
-            var dArray = d.key;
-            datesArray.push(dArray);
-
-            bldAdded = false;
-            demoAdded = false;
-            eleAdded = false;
-            otherAdded = false;
-            mechAdded = false;
-            plmAdded = false;
-            pspAdded = false;
-            fncAdded = false;
-            roofAdded = false;
-            gradAdded = false;
-
-
-            d.values.forEach(function(i) {
-              
-              if (i.key == "Building") {
-                bld.push(i.values);
-                bldAdded = true;
-              }
-              if (i.key == "Demolition") {
-                demo.push(i.values);
-                demoAdded = true;
-              }
-              if (i.key == "Electrical") {
-                ele.push(i.values);
-                eleAdded = true;
-              }
-              if (i.key == "Other") {
-                other.push(i.values);
-                otherAdded = true;
-              }
-              if (i.key == "Mechanical") {
-                mech.push(i.values);
-                mechAdded = true;
-              }
-              if (i.key == "Roof") {
-                roof.push(i.values);
-                roofAdded = true;    
-              }
-              if (i.key == "Pool/Spa") {
-                psp.push(i.values);
-                pspAdded = true;    
-              }
-              if (i.key == "Fence") {
-                fnc.push(i.values);
-                fncAdded = true;    
-              }
-
-              if (i.key == "Plumbing") {
-                plm.push(i.values);
-                plmAdded = true;    
-              }
-
-              if (i.key == "Grading") {
-                grad.push(i.values);
-                gradAdded = true;    
-              }
-
-            });
-
-            if (!bldAdded)
-              bld.push(0);
-            if (!demoAdded)
-              demo.push(0);
-            if (!eleAdded)
-              ele.push(0);
-            if (!mechAdded)
-              mech.push(0);
-            if (!otherAdded)
-              other.push(0);
-            if (!plmAdded)
-              plm.push(0);
-            if (!roofAdded)
-              roof.push(0);
-            if (!fncAdded)
-              fnc.push(0);
-            if (!pspAdded)
-              psp.push(0);
-            if (!gradAdded)
-              grad.push(0);
-
-
+          appliedLast365Days.forEach(function(rec, i, arr){
+            appliedLast365Days[i]['AppliedDate'] = moment(appliedLast365Days[i]['AppliedDate']);
           });
 
-          /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*
-          /*   DATA PLOT
-          /************************************************************************************/
 
+          timeRecords.forEach(function(record, inc, array) {
+            record.AppliedDate = moment(record.AppliedDate).format('MMM-YYYY');
+          })
 
-          var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-             colors: {
-                           'Building': 'rgb(31, 119, 180)',
-                           'Demolition': 'rgb(140, 86, 75)',
-                           'Electrical': 'rgb(214, 39, 40)',
-                           'Other': 'rgb(127, 127, 127)',
-                           'Mechanical': 'rgb(44, 160, 44)',
-                           'Roof': 'rgb(255, 127, 14)',
-                           'Plumbing': 'rgb(148, 103, 189)' ,
-                           'Pool/Spa': 'rgb(188, 189, 34)',
-                           'Fence': 'rgb(23, 190, 207)',
-                           'Grading': 'rgb(227, 119, 194)'
-                        },
-              columns: [
-                  bld,
-                  roof,
-                  mech,
-                  ele,
-                  plm,
-                  demo,
-                  grad,
-                  other,
-                  psp,
-                  fnc
-              ],
-              type: 'bar'//,
-            },
-            grid: {
-              y: {
-                lines: [{value:0}]
-              }
-            },
-            axis: {
-              x: {
-                type: 'category',
-                categories: datesArray
-              }
-            },
-            legend: {
-              show: false
-            }
-          });
-         
-        break;
+          var returnedData = BreakItDown(timeRecords, appliedLast365Days);
+
+          var bld = returnedData.bld;
+          var roof = returnedData.roof;
+          var mech = returnedData.mech;
+          var ele = returnedData.ele;
+          var plm = returnedData.plm;
+          var demo = returnedData.demo;
+          var grad = returnedData.grad;
+          var other = returnedData.other;
+          var spa = returnedData.spa;
+          var fnc = returnedData.fnc;
+          var datesArray = returnedData.datesArray;
+           
+          break;
 
            
         default:
@@ -907,7 +598,6 @@ function monthSelect(months){
           }
 
           startDateMoment = startDateMoment.startOf('isoWeek');
-          // console.log(weeksAgoLabel, startDateMoment);
           var appliedPerWeekLast365Days = weeklyBunch.filter(function(d) {
               return (moment(d[0]) > startDateMoment);
             });
@@ -920,171 +610,36 @@ function monthSelect(months){
 
 
           appliedLast365Days.forEach(function(day, inc, arr){
-            // console.log(appliedLast365Days[inc], appliedPerWeekLast365Days[inc]);
             appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
           })
 
+          var returnedData = BreakItDown(timeRecords, appliedLast365Days);
 
-          var appliedByDayByType = d3.nest()
-            .key(function(d) { return d.week })
-            .key(function(d) { return d.PermitTypeMapped })
-            .rollup (function(v) { return v.length })
-            .entries(appliedLast365Days);
-
-          var bld = ['Building'];
-          var demo = ['Demolition'];
-          var ele = ['Electrical'];
-          var other = ['Other'];
-          var mech = ['Mechanical'];
-          var plm = ['Plumbing'];
-          var psp = ['Pool/Spa'];
-          var fnc = ['Fence'];
-          var roof = ['Roof'];
-          var grad = ['Grading'];
-          var datesArray = [];
-
-          appliedByDayByType.forEach(function(d) {
-
-            var dArray = d.key;
-            datesArray.push(dArray);
-
-            bldAdded = false;
-            demoAdded = false;
-            eleAdded = false;
-            otherAdded = false;
-            mechAdded = false;
-            plmAdded = false;
-            pspAdded = false;
-            fncAdded = false;
-            roofAdded = false;
-            gradAdded = false;
-
-
-            d.values.forEach(function(i) {
-              
-              if (i.key == "Building") {
-                bld.push(i.values);
-                bldAdded = true;
-              }
-              if (i.key == "Demolition") {
-                demo.push(i.values);
-                demoAdded = true;
-              }
-              if (i.key == "Electrical") {
-                ele.push(i.values);
-                eleAdded = true;
-              }
-              if (i.key == "Other") {
-                other.push(i.values);
-                otherAdded = true;
-              }
-              if (i.key == "Mechanical") {
-                mech.push(i.values);
-                mechAdded = true;
-              }
-              if (i.key == "Roof") {
-                roof.push(i.values);
-                roofAdded = true;    
-              }
-              if (i.key == "Pool/Spa") {
-                psp.push(i.values);
-                pspAdded = true;    
-              }
-              if (i.key == "Fence") {
-                fnc.push(i.values);
-                fncAdded = true;    
-              }
-
-              if (i.key == "Plumbing") {
-                plm.push(i.values);
-                plmAdded = true;    
-              }
-
-              if (i.key == "Grading") {
-                grad.push(i.values);
-                gradAdded = true;    
-              }
-
-            });
-
-            if (!bldAdded)
-              bld.push(0);
-            if (!demoAdded)
-              demo.push(0);
-            if (!eleAdded)
-              ele.push(0);
-            if (!mechAdded)
-              mech.push(0);
-            if (!otherAdded)
-              other.push(0);
-            if (!plmAdded)
-              plm.push(0);
-            if (!roofAdded)
-              roof.push(0);
-            if (!fncAdded)
-              fnc.push(0);
-            if (!pspAdded)
-              psp.push(0);
-            if (!gradAdded)
-              grad.push(0);
-
-
-          });
-
-          /*  Loads Bar-Chart With Time-Frame Selected Data
-          /*
-          /*    DATA PLOT
-          /************************************************************************************/
-
-
-          var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-             colors: {
-                           'Building': 'rgb(31, 119, 180)',
-                           'Demolition': 'rgb(140, 86, 75)',
-                           'Electrical': 'rgb(214, 39, 40)',
-                           'Other': 'rgb(127, 127, 127)',
-                           'Mechanical': 'rgb(44, 160, 44)',
-                           'Roof': 'rgb(255, 127, 14)',
-                           'Plumbing': 'rgb(148, 103, 189)' ,
-                           'Pool/Spa': 'rgb(188, 189, 34)',
-                           'Fence': 'rgb(23, 190, 207)',
-                           'Grading': 'rgb(227, 119, 194)'
-                        },
-              columns: [
-                  bld,
-                  roof,
-                  mech,
-                  ele,
-                  plm,
-                  demo,
-                  grad,
-                  other,
-                  psp,
-                  fnc
-              ],
-              type: 'bar'//,
-            },
-            grid: {
-              y: {
-                lines: [{value:0}]
-              }
-            },
-            axis: {
-              x: {
-                type: 'category',
-                categories: datesArray
-              }
-            },
-            legend: {
-              show: false
-            }
-          });
+        
+          var bld = returnedData.bld;
+          var roof = returnedData.roof;
+          var mech = returnedData.mech;
+          var ele = returnedData.ele;
+          var plm = returnedData.plm;
+          var demo = returnedData.demo;
+          var grad = returnedData.grad;
+          var other = returnedData.other;
+          var spa = returnedData.spa;
+          var fnc = returnedData.fnc;
+          var datesArray = returnedData.datesArray;
 
         break;
+  
 
       };    
+
+
+      /*  Loads Bar-Chart With Time-Frame Selected Data
+      /*
+      /*   DATA PLOT
+      /************************************************************************************/        
+
+      wholePieChart(bld, roof, mech, ele, plm, demo, grad, other, spa, fnc, datesArray);    
 
       // var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
 
@@ -1193,7 +748,7 @@ function monthSelect(months){
                     // console.log(record.AppliedDate, "*");
                   })   
 
-                }; 
+                };
 
                 var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
@@ -1307,35 +862,7 @@ function monthSelect(months){
               /************************************************************************************/
 
 
-
-              var chart = c3.generate({
-                bindto: '#byDay',
-                data: {
-                  columns: [
-                      returnObj
-                  ],
-                  type: 'bar',
-                  colors: {
-                     'Building': 'rgb(31, 119, 180)',
-                     'Demolition': 'rgb(140, 86, 75)',
-                     'Electrical': 'rgb(214, 39, 40)',
-                     'Other': 'rgb(127, 127, 127)',
-                     'Mechanical': 'rgb(44, 160, 44)',
-                     'Roof': 'rgb(255, 127, 14)',
-                     'Plumbing': 'rgb(148, 103, 189)' ,
-                     'Pool/Spa': 'rgb(188, 189, 34)',
-                     'Fence': 'rgb(23, 190, 207)',
-                     'Grading': 'rgb(227, 119, 194)'
-                  }
-                },
-                axis: {
-                    y: {tick : {format: d3.format('d')}},
-                    x: {
-                    type: 'category',
-                    categories: datesArray
-                  }
-                }
-              });
+              returnObjChart(returnObj, datesArray);
 
               
                     //
@@ -1354,34 +881,9 @@ function monthSelect(months){
                     console.log(e);
                     console.log(e.target);
                     if ((toggleSubtypeDate%2)!=0){
-                        var chart = c3.generate({
-                        bindto: '#byDay',
-                        data: {
-                          columns: [
-                              returnObj
-                          ],
-                          type: 'bar',
-                          colors: {
-                             'Building': 'rgb(31, 119, 180)',
-                             'Demolition': 'rgb(140, 86, 75)',
-                             'Electrical': 'rgb(214, 39, 40)',
-                             'Other': 'rgb(127, 127, 127)',
-                             'Mechanical': 'rgb(44, 160, 44)',
-                             'Roof': 'rgb(255, 127, 14)',
-                             'Plumbing': 'rgb(148, 103, 189)' ,
-                             'Pool/Spa': 'rgb(188, 189, 34)',
-                             'Fence': 'rgb(23, 190, 207)',
-                             'Grading': 'rgb(227, 119, 194)'
-                          }
-                        },
-                        axis: {
-                            y: {tick : {format: d3.format('d')}},
-                            x: {
-                            type: 'category',
-                            categories: datesArray
-                          }
-                        }
-                      });
+
+                     returnObjChart(returnObj, datesArray)
+                    
                     }
 
                     else{
@@ -1493,3 +995,82 @@ function clearDomElementUS(){
   var new_element = old_element.cloneNode(true);
   old_element.parentNode.replaceChild(new_element, old_element);
 };
+
+function wholePieChart(bld, roof, mech, ele, plm, demo, grad, other, spa, fnc, datesArray){
+  var chart = c3.generate({
+    bindto: '#byDay',
+    data: {
+      colors: {
+                   'Building': 'rgb(31, 119, 180)',
+                   'Demolition': 'rgb(140, 86, 75)',
+                   'Electrical': 'rgb(214, 39, 40)',
+                   'Other': 'rgb(127, 127, 127)',
+                   'Mechanical': 'rgb(44, 160, 44)',
+                   'Roof': 'rgb(255, 127, 14)',
+                   'Plumbing': 'rgb(148, 103, 189)' ,
+                   'Pool/Spa': 'rgb(188, 189, 34)',
+                   'Fence': 'rgb(23, 190, 207)',
+                   'Grading': 'rgb(227, 119, 194)'
+                },
+      columns: [
+          bld,
+          roof,
+          mech,
+          ele,
+          plm,
+          demo,
+          grad,
+          other,
+          spa,
+          fnc
+      ],
+      type: 'bar'//,
+    },
+    grid: {
+      y: {
+        lines: [{value:0}]
+      }
+    },
+    axis: {
+      x: {
+        type: 'category',
+        categories: datesArray
+      }
+    },
+    legend: {
+      show: false
+    }
+  });
+}
+
+
+function returnObjChart(returnObj, datesArray){
+    var chart = c3.generate({
+    bindto: '#byDay',
+    data: {
+      columns: [
+          returnObj
+      ],
+      type: 'bar',
+      colors: {
+         'Building': 'rgb(31, 119, 180)',
+         'Demolition': 'rgb(140, 86, 75)',
+         'Electrical': 'rgb(214, 39, 40)',
+         'Other': 'rgb(127, 127, 127)',
+         'Mechanical': 'rgb(44, 160, 44)',
+         'Roof': 'rgb(255, 127, 14)',
+         'Plumbing': 'rgb(148, 103, 189)' ,
+         'Pool/Spa': 'rgb(188, 189, 34)',
+         'Fence': 'rgb(23, 190, 207)',
+         'Grading': 'rgb(227, 119, 194)'
+      }
+    },
+    axis: {
+        y: {tick : {format: d3.format('d')}},
+        x: {
+        type: 'category',
+        categories: datesArray
+      }
+    }
+  });
+};     

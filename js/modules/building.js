@@ -339,16 +339,16 @@ var Building = function Building(config){
     $(".monthly-dropdown-menu").empty();
 	$("#innerSelectSubs").append('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value=""></option>'+
       									    '<optgroup label="Residential">'+    
-                                            '<option value="bNRB">New Residence Building</option>'+
-                                            '<option value="bNew Residence">New Residence</option>'+
-                                            '<option value="bRA">Residential Accessory</option>'+
-                                            '<option value="bResidential Accessory Building">Residential Accessory Building</option>'+
-                                            '<option value="bResidential Addition"">Residential Addition</option>'+
-                                            '<option value="bResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
-                                            '<option value="bCommercial Remodel">Commercial Remodel</option>'+
-                                            '<option value="bNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
-                                            '<option value="bAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
-                                            '<option value="bobuild">Other</option></select>');
+                                            '<option value="buNRB">New Residence Building</option>'+
+                                            '<option value="buNew Residence">New Residence</option>'+
+                                            '<option value="buRA">Residential Accessory</option>'+
+                                            '<option value="buResidential Accessory Building">Residential Accessory Building</option>'+
+                                            '<option value="buResidential Addition"">Residential Addition</option>'+
+                                            '<option value="buResidential Remodel">Residential Remodel</option></optgroup><optgroup label="Commercial">'+
+                                            '<option value="buCommercial Remodel">Commercial Remodel</option>'+
+                                            '<option value="buNCR">New Commercial Residence</option></optgroup><optgroup label="Agriculture">'+
+                                            '<option value="buAccessory Agricultural Building">Accessory Agriculture Building</option></optgroup>'+
+                                            '<option value="buobuild">Other</option></select>');
 
 	console.log('*******  ',columnData,'  *******');
 
@@ -389,7 +389,7 @@ var Building = function Building(config){
 		             'Mechanical': 'rgb(44, 160, 44)',
 		             'Roof': 'rgb(255, 127, 14)',
 		             'Plumbing': 'rgb(148, 103, 189)' ,
-		             'Pool/Spa': 'rgb(188, 189, 34)',
+		             'Spa/Pool': 'rgb(188, 189, 34)',
 		             'Fence': 'rgb(23, 190, 207)',
 		             'Grading': 'rgb(227, 119, 194)'
 		          }

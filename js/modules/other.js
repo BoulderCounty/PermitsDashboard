@@ -336,9 +336,9 @@ var Other = function Other(config){
 
   $(".monthly-dropdown-menu").empty();
   $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
-                '<option value="oBridge">Bridge</option>'+
-                '<option value="oBuilding Lot Determination">Building Lot Determination</option>'+
-                '<option value="oOil and Gas Development">Oil and Gas Development</option></select>'); 
+                '<option value="otBridge">Bridge</option>'+
+                '<option value="otBuilding Lot Determination">Building Lot Determination</option>'+
+                '<option value="otOil and Gas Development">Oil and Gas Development</option></select>'); 
 
   $("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
                           function (){

@@ -338,14 +338,13 @@ var Plumbing = function Plumbing(config){
 
   $(".monthly-dropdown-menu").empty();
   $("#innerSelectSubs").append('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
-                  '<option value="pWater Heater">Water Heater</option>'+
-                  '<option value="pGas Piping">Gas Piping</option>'+
-                  '<option value="pEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
-                  '<option value="pPlumbing - Other">Plumbing - Other</option></select>');
+                  '<option value="plWater Heater">Water Heater</option>'+
+                  '<option value="plGas Piping">Gas Piping</option>'+
+                  '<option value="plEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
+                  '<option value="plPlumbing - Other">Plumbing - Other</option></select>');
 
   $('#Plumbing').text('Totals');
 
-  return subtype;
 
   $("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
                           function (){
@@ -428,6 +427,8 @@ var Plumbing = function Plumbing(config){
         clicker++;
 
       });
+
+  return subtype;
 
 };
 

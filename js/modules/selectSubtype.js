@@ -11,8 +11,8 @@ var SelectSubtype = function selectSubtype(subtype){
   console.log(initialStartDate);
 
   console.log(subtype,"^^");
-  var typeM = subtype.substr(0, 1);
-  var subtype = subtype.slice(1);
+  var typeM = subtype.substr(0, 2);
+  var subtype = subtype.slice(2);
 
 
     /********************************************************************************/
@@ -123,59 +123,59 @@ var SelectSubtype = function selectSubtype(subtype){
 
     switch(typeM) {
 
-      case "b":
+      case "bu":
         var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"];
      
 
         $(function() {
-            $("#bld-monthly-dropdown-menu").val('b'+subtype);
+            $("#bld-monthly-dropdown-menu").val('bu'+subtype);
         });
         
       break;
     
-      case "m":
+      case "me":
         var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
 
         $(function() {
-                $("#mch-monthly-dropdown-menu").val('m'+subtype);
+                $("#mch-monthly-dropdown-menu").val('me'+subtype);
         });
             
 
       break;
     
-      case "e":
+      case "el":
         var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
    
         $(function() {
-                $("#elc-monthly-dropdown-menu").val('e'+subtype);
+                $("#elc-monthly-dropdown-menu").val('el'+subtype);
         });
     
 
       break;
 
-      case "p":
+      case "pl":
         var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
 
         $(function() {
-                $("#plm-monthly-dropdown-menu").val('p'+subtype);
+                $("#plm-monthly-dropdown-menu").val('pl'+subtype);
         });
 
       break;
 
-      case "d":
+      case "de":
         var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
    
         $(function() {
-                $("#dem-monthly-dropdown-menu").val('d'+subtype);
+                $("#dem-monthly-dropdown-menu").val('de'+subtype);
         });
 
       break;
 
-      case "o":
+      case "ot":
         var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
 
         $(function() {
-                $("#oth-monthly-dropdown-menu").val('o'+subtype);
+                $("#oth-monthly-dropdown-menu").val('ot'+subtype);
         });
 
       break;
@@ -241,7 +241,7 @@ var SelectSubtype = function selectSubtype(subtype){
     console.log(columnData);
 
     var selectedColumnData = columnData.filter(function(subtypet){
-      return subtypet[0] == subtype;
+      return (subtypet[0] == subtype);
     });
 
     console.log(selectedColumnData);

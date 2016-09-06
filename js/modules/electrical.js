@@ -333,14 +333,14 @@ var Electrical = function Electrical(config){
 
     $(".monthly-dropdown-menu").empty();
 	$("#innerSelectSubs").append('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
-	                '<option value="eCommercial Electric">Commercial Electric</option>'+
-	                '<option value="eElectrical Lift Station">Electrical Lift Station</option>'+
-	                '<option value="eElectrical Re-Wiring">Electrical Re-Wiring</option>'+
-	                '<option value="eElectrical Service Change">Electrical Service Change</option>'+
-	                '<option value="eTemporary Electrical Service">Temporary Electrical Service</option>'+
-	                '<option value="eGenerator">Generator</option>'+
-	                '<option value="eSolar Electrical System">Solar Electrical System</option>'+
-	                '<option value="eElectrical Other">Electical Other</option></select>');
+	                '<option value="elCommercial Electric">Commercial Electric</option>'+
+	                '<option value="elElectrical Lift Station">Electrical Lift Station</option>'+
+	                '<option value="elElectrical Re-Wiring">Electrical Re-Wiring</option>'+
+	                '<option value="elElectrical Service Change">Electrical Service Change</option>'+
+	                '<option value="elTemporary Electrical Service">Temporary Electrical Service</option>'+
+	                '<option value="elGenerator">Generator</option>'+
+	                '<option value="elSolar Electrical System">Solar Electrical System</option>'+
+	                '<option value="elElectrical Other">Electical Other</option></select>');
 
 
 	$("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),

@@ -333,9 +333,9 @@ var Demolition = function Demolition(config){
 
   $(".monthly-dropdown-menu").empty();
   $("#innerSelectSubs").append('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
-                              '<option value="dCommercial Deconstruction">Commercial Deconstruction</option>'+
-                              '<option value="dResidential Deconstruction">Residential Deconstruction</option>'+
-                              '<option value="dResidential Demolition">Residential Demolition</option></select>');
+                              '<option value="deCommercial Deconstruction">Commercial Deconstruction</option>'+
+                              '<option value="deResidential Deconstruction">Residential Deconstruction</option>'+
+                              '<option value="deResidential Demolition">Residential Demolition</option></select>');
 
 
   $("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
@@ -376,7 +376,7 @@ var Demolition = function Demolition(config){
                  'Mechanical': 'rgb(44, 160, 44)',
                  'Roof': 'rgb(255, 127, 14)',
                  'Plumbing': 'rgb(148, 103, 189)' ,
-                 'Pool/Spa': 'rgb(188, 189, 34)',
+                 'Spa/Pool': 'rgb(188, 189, 34)',
                  'Fence': 'rgb(23, 190, 207)',
                  'Grading': 'rgb(227, 119, 194)'
               }

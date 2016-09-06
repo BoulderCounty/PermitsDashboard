@@ -328,14 +328,14 @@ var Mechanical = function Mechanical (config){
 
 	$(".monthly-dropdown-menu").empty();
 	$("#innerSelectSubs").append('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
-	                '<option value="mAir Conditioning">Air Conditioning</option>'+
-	                '<option value="mBoiler">Boiler</option>'+
-	                '<option value="mEvaporative Cooler">Evaporative Cooler</option>'+
-	                '<option value="mFurnace">Furnace</option>'+
-	                '<option value="mGas Log Fireplace">Gas / Log Fireplace</option>'+
-	                '<option value="mWood Stove">Wood Stove</option>'+
-	                '<option value="mSolar Thermal">Solar Thermal</option>'+
-	                '<option value="mMechanical - Other">Other</option></select>');
+	                '<option value="meAir Conditioning">Air Conditioning</option>'+
+	                '<option value="meBoiler">Boiler</option>'+
+	                '<option value="meEvaporative Cooler">Evaporative Cooler</option>'+
+	                '<option value="meFurnace">Furnace</option>'+
+	                '<option value="meGas Log Fireplace">Gas / Log Fireplace</option>'+
+	                '<option value="meWood Stove">Wood Stove</option>'+
+	                '<option value="meSolar Thermal">Solar Thermal</option>'+
+	                '<option value="meMechanical - Other">Other</option></select>');
 
 
 	 $("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
