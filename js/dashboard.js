@@ -114,7 +114,7 @@ $(document).ready(function() {
 
     $("#newApplications").text(appliedLast365Days.length);
     $("#issuedPermits").text(issuedLast365Days.length);
-    $("#totalConstructionValue").text(numeral(totalConstructionValue).format('($ 0.00 a)'));
+    $("#totalConstructionValue").text(numeral(totalConstructionValue).format('( 0 a)'));
 
     /********************************************************************************/
     /* Load recent permit applications (Start)
@@ -310,7 +310,7 @@ $(document).ready(function() {
 
               // REMOVE CSS STYLE
 
-          $("#uniqueSelector").html("<div style='display: inline-block'><i class='fa fa-bar-chart-o fa-fw'></i><span id='toggleWithPieClick'>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></div>")
+          $("#uniqueSelector").html("<div style='display: inline-block'><i class='fa fa-bar-chart-o fa-fw'></i><span id='toggleWithPieClick'>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 120px; margin-top: 2px;'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></div>")
 
           var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
@@ -452,8 +452,8 @@ $(document).ready(function() {
                     function (){
                       var selectedSubtype = this.querySelector("div").querySelector("span").querySelector("div").querySelector("label").id;
                       console.log(selectedSubtype);
-                      returnedObj = ToggleBarGraph(selectedSubtype, toggleSubtype, returnObj);
-                      console.log('***', returnedObj, '***');
+                      returnedObj = ToggleBarGraph(selectedSubtype, '', returnObj);
+                      // console.log('***', returnedObj, '***');
                     })
                 });
 
@@ -468,11 +468,19 @@ $(document).ready(function() {
       donut: {
        title :  'Select for breakdown'
       }   
-    })   
+    })  
+
+    var boxTops = $('.panel-default .panel-heading');
+    for(var i =0, il = boxTops.length;i<il;i++){
+       boxTops[i].className += " constant-height";
+    }
+    console.log('pop');
   });
 
-  
-             
+
+
+
+
 });
 
 
@@ -740,24 +748,87 @@ function monthSelect(months){
                       record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
                       console.log(record.AppliedDate, "%%");
                     });
+
+                    weeklyBunch = [];
                   break;
-                     
+
+                  case '2':
+                  case '3':
+                  case '4':
+                  case '5':
+                  case '6':
+
+
+                    weeklyBunch = [];
+
+
+                    for (var  i = 0; i<rebarRecords.length; i++){
+                      var then = rebarRecords[i].AppliedDate;
+
+
+                      var ago = moment(then);
+                      var weeksAgoLabel = ago.startOf('isoWeek').format('MMM-DD-YY');
+                      weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgoLabel]);
+
+
+                    }
+
+                    console.log(weeklyBunch);
+                   
+           //          // console.log(appliedPerWeekLast365Days);
+                   
+           //          var appliedLast365Days = timeRecords.filter(function(d) { 
+           //            return moment(d.AppliedDate) > startDateMoment; 
+           //          })
+
+
+           //          appliedLast365Days.forEach(function(day, inc, arr){
+           //            appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][1];
+           //          })
+
+           //          var returnedData = BreakItDown(timeRecords, appliedLast365Days);
+
+                  
+           //          var bld = returnedData.bld;
+           //          var roof = returnedData.roof;
+           //          var mech = returnedData.mech;
+           //          var ele = returnedData.ele;
+           //          var plm = returnedData.plm;
+           //          var demo = returnedData.demo;
+           //          var grad = returnedData.grad;
+           //          var other = returnedData.other;
+           //          var spa = returnedData.spa;
+           //          var fnc = returnedData.fnc;
+           //          var datesArray = returnedData.datesArray;
+
+                    console.log('WEEKS');
+
+                  break;
+
                   default:
                     rebarRecords.forEach(function(record, inc, array) {
                     record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-                    // console.log(record.AppliedDate, "*");
+
+                    weeklyBunch=[];
                   })   
 
                 };
 
                 var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
-                var startDateMoment = moment().subtract(initialStartDate, 'M');
+                // THERE ARE SOME DUPLICATE EQUATIONS BETWEEN THESE COMMENTS USED TO COMPUTE WEEKLY TOTALS IN PARALLEL = TOP
 
-                console.log(startDateMoment);
+                var startDateMoment = moment().subtract(initialStartDate, 'M');
+                var weekStartDateMoment =  startDateMoment.startOf('isoWeek');
+                console.log(weekStartDateMoment);
+
 
                 var appliedLast365Days = rebarRecords.filter(function(d) { 
                   return moment(d.AppliedDate) > startDateMoment; 
+                });
+
+                var appliedPerWeekSelectedDays = weeklyBunch.filter(function(d) {
+                  return (moment(d[0]) > weekStartDateMoment);
                 });
 
 
@@ -766,17 +837,22 @@ function monthSelect(months){
                 });
 
        
-                 //Get a distinct list of neighborhoods
-                for (var i = 0; i < records.length; i++) {
+                 //Get a distinct list of neighborhoods?
+
+                for (var i = 0; i < rebarRecords.length; i++) {
                   permitTypes.push([rebarRecords[i]["PermitTypeMapped"], rebarRecords[i].count]);
                 }
-
-
-                var appliedLast365Days = rebarRecords.filter(function(d) { 
-                  return moment(d.AppliedDate) > startDateMoment; 
-                });
                   
+                if (initialStartDate > 1 && initialStartDate < 7){
+
+                  appliedLast365Days.forEach(function(day, inc, arr){
+                    appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
+                  });
+
+                };
+
                 var appliedByDayByType = [];
+                var weeklyAppliedByDayByType = [];
 
                   // compiles array for bar-graph
                 var appliedByDayByType = d3.nest()
@@ -793,12 +869,27 @@ function monthSelect(months){
                   // creates a d3 object from the records
                   .entries(appliedLastYearByType);
 
+                var weeklyAppliedByDayByType = d3.nest()  
+
+                  // concatenates date
+                  .key(function(d) { return d.week })
+
+                  // concatanates type
+                  .key(function(d) { return d.PermitTypeMapped })
+
+                  // takes the records and creates a count
+                  .rollup (function(v) { return v.length })
+
+                  // creates a d3 object from the records
+                  .entries(appliedLastYearByType);
+
                 var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
 
                 var output = [];
+                var weeklyOutput = [];
 
                 console.log(appliedLastYearByType);
-                console.log(appliedByDayByType);
+                console.log(weeklyAppliedByDayByType);
 
                 output[d.id] = appliedByDayByType.map(function(month) {
                     var o = {};
@@ -807,14 +898,29 @@ function monthSelect(months){
                     }).map(function(m) { return m.values; }).shift() || 0;
                     return o;
                   })
+
+                weeklyOutput[d.id] = weeklyAppliedByDayByType.map(function(month){
+                    var o = {};
+                    o[month.key] = month.values.filter(function(val) {
+                      return val.key == d.id;
+                    }).map(function(m) { return m.values; }).shift() || 0;
+                    return o;
+                })
                            
+                console.log(output);
+                console.log(weeklyOutput);
 
                 var dates = appliedByDayByType.map(function(date) {
                   return date.key;
                 });
 
+                var weeklyDates = weeklyAppliedByDayByType.map(function(date) {
+                  return date.key;
+                })
+
 
                 var columnData=[];
+                var weeklyColumnData=[];
 
                 lcount=0;
 
@@ -822,11 +928,20 @@ function monthSelect(months){
                   var rObj = {};
                   rObj[dates[lcount]] = (index[dates[lcount]]);
                   lcount++;
+                  return rObj;
+                });
 
+                lcount=0;
+
+                weeklyColumnData = weeklyOutput[d.id].map(function(index){
+                  var rObj = {};
+                  rObj[weeklyDates[lcount]] = (index[weeklyDates[lcount]]);
+                  lcount++;
                   return rObj;
                 });
 
                 console.log(columnData);
+                console.log(weeklyColumnData);
 
                 var returnObj = columnData.map(function(obj) {
                   return Object.keys(obj).sort().map(function(key) { 
@@ -834,11 +949,23 @@ function monthSelect(months){
                   });
                 });
 
-                var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+                var weeklyReturnObj = weeklyColumnData.map(function(obj){
+                  return Object.keys(obj).sort().map(function(key) { 
+                    return obj[key];
+                  });
+                })
 
-                console.log(returnObj);
+
+                console.log(weeklyReturnObj);
+
+                returnObj = ([Object.keys(output)[0]]).concat(returnObj)
+
+                weeklyReturnObj = ([Object.keys(output)[0]]).concat(weeklyReturnObj)
+
+                console.log(weeklyReturnObj);
 
                 window.returningObj = returnObj;
+                window.weeklyReturningObj = returnObj;
 
                 console.log(Object.keys(output)[0],'____________________________');
 
@@ -846,25 +973,47 @@ function monthSelect(months){
 
                 output[Object.keys(output)[0]].forEach(function(d, i) {
 
-
-                var dArray = [dates[i]];
-                datesArray.push(dArray);
-            
-              });
-
-              console.log(datesArray);
-
-
-              /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
+                  var dArray = [dates[i]];
+                  datesArray.push(dArray);
               
-              /*    DATA PLOT
+                });
+
+                weeklyDatesArray=[];
+
+                weeklyOutput[Object.keys(weeklyOutput)[0]].forEach(function(d, i) {
+
+                  var wdArray = [weeklyDates[i]];
+                  weeklyDatesArray.push(wdArray);
               
-              /************************************************************************************/
+                });
 
+                console.log(datesArray);
 
-              returnObjChart(returnObj, datesArray);
+                    // THERE ARE SOME DUPLICATE EQUATIONS BETWEEN THESE COMMENTS USED TO COMPUTE WEEKLY TOTALS IN PARALLEL = BOTTOM
 
-              
+                  /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
+                  
+                  /*    DATA PLOT
+                  
+                  /************************************************************************************/
+                
+                switch (document.getElementById('monthList-dropdown-menu').value){
+
+                  case '2':
+                  case '3':
+                  case '4':
+                  case '5':
+                  case '6':
+
+                    returnObjChart(weeklyReturnObj, weeklyDatesArray);
+
+                  break;
+
+                  default:
+
+                    returnObjChart(returnObj, datesArray);
+
+                }
                     //
                     //     SUBTYPE BUTTON
                     //
@@ -874,7 +1023,7 @@ function monthSelect(months){
 
                     $('#toggleWithPieClick').empty();
 
-                    document.getElementById("toggleWithPieClick").innerHTML= ("<span style='display: inline-block'><span></span><span id='toggleWithPieClick'>Graph options - toggle between: <span class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
+                    document.getElementById("toggleWithPieClick").innerHTML= ("<span style='display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 150px; margin-top: 2px;'><span id='toggleWithPieClick'>Graph options - toggle between: <span class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span>");
                           
                   $('#toggleWithPieClick').on('click', $('#innerSelectSub'), function(e){
                     console.log(d.id);
@@ -888,7 +1037,7 @@ function monthSelect(months){
 
                     else{
                       subtypeVar = e.target.id  || d.id;
-                      subtypeVar = subtypeVar.charAt(0);
+                      subtypeVar = (subtypeVar.charAt(0)+subtypeVar.charAt(1));
                       SubtypeRadioButtons(subtypeVar);
                     }
 
@@ -916,7 +1065,9 @@ function monthSelect(months){
     // setTimeout(function () {
     //   chart.groups([['Building','Demolition','Electrical','Other','Mechanical','Plumbing', 'Roof', 'Fence', 'Pool/Spa', 'Grading']])
     // }, 1000);
+    var label = d3.select('text.c3-chart-arcs-title');
 
+    console.log(label.text);
 
     var records = [];
 

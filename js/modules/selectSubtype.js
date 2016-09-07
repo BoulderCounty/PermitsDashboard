@@ -11,6 +11,7 @@ var SelectSubtype = function selectSubtype(subtype){
   console.log(initialStartDate);
 
   console.log(subtype,"^^");
+  var breaker = document.getElementById('monthList-dropdown-menu').value;
   var typeM = subtype.substr(0, 2);
   var subtype = subtype.slice(2);
 
@@ -57,9 +58,43 @@ var SelectSubtype = function selectSubtype(subtype){
     // format record.AppliedDate to drop days and years
     // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
 
-    records.forEach(function(record, inc, array) {
-      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-    })
+    if (breaker < 7) {
+      records.forEach(function(record, inc, array) {
+        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+
+        weeklyBunch = [];
+
+      })
+
+      for (var  i = 0; i<appliedLast365Days.length; i++){
+        var then = appliedLast365Days[i].AppliedDate;
+
+        var ago = moment(then);
+        var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
+        weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+
+      }
+
+      console.log(weeklyBunch.length);
+
+    }
+
+    else {
+      records.forEach(function(record, inc, array) {
+        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+
+      })
+
+      weeklyBunch = [];
+
+      for (var  i = 0; i<appliedLast365Days.length; i++){
+        var then = appliedLast365Days[i].AppliedDate;
+        var ago = moment(then);
+        var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM');
+        weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+
+      }
+    }
 
 
     /* INITIAL CONSTRUCTION OF BAR CHART (START)
@@ -71,21 +106,21 @@ var SelectSubtype = function selectSubtype(subtype){
 
     /********************************************************************************/
     
-    weeklyBunch = [];
+    // weeklyBunch = [];
 
 
-    for (var  i = 0; i<appliedLast365Days.length; i++){
-      var then = appliedLast365Days[i].AppliedDate;
+    // for (var  i = 0; i<appliedLast365Days.length; i++){
+    //   var then = appliedLast365Days[i].AppliedDate;
 
 
 
-      var ago = moment(then);
-      var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
-      weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+    //   var ago = moment(then);
+    //   var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM');
+    //   weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
 
-    }
+    // }
 
-    console.log(weeklyBunch.length);
+    // console.log(weeklyBunch.length);
 
     var appliedPerWeekLast365Days = weeklyBunch;
 
@@ -110,11 +145,28 @@ var SelectSubtype = function selectSubtype(subtype){
 
     // console.log(appliedPerWeekLast365Days);
 
-    var appliedByDayBySubtype = d3.nest()
-      .key(function(d) { return d.week })
-      .key(function(d) { return d.PermitType })
-      .rollup (function(v) { return v.length })
-      .entries(appliedLast365Days);
+    console.log(appliedLast365Days);
+
+    if (breaker < 7) { 
+      var appliedByDayBySubtype = d3.nest()
+        .key(function(d) { return d.AppliedDate })
+        .key(function(d) { return d.PermitType })
+        .rollup (function(v) { return v.length })
+        .entries(appliedLast365Days);
+
+        console.log('days');
+
+      }
+
+    else {
+
+      var appliedByDayBySubtype = d3.nest()
+        .key(function(d) { return d.week })
+        .key(function(d) { return d.PermitType })
+        .rollup (function(v) { return v.length })
+        .entries(appliedLast365Days);
+
+      }
 
     console.log(appliedByDayBySubtype);
 
@@ -225,7 +277,6 @@ var SelectSubtype = function selectSubtype(subtype){
       return week.key;
     });
 
-    // console.log(weeks);
 
     // (G) push the value into the type-labeled array
 

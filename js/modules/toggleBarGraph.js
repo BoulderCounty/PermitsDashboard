@@ -34,7 +34,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
     // REMOVE CSS STYLE
     $('#toggleWithPieClick').empty();
     document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off' id='" + subtypeVar + "'> Subtype(s) </label>");
-
+    console.log('sqeak');
 
     var chart = c3.generate({
       bindto: '#byDay',

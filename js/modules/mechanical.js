@@ -413,6 +413,7 @@ var Mechanical = function Mechanical (config){
 	    	$('#mch-monthly-dropdown-menu').show();
 
 	    	$('#Mechanical').text('Totals');
+	    	$('#Mechanical').style('border-top-right-radius: 4px; border-bottom-right-radius: 4px;');
 	    };
 
 
