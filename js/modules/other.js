@@ -1,428 +1,466 @@
 var Other = function Other(config){
-          
-  var clicker = [];
-  var records = [];
-  var columnData = [];
+	console.log("START:", config);
+	var clicker = 0;
+	var records = [];
+	var columnData = [];
 
 
-        /********************************************************************************/
-        /*
-        /*  DATA GRAB
-        /*
-        /********************************************************************************/
+	      /********************************************************************************/
+	      /*
+	      /*  DATA GRAB
+	      /*
+	      /********************************************************************************/
+	check = function(config){
+		if (config){
 
-   check = function(config){
-    if (!config){
+		var grabLast365 = PermitDashboard.cache.last365;
+		console.log(grabLast365);
 
-      var grabLast365 = PermitDashboard.cache.last365;
+		requestJSONa(grabLast365, function(json) {
 
-      console.log(grabLast365);
+		    var records = json.records;
+		    var otherRecords = clone(records);
+		    var timeRecords = clone(records);
 
-      requestJSONa(grabLast365, function(json) {
+		    console.log(otherRecords, "#");
 
-        var records = json.records;
-        var otheRecords = clone(records); 
+			switch (document.getElementById('monthList-dropdown-menu').value){
 
-      console.log(otheRecords, "#");
+		  		case '1':
+		    		otherRecords.forEach(function(record, inc, array) {
+		     		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+		    	});
 
-      switch (document.getElementById('monthList-dropdown-menu').value){
+		    		weeklyBunch =[];
+		  		break;
+		     
+		  		default:
+		   			otherRecords.forEach(function(record, inc, array) {
+		    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+		  			});
 
-          case '1':
-            otheRecords.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-          });
-          break;
-         
-          default:
-            otheRecords.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-        		// console.log(record.AppliedDate, "*");
-      		})   
-
-      	}; 
-
-      	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
-
-      	var startDateMoment = moment().subtract(initialStartDate, 'M');
-
-       	console.log(startDateMoment);
-
-      	var appliedLast365Days = otheRecords.filter(function(d) { 
-      	   return moment(d.AppliedDate) > startDateMoment; 
-      	});
+		  			 weeklyBunch = [];
 
 
+                    for (var  i = 0; i<otherRecords.length; i++){
+                      var then = otherRecords[i].AppliedDate;
 
 
-        	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-          	return o.PermitTypeMapped === "Other";
-        	});
-
-        	permitTypes=[];
-
-      	//Get a distinct list of neighborhoods
-      	for (var i = 0; i < otheRecords.length; i++) {
-      	    permitTypes.push([otheRecords[i]["PermitType"], otheRecords[i].count]);
-      	}
+                      var ago = moment(then);
+                      var weeksAgoLabel = ago.startOf('isoWeek').format('MMM-DD-YY');
+                      weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgoLabel]);
 
 
-      	var appliedLast365Days = otheRecords.filter(function(d) { 
-      	   return moment(d.AppliedDate) > startDateMoment; 
-      	});
-      	    
-      	var appliedByDayByType = [];
+                    };
 
-      	// compiles array for bar-graph
-      	var appliedByDayByType = d3.nest()
+                    console.log(weeklyBunch);
 
-          // concatenates date
-          .key(function(d) { return d.AppliedDate })
+		  	}; 
+//
+//  NEED TO ADD TO OTHER TYPES
+//
+		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
 
-          // concatanates type
-          .key(function(d) { return d.PermitType })
-
-          // takes the records and creates a count
-          .rollup (function(v) { return v.length })
-
-          // creates a d3 object from the records
-          .entries(appliedLastYearByType);
-
-        var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
-         
-        var output = [];
-
-        console.log(appliedLastYearByType);
-        console.log(appliedByDayByType);
-
-                   
-      	subtypes.forEach(function(subtype) {
-          output[subtype] = appliedByDayByType.map(function(month) {
-              var o = {};
-              o[month.key] = month.values.filter(function(val) {
-                return val.key == subtype;
-              }).map(function(m) { return m.values; }).shift() || 0;
-              return o;
-            })
-        });
-
-
-        var dates = appliedByDayByType.map(function(date) {
-          return date.key;
-        });
-
-
-        columnData=[];
-      	lcount=0;
-
-      	columnData = Object.keys(output).map(function(type) {
-              var a = output[type].map(function(month){
-                return month[Object.keys(month)[0]];
-              });
-              return [type].concat(a);
-      	});
-
-      	console.log(columnData);
-
-      	
-
-        	var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-      	  datesArray=[];
-      	  output[Object.keys(output)[0]].forEach(function(d, i) {
-      		    var dArray = [dates[i]];
-      	    	datesArray.push(dArray);
-      	});
-
-          console.log(datesArray);
-
-
-                /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-                /*
-                /*   DATA PLOT|
-                /*
-                /************************************************************************************/
-
-
-
-          var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-              columns : columnData
-              ,
-              type: 'bar'//,
-            }, 
-            axis: {
-                y: {tick : {format: d3.format('d')}},
-                x: {
-                type: 'category',
-                categories: datesArray
-              }
+			if (initialStartDate > 6) {
+	        	initialStartDate = (parseInt(initialStartDate) + 1);
+	        	otherRecords.forEach(function(record, inc, array) {
+		    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+		  		});
             }
-          });
 
-                  
-      });
+		  	var startDateMoment = moment().subtract(initialStartDate, 'M');
 
-    return columnData;
-
-    }
-
-    else {
+		  	var weekStartDateMoment =  moment().subtract(initialStartDate, 'M').startOf('isoWeek');
+            console.log(weekStartDateMoment);
 
 
-      var grabLast365 = PermitDashboard.cache.last365;
+		 	console.log(startDateMoment);
 
-      config = config.slice(1);
+			var appliedLast365Days = otherRecords.filter(function(d) { 
+			   return moment(d.AppliedDate) > startDateMoment; 
+			});
 
-      requestJSONa(grabLast365, function(json) {
+			 var appliedPerWeekSelectedDays = weeklyBunch.filter(function(d) {
+	              return (moment(d[0]) > weekStartDateMoment);
+	            });
 
-        var records = json.records 
-        var otheRecords = clone(records); 
+			 console.log(appliedPerWeekSelectedDays);
 
-        console.log(otheRecords, "#");
 
-        switch (document.getElementById('monthList-dropdown-menu').value){
+		  	permitTypes=[];
 
-          case '1':
-            otheRecords.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-          });
-          break;
-         
-          default:
-            otheRecords.forEach(function(record, inc, array) {
-            record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
-            // console.log(record.AppliedDate, "*");
-          })   
 
-        }; 
+			//Get a distinct list of neighborhoods
+			for (var i = 0; i < otherRecords.length; i++) {
+			    permitTypes.push([otherRecords[i]["PermitType"], otherRecords[i].count]);
+			}
 
-        var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+			if (config != 1){				
+				 appliedLast365Days.forEach(function(day, inc, arr){
+		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
+	              })
+			}
 
-        var startDateMoment = moment().subtract(initialStartDate, 'M');
-
-        console.log(startDateMoment);
-
-        var appliedLast365Days = otheRecords.filter(function(d) { 
-           return moment(d.AppliedDate) > startDateMoment; 
-        });
+			else {
+				 appliedLast365Days.forEach(function(day, inc, arr){
+		                appliedLast365Days[inc]["week"] = null;
+	        	 })
+			}
 
 
 
-
-          var appliedLastYearByType = appliedLast365Days.filter(function(o) {
-            return o.PermitTypeMapped === "Other";
-          });
-
-          permitTypes=[];
-
-        //Get a distinct list of neighborhoods
-        for (var i = 0; i < otheRecords.length; i++) {
-            permitTypes.push([otheRecords[i]["PermitType"], otheRecords[i].count]);
-        }
+			 console.log(appliedLast365Days);
 
 
-        var appliedLast365Days = otheRecords.filter(function(d) { 
-           return moment(d.AppliedDate) > startDateMoment; 
-        });
-            
-        var appliedByDayByType = [];
-
-        // compiles array for bar-graph
-        var appliedByDayByType = d3.nest()
-
-          // concatenates date
-          .key(function(d) { return d.AppliedDate })
-
-          // concatanates type
-          .key(function(d) { return d.PermitType })
-
-          // takes the records and creates a count
-          .rollup (function(v) { return v.length })
-
-          // creates a d3 object from the records
-          .entries(appliedLastYearByType);
-
-          var subtypes = [config];
-           
-          var output = [];
-
-          console.log(appliedLastYearByType);
-          console.log(appliedByDayByType);
-
-                     
-          subtypes.forEach(function(subtype) {
-            output[subtype] = appliedByDayByType.map(function(month) {
-                var o = {};
-                o[month.key] = month.values.filter(function(val) {
-                  return val.key == subtype;
-                }).map(function(m) { return m.values; }).shift() || 0;
-                return o;
-              })
-          });
+			var appliedLast365Days = otherRecords.filter(function(d) { 
+			   return moment(d.AppliedDate) > startDateMoment; 
+			});
 
 
-          var dates = appliedByDayByType.map(function(date) {
-            return date.key;
-          });
+		  	var appliedLastYearByType = appliedLast365Days.filter(function(o) {
+		    	return o.PermitTypeMapped === "Other";
+		  	});
 
 
-          columnData=[];
-          // console.log(columnData);
+			    
+			var appliedByDayByType = [];
 
-          // dates.forEach(function(date, i){
-          //   var dArray = date;
-            // console.log(i);
-        lcount=0;
+			// compiles array for bar-graph
+			var appliedByDayByType = d3.nest()
 
-        columnData = Object.keys(output).map(function(type) {
-              var a = output[type].map(function(month){
-                return month[Object.keys(month)[0]];
-              });
-              return [type].concat(a);
-        });
+		    // concatenates date
+		    .key(function(d) { return d.AppliedDate })
 
-        console.log(columnData);
+		    // concatanates type
+		    .key(function(d) { return d.PermitType })
 
-        
+		    // takes the records and creates a count
+		    .rollup (function(v) { return v.length })
 
-          var returnObj = ([Object.keys(output)[0]]).concat(returnObj)
-          datesArray=[];
-          output[Object.keys(output)[0]].forEach(function(d, i) {
-              var dArray = [dates[i]];
-              datesArray.push(dArray);
-        });
-
-          console.log(datesArray);
-
-
-                /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
-                /*
-                /*  DATA PLOT
-                /*
-                /************************************************************************************/
+		    // creates a d3 object from the records
+		    .entries(appliedLastYearByType);
 
 
 
-          var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-              columns : columnData
-              ,
-              type: 'bar'//,
-            }, 
-            axis: {
-                y: {tick : {format: d3.format('d')}},
-                x: {
-                type: 'category',
-                categories: datesArray
-              }
-            }
-          });
+                var weeklyAppliedByDayByType = d3.nest()  
 
-                  
-      });
+                  // concatenates date
+                  .key(function(d) { return d.week })
 
-      return columnData;
+                  // concatanates type
+                  .key(function(d) { return d.PermitType })
 
-    }
+                  // takes the records and creates a count
+                  .rollup (function(v) { return v.length })
 
-  };
+                  // creates a d3 object from the records
+                  .entries(appliedLastYearByType);
 
 
-  columnData = check(config);
 
-  console.log($('.btn-primary').attr('id'));
-  document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
+	        var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
+		     
+		    var output = [];
+		    var weeklyOutput = [];
 
-  $(".monthly-dropdown-menu").empty();
-  $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+
+		    console.log(weeklyAppliedByDayByType);
+		    // console.log(appliedLastYearByType);
+		    // console.log(appliedByDayByType);
+
+		               
+		  	subtypes.forEach(function(subtype) {
+		      output[subtype] = appliedByDayByType.map(function(month) {
+		          var o = {};
+		          o[month.key] = month.values.filter(function(val) {
+		            return val.key == subtype;
+		          }).map(function(m) { return m.values; }).shift() || 0;
+		          return o;
+		        })
+		    });
+
+		    subtypes.forEach(function(subtype) {
+		      weeklyOutput[subtype] = weeklyAppliedByDayByType.map(function(month) {
+		          var o = {};
+		          o[month.key] = month.values.filter(function(val) {
+		            return val.key == subtype;
+		          }).map(function(m) { return m.values; }).shift() || 0;
+		          return o;
+		        })
+		    });
+
+		    var dates = appliedByDayByType.map(function(date) {
+		      return date.key;
+		    });
+
+
+		    columnData=[];
+		    // console.log(columnData);
+
+		    // dates.forEach(function(date, i){
+		    //   var dArray = date;
+		      // console.log(i);
+			lcount=0;
+
+			columnData = Object.keys(output).map(function(type) {
+		        var a = output[type].map(function(month){
+		          return month[Object.keys(month)[0]];
+		        });
+		        return [type].concat(a);
+			});
+
+			weeklyColumnData = Object.keys(weeklyOutput).map(function(type) {
+		        var a = weeklyOutput[type].map(function(month){
+		          return month[Object.keys(month)[0]];
+		        });
+		        return [type].concat(a);
+			});
+
+			console.log(weeklyColumnData);
+
+			
+
+		  	// var returnObj = ([Object.keys(output)[0]]).con cat(returnObj);
+
+		    datesArray=[];
+		    output[Object.keys(output)[0]].forEach(function(d, i) {
+			    var dArray = [dates[i]];
+		    	datesArray.push(dArray);
+			});
+
+			weeklyDatesArray=[];
+		    weeklyOutput[Object.keys(weeklyOutput)[0]].forEach(function(d, i) {
+			    var dArray = [dates[i]];
+		    	weeklyDatesArray.push(dArray);
+			});
+
+		    console.log(weeklyDatesArray);
+
+
+		          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
+		          /*
+		          /*    DATA PLOT   
+		          /*
+		          /************************************************************************************/
+
+
+
+	       if((config == 1) || (config > 6)){
+
+	       	console.log('SATURATION');
+
+		       var chart = c3.generate({
+		            bindto: '#byDay',
+		            data: {
+		              columns : columnData
+		              ,
+		              type: 'bar'//,
+		            }, 
+		            axis: {
+		                y: {tick : {format: d3.format('d')}},
+		                x: {
+		                type: 'category',
+		                categories: datesArray
+		              	}
+		            }
+		        })
+		    }
+
+	       	else{
+		        var chart = c3.generate({
+		            bindto: '#byDay',
+		            data: {
+		              columns : weeklyColumnData
+		              ,
+		              type: 'bar'//,
+		            }, 
+		            axis: {
+		                y: {tick : {format: d3.format('d')}},
+		                x: {
+		                type: 'category',
+		                categories: window.datesingArray
+		              	}
+		            }
+		        });
+		    }
+		            
+		});
+
+		return columnData;
+	
+		}
+
+
+	};
+
+	
+
+	columnData = check(config);
+
+	console.log($('.btn-primary').attr('id'));
+    document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
+
+    $(".monthly-dropdown-menu").empty();
+    $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
                 '<option value="otBridge">Bridge</option>'+
                 '<option value="otBuilding Lot Determination">Building Lot Determination</option>'+
                 '<option value="otOil and Gas Development">Oil and Gas Development</option></select>'); 
 
-  $("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
+	console.log('*******  ',columnData,'  *******');
+
+	$("#uniqueSelector").on('select', $(".monthly-dropdown-menu"),
                           function (){
                             var selectedSubtype = this.querySelector("div").querySelector("span").querySelector("div").querySelector("label").id;
                             console.log(selectedSubtype);
                             ToggleBarGraph(selectedSubtype, toggleSubtype);
                           });
 
-  $('#Other').text('Totals');
+	$('#Other').text('Totals');
 
-  var clickHole = document.getElementById("toggleWithPieClick").querySelector("span").querySelector("div").querySelector("label");
+	var clickHole = document.getElementById("toggleWithPieClick").querySelector("span").querySelector("div").querySelector("label");
 
-  $(clickHole).on('click', null, columnData, function(e){
+	$(clickHole).on('click', null, columnData, function(e){
 
-    console.log(columnData);
+		console.log(columnData, clicker);
 
-    if (clicker%2 == 0){
+		if (clicker%2 == 0){
 
-      $('#oth-monthly-dropdown-menu').hide();
-      $('#Other').text('Subtype(s)');
+			if (config != 1){
+				var coolum = window.returningObj;
+				var daates = window.datesingArray;
+				console.log(coolum);
+				console.log(daates);
+			}
 
-        console.log(e);
-        console.log(e.target);
-            var chart = c3.generate({
-            bindto: '#byDay',
-            data: {
-              columns: [
-                  window.returningObj
-              ],
-              type: 'bar',
-              colors: {
-                 'Building': 'rgb(31, 119, 180)',
-                 'Demolition': 'rgb(140, 86, 75)',
-                 'Electrical': 'rgb(214, 39, 40)',
-                 'Other': 'rgb(127, 127, 127)',
-                 'Mechanical': 'rgb(44, 160, 44)',
-                 'Roof': 'rgb(255, 127, 14)',
-                 'Plumbing': 'rgb(148, 103, 189)' ,
-                 'Pool/Spa': 'rgb(188, 189, 34)',
-                 'Fence': 'rgb(23, 190, 207)',
-                 'Grading': 'rgb(227, 119, 194)'
-              }
-            },
-            axis: {
-                y: {tick : {format: d3.format('d')}},
-                x: {
-                type: 'category',
-                categories: datesArray
-              }
-            }
-          })
+			else {
+				var coolum = columnData;
+				var daates = datesArray;
 
-        }
+				console.log(daates);
 
-          else {
+                var returnObjFunc = function(columnData){
+				                	
 
-            var chart = c3.generate({
-                bindto: '#byDay',
-                data: {
-                  columns : columnData
-                  ,
-                  type: 'bar'//,
-                }, 
-                axis: {
-                    y: {tick : {format: d3.format('d')}},
-                    x: {
-                    type: 'category',
-                    categories: datesArray
-                    }
-                }
-            });
+				var	repacked =['Other'];
+				var	prepacked = [0];
+				suprepacked = [];
+	                for (var i = 1; i<columnData[0].length ; i++){
+	                	prepacked[i] = [];
+	                	columnData.forEach(function(sub, inc){
+	                		console.log(inc, prepacked[i]);
+	                		suprepacked[i]=prepacked[i].push(sub[i]);
+	                	})
+	                }
+	                
+	                for (var i = 1; i<columnData[0].length ; i++){
+	                	console.log(i);
+	                	// console.log(prepacked[i]);
+	                	repacked[i]=prepacked[i].reduce((a , b) => a + b, 0);
+	                	// console.log(repacked);
+	            	}
+	                console.log(repacked);
 
-          $('#oth-monthly-dropdown-menu').show();
+	                return(repacked);
 
-          $('#Other').text('Totals');
-        };
+	            }
 
 
+				console.log('STOP');
+			}
 
-      clicker++;
+			$('#bld-monthly-dropdown-menu').hide();
+			$('#Other').text('Subtype(s)');
 
-    });
+		    console.log(e);
+		    console.log(e.target);
 
-  return subtype;
+
+			function returnObjChart(returnObj, datesArray){
+			    var chart = c3.generate({
+			    bindto: '#byDay',
+			    data: {
+			      columns: 
+			          [returnObj]
+			      ,
+			      type: 'bar',
+			      colors: {
+	                 'Other': 'hsl(0, 0%, 49.8%)',
+			      }
+			    },
+			    axis: {
+			        y: {tick : {format: d3.format('d')}},
+			        x: {
+			        type: 'category',
+			        categories: datesArray
+			      }
+			    }
+			  });
+			};     
+
+			// console.log(returnObj(coolum));
+
+			if (config == 1){
+				coolum = returnObjFunc(coolum);
+			}
+
+			returnObjChart(coolum, daates);
+		    }
+
+   		   	else {
+
+   		   		console.log('BREAK');
+
+	          	if((config == 1) || (config > 6)){
+
+			       	var chart = c3.generate({
+			            bindto: '#byDay',
+			            data: {
+			              columns : columnData
+			              ,
+			              type: 'bar'//,
+			            }, 
+			            axis: {
+			                y: {tick : {format: d3.format('d')}},
+			                x: {
+			                type: 'category',
+			                categories: datesArray
+			              	}
+			            }
+			        })
+			    }
+
+		       	else{
+			        var chart = c3.generate({
+			            bindto: '#byDay',
+			            data: {
+			              columns : weeklyColumnData
+			              ,
+			              type: 'bar'//,
+			            }, 
+			            axis: {
+			                y: {tick : {format: d3.format('d')}},
+			                x: {
+			                type: 'category',
+			                categories: window.datesingArray
+			              	}
+			            }
+			        });
+			    }
+
+		    	$('#bld-monthly-dropdown-menu').show();
+
+		    	$('#Other').text('Totals');
+		    };
+
+
+
+		  clicker++;
+
+	  });
+
+	return subtype;
+
+
 
 };
 

@@ -48,7 +48,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Boulder County Permits Dashboard</a>
+                <a class="navbar-brand" href="index.html">Permits Summary</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -66,6 +66,8 @@
                             <a href="metrics.html"><i class="fa fa-line-chart fa-fw"></i> Metrics / Trends</a>
                         </li>
                         <li>
+                            <a href="crossfilter.html"><i class="fa fa-line-chart fa-fw"></i> Crossfilter</a>
+<!-- 
                             <a href="#"><i class="fa fa-map-marker fa-fw"></i> Maps<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
@@ -74,7 +76,7 @@
                                 <li>
                                     <a href="animated.html">Animated Heatmap</a>
                                 </li>
-                            </ul>
+                            </ul> -->
                             <!-- /.nav-second-level -->
                         </li>
                         <li>
@@ -89,91 +91,91 @@
 
         <div id="page-wrapper">
             <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-9">
-                    <h1 class="page-header">Dashboard</h1>
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-4">
-
-                </div>
-
-                <div class="col-lg-4">
-
-                    <div> 
-                        <div></div> 
-<!-- CSS -->            <span class="inline">Today's date: <span id="demo" style="color: magenta;"> </span></span>
-                    </div>
-                    <div>________________________</div>
-                <div class="col-lg-12"> . </div>
-<!-- CSS -->            <div style="font-size:24px;">In the last <span>year</span>...</div>
-                </div>
-                <div class="col-lg-12"> . </div>
-
-<!-- JAVASCRIPT NEEDS TO COME OUT -->
-
-                                <script>
-                                document.getElementById("demo").innerHTML = (Date()).substring(0,15);
-                                </script>
-
-<!-- END JAVASCRIPT -->
-
-                <!-- /.col-lg-12 -->
-            </div>
-            <div class="row">
-                <div class="col-lg-1"></div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="panel panel-red">
-                        <div class="panel-heading">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <i class="fa fa-building fa-5x"></i>
-                                </div>
-                                <div class="col-xs-9 text-right">
-                                    <div class="huge" id="newApplications">Calculating</div>
-                                    <div>New Applications</div>
+                <div class="col-lg-12 page-header" style="display: flex">
+                    <span style="font-size:20px">In the past  <select onchange="monthSelect(value)" id="monthList-dropdown-menu">
+                                                    <optgroup label="Months">    
+                                                        <option value="1">month</option>
+                                                        <option value="2">2 months</option>
+                                                        <option value="3">3 months</option>
+                                                        <option value="4">4 months</option>
+                                                        <option value="5">5 months</option>
+                                                        <option value="6">6 months</option>
+                                                        <option value="7">7 months</option>
+                                                        <option value="8">8 months</option>
+                                                        <option value="9">9 months</option>
+                                                        <option value="10">10 months</option>
+                                                        <option value="11">11 months</option>
+                                                    </optgroup>
+                                                    <optgroup label="Years">
+                                                        <option value="12" selected="selected">year</option>
+                                                        <option value="24">two years</option>
+                                                        <option value="36">three years</option>
+                                                        <option value="48">four years</option>
+                                                        <option value="60">five years</option>
+                                                    </optgroup>
+                                                </select>
+                    </span>
+                
+                <div class="col-lg-1 col-md-2"></div>
+                <div class="col-lg-2 col-md-4">
+                        <div class="panel panel-red">
+                            <div class="panel-heading">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <i class="fa fa-list fa-5x"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-right">
+                                        <div class="huge" id="newApplications"><div class="col-xs-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i><div class="col-xs-1"></div></div></div>
+                                        <div>New Applications</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-2 col-md-4">
                     <div class="panel panel-yellow">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-check-circle-o fa-5x"></i>
+                                    <i class="fa fa-briefcase fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge" id="issuedPermits">Calculating</div>
+                                    <div class="huge" id="issuedPermits"><div class="col-xs-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i><div class="col-xs-1"></div></div></div>
                                     <div>Issued Permits</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-1"></div>
+                <div class="col-lg-2 col-md-4">
                     <div class="panel panel-green">
                         <div class="panel-heading">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <i class="fa fa-money fa-5x"></i>
+                                    <i class="fa fa-usd fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge" id="totalConstructionValue">Calculating</div>
-                                    <div>Total Construction $</div>
+                                    <div class="huge" id="totalConstructionValue"><div class="col-xs-1"><i class="fa fa-spinner fa-spin" aria-hidden="true"></i><div class="col-xs-1"></div></div>
+                                    </div>
+                                    <div>Construction Value</div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+
                 </div>
+                
+                </div>
+                <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
-                </div>
+            </div>
                 <div class="col-lg-3">
                
                     <!-- /.panel -->
@@ -182,51 +184,20 @@
                             <i class="fa fa-bar-chart-o fa-fw"></i> Permits by Type <small>(Last <span id ='pieHeader'>year</span>)</small>
                         </div>
                         <div>    
-                            <div class="panel-body">
-            <!--  CSS NEEDS TO BE REMOVED -->
-                                <div class="container" style="padding-left: 36px;">
-                                    <div> 
-                                        <select onchange="monthSelect(value)" id="monthList-dropdown-menu">
-                                            <optgroup label="Months">    
-                                                <option value="1">One month</option>
-                                                <option value="2">Two months</option>
-                                                <option value="3">Three months</option>
-                                                <option value="4">Four months</option>
-                                                <option value="5">Five months</option>
-                                                <option value="6">Six months</option>
-                                                <option value="7">Seven months</option>
-                                                <option value="8">Eight months</option>
-                                                <option value="9">Nine months</option>
-                                                <option value="10">Ten months</option>
-                                                <option value="11">Eleven months</option>
-                                            </optgroup>
-                                            <optgroup label="Years">
-                                                <option value="12" selected="selected">One year</option>
-                                                <option value="24">Two years</option>
-                                                <option value="36">Three years</option>
-                                                <option value="48">Four years</option>
-                                                <option value="60">Five years</option>
-                                            </optgroup>
-                                        </select>
-                              <!--  CSS NEEDS TO BE REMOVED -->
-                                    <div style="text-indent: 13px;">of data displayed</div>
-                                    </div> 
-                                </div></div>
-                                <div id="permitTypes"></div>
-                            </div>
+                            <div class="panel-body"></div>
+                            <div id="permitTypes"></div>
                         </div>
-                        <!-- /.panel-body -->
                     </div>
-                    <div class="col-lg-8">
+                        <!-- /.panel-body -->
+                </div>
+                <div class="col-lg-8">
                     <div class="panel panel-default" id="present">
                         <div class="panel-heading" id="uniqueSelector">
                             <i class="fa fa-bar-chart-o fa-fw"></i><span id='toggleWithPieClick'> Applications by Month </span>
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
-                            
-                                <div id="byDay"></div>
-                           
+                            <div id="byDay"></div>
                         </div>
                         <!-- /.panel-body -->
                     </div>

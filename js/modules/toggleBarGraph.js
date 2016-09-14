@@ -44,16 +44,16 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         ],
         type: 'bar',
         colors: {
-           'Building': 'rgb(31, 119, 180)',
-           'Demolition': 'rgb(140, 86, 75)',
-           'Electrical': 'rgb(214, 39, 40)',
-           'Other': 'rgb(127, 127, 127)',
-           'Mechanical': 'rgb(44, 160, 44)',
-           'Roof': 'rgb(255, 127, 14)',
-           'Plumbing': 'rgb(148, 103, 189)' ,
-           'Pool/Spa': 'rgb(188, 189, 34)',
-           'Fence': 'rgb(23, 190, 207)',
-           'Grading': 'rgb(227, 119, 194)'
+           'Building': 'hsl(205, 70.6%, 41.4%)',
+           'Demolition': 'hsl(10, 30.2%, 42.2%)',
+           'Electrical': 'hsl(360, 69.2%, 49.6%)',
+           'Other': 'hsl(0, 0%, 49.8%)',
+           'Mechanical': 'hsl(120, 56.9%, 40.0%)',
+           'Roof': 'hsl(30, 100%, 50.2%)',
+           'Plumbing': 'hsl(271, 39.4%, 57.3%)' ,
+           'Pool/Spa': 'hsl(60, 69.5%, 43.7%)',
+           'Fence': 'hsl(186, 80%, 45.1%)',
+           'Grading': 'hsl(318, 65.9%, 67.8%)'
         }
       },
       // grid: {y: {lines: [{value: AVERAGE}]}},

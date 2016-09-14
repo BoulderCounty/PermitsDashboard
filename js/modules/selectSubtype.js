@@ -42,9 +42,17 @@ var SelectSubtype = function selectSubtype(subtype){
   requestJSONa(grabLast365, function(json) {
       var records = json.records;
       var subRecords = clone(records); 
+      var subRecords2 = clone(records); 
 
 
-  console.log(subRecords.length)
+  console.log(subRecords)
+
+    subRecords2 = subRecords.filter(function(record){
+      return ((record["PermitType"]) == subtype && (moment(record.AppliedDate) > startDateMoment))
+    })
+
+
+  console.log(subRecords2.length)
 
 
     //extract permits applied for the last year
@@ -52,7 +60,23 @@ var SelectSubtype = function selectSubtype(subtype){
       return moment(d.AppliedDate) > startDateMoment; 
     });
 
+    //extract permits issued in last year
+    var issuedLast365Days2 = records.filter(function(d) { 
+      return ((d["PermitType"]) == subtype && (moment(d.IssuedDate) > startDateMoment)); 
+    });
+
+       //total construction value for new project in last year
+    var totalConstructionValue2 = d3.sum(subRecords2, function(d) {
+      return Number(d.EstProjectCost);
+    });
+
     console.log(appliedLast365Days.length);
+
+
+    $("#newApplications").text(subRecords2.length);
+    $("#issuedPermits").text(issuedLast365Days2.length);
+    $("#issuedPermits").show();
+    $("#totalConstructionValue").text(numeral(totalConstructionValue2).format('( 0 a)'));
 
 
     // format record.AppliedDate to drop days and years
