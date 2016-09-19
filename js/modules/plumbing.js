@@ -293,7 +293,6 @@ var Plumbing = function Plumbing(config){
 
 	};
 
-	
 
 	columnData = check(config);
 

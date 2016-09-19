@@ -321,3 +321,11 @@ requestJSON(urlLast365, function(json){
   /********************************************************************************/
   /* Average Completion Days (END)
   /********************************************************************************/
+
+  var ctx = $("#myChart");
+
+  var myBubbleChart = new Chart(ctx,{
+    type: 'bubble',
+    data: data,
+    options: options
+});

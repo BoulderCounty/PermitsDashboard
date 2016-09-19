@@ -2,6 +2,7 @@ var SelectSubtype = function selectSubtype(subtype){
 
     var appliedPerWeekLast365Day={};
     var appliedLast365Days={};
+    var records={};
     // console.log($("#uniqueSelector .monthly-dropdown-menu").length);
     // var c = document.getElementById('subtypeMenu');
     // console.log(c);
@@ -25,6 +26,11 @@ var SelectSubtype = function selectSubtype(subtype){
 
     // Original data grab
   // var initialStartDate = 365;
+
+  if (initialStartDate > 6) {
+                initialStartDate = (parseInt(initialStartDate) + 1);
+              }
+
   var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
   var startDateMoment = moment().subtract(initialStartDate, 'M');
 
@@ -113,7 +119,7 @@ var SelectSubtype = function selectSubtype(subtype){
 
       for (var  i = 0; i<appliedLast365Days.length; i++){
         var then = appliedLast365Days[i].AppliedDate;
-        var ago = moment(then);
+        var ago = moment(then).subtract(1, "months");
         var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM');
         weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
 
@@ -272,13 +278,47 @@ var SelectSubtype = function selectSubtype(subtype){
     // // var c = eval(document.getElementById('toggleWithPieClick').innerHTML);
 
 
-    
+//     
+ //     ___________   _____    ______________.___. ___________._______  ___   ___ ___________________________________
+ //     \_   _____/  /  _  \  /   _____/\__  |   | \_   _____/|   \   \/  /  /   |   \_   _____/\______   \_   _____/
+ //      |    __)_  /  /_\  \ \_____  \  /   |   |  |    __)  |   |\     /  /    ~    \    __)_  |       _/|    __)_ 
+ //      |        \/    |    \/        \ \____   |  |     \   |   |/     \  \    Y    /        \ |    |   \|        \
+ //     /_______  /\____|__  /_______  / / ______|  \___  /   |___/___/\  \  \___|_  /_______  / |____|_  /_______  /
+ //              \/         \/        \/  \/             \/              \_/        \/        \/         \/        \/ 
+
 
     // console.log(appliedByDayBySubtype);
 
     var output = {};
 
-    // (C) Enumerates each type
+    // // (C) Enumerates each type
+    // console.log(appliedByDayBySubtype);
+    // appliedByDayBySubtype2 =[];
+
+    // appliedByDayBySubtype.map(function(week){
+    //   week.key=moment(week.key).format("YYYY-MM");
+    //   console.log(week.key)
+    // });
+
+    // for(var week in appliedByDayBySubtype){
+    //   appliedByDayBySubtype2.push({country : country, data : countries[country] / countries_count[country]})
+    // }
+
+
+    // // var result = _.mapValues(appliedByDayBySubtype, function (e) {
+    // //   return _.reduce(e, function (prev, current) {
+    // //     return _(current)
+    // //       .pick(_.isNumber)
+    // //       .mapValues(function (value, key) {
+    // //          return (prev[key] || 0) + value;
+    // //       })
+    // //       .value();
+    // //   }, {});
+    // // });
+
+    // console.log(appliedByDayBySubtype2);
+
+
 
 
     subtypes.forEach(function(subtyper) {
@@ -286,7 +326,7 @@ var SelectSubtype = function selectSubtype(subtype){
           var o = {};
           o[week.key] = week.values.filter(function(val) {
             return val.key == subtyper;
-          }).map(function(m) { return m.values; }).shift() || 0;
+          }).map(function(m) { return m.values; }).shift() || '0';
           return o;
         })
     });

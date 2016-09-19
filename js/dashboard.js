@@ -3,8 +3,8 @@
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
-// var fullStartDate = 1826;
-var fullStartDate = 365;
+var fullStartDate = 1826;
+// var fullStartDate = 365;
 
 var initialStartDate = 365;
 var fstartDate = moment().subtract(fullStartDate, 'd').startOf('month').format("YYYY-MM-DD");
