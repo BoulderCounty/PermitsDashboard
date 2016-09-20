@@ -254,6 +254,16 @@ var Electrical = function Electrical(config){
 		            data: {
 		              columns : columnData
 		              ,
+		              colors :{
+		              	 "Commercial Electric": 'hsl(360, 69.2%, 19.6%)',
+	                     "Electrical Lift Station" : 'hsl(360, 69.2%, 29.6%)',
+	                     "Electrical Re-Wiring": 'hsl(360, 69.2%, 39.6%)',
+	                     "Electrical Service Change": 'hsl(360, 69.2%, 49.6%)',
+	                     "Temporary Electrical Service": 'hsl(360, 69.2%, 59.6%)',
+	                     "Generator": 'hsl(360, 69.2%, 69.6%)',
+	                     "Solar Electrical System": 'hsl(360, 69.2%, 79.6%)',
+	                     "Other": 'hsl(360, 69.2%, 89.6%)'
+					  },		              
 		              type: 'bar'//,
 		            }, 
 		            axis: {
@@ -272,6 +282,16 @@ var Electrical = function Electrical(config){
 		            data: {
 		              columns : weeklyColumnData
 		              ,
+		              colors :{
+		              	 "Commercial Electric": 'hsl(360, 69.2%, 19.6%)',
+	                     "Electrical Lift Station" : 'hsl(360, 69.2%, 29.6%)',
+	                     "Electrical Re-Wiring": 'hsl(360, 69.2%, 39.6%)',
+	                     "Electrical Service Change": 'hsl(360, 69.2%, 49.6%)',
+	                     "Temporary Electrical Service": 'hsl(360, 69.2%, 59.6%)',
+	                     "Generator": 'hsl(360, 69.2%, 69.6%)',
+	                     "Solar Electrical System": 'hsl(360, 69.2%, 79.6%)',
+	                     "Other": 'hsl(360, 69.2%, 89.6%)'
+					  },
 		              type: 'bar'//,
 		            }, 
 		            axis: {
@@ -421,6 +441,16 @@ var Electrical = function Electrical(config){
 			            data: {
 			              columns : columnData
 			              ,
+			              colors :{
+			              	 "Commercial Electric": 'hsl(360, 69.2%, 19.6%)',
+		                     "Electrical Lift Station" : 'hsl(360, 69.2%, 29.6%)',
+		                     "Electrical Re-Wiring": 'hsl(360, 69.2%, 39.6%)',
+		                     "Electrical Service Change": 'hsl(360, 69.2%, 49.6%)',
+		                     "Temporary Electrical Service": 'hsl(360, 69.2%, 59.6%)',
+		                     "Generator": 'hsl(360, 69.2%, 69.6%)',
+		                     "Solar Electrical System": 'hsl(360, 69.2%, 79.6%)',
+		                     "Other": 'hsl(360, 69.2%, 89.6%)'
+						  },
 			              type: 'bar'//,
 			            }, 
 			            axis: {

@@ -254,6 +254,16 @@ var Mechanical = function Mechanical(config){
 		            data: {
 		              columns : columnData
 		              ,
+		              colors : {
+		              	"Air Conditioning": 'hsl(120, 56.9%, 10.0%)',
+		              	"Boiler": 'hsl(120, 56.9%, 20.0%)',
+		              	"Evaporative Cooler": 'hsl(120, 56.9%, 30.0%)',
+		              	"Furnace": 'hsl(120, 56.9%, 40.0%)',
+		              	"Gas Log Fireplace": 'hsl(120, 56.9%, 50.0%)',
+		              	"Other": 'hsl(120, 56.9%, 60.0%)',
+		              	"Wood Stove": 'hsl(120, 56.9%, 70.0%)',
+		              	"Solar Thermal": 'hsl(120, 56.9%, 80.0%)'
+		              },
 		              type: 'bar'//,
 		            }, 
 		            axis: {
@@ -272,6 +282,16 @@ var Mechanical = function Mechanical(config){
 		            data: {
 		              columns : weeklyColumnData
 		              ,
+		              colors : {
+		              	"Air Conditioning": 'hsl(120, 56.9%, 10.0%)',
+		              	"Boiler": 'hsl(120, 56.9%, 20.0%)',
+		              	"Evaporative Cooler": 'hsl(120, 56.9%, 30.0%)',
+		              	"Furnace": 'hsl(120, 56.9%, 40.0%)',
+		              	"Gas Log Fireplace": 'hsl(120, 56.9%, 50.0%)',
+		              	"Other": 'hsl(120, 56.9%, 60.0%)',
+		              	"Wood Stove": 'hsl(120, 56.9%, 70.0%)',
+		              	"Solar Thermal": 'hsl(120, 56.9%, 80.0%)'
+		              },
 		              type: 'bar'//,
 		            }, 
 		            axis: {
@@ -421,6 +441,16 @@ var Mechanical = function Mechanical(config){
 			            data: {
 			              columns : columnData
 			              ,
+				            colors : {
+			              	"Air Conditioning": 'hsl(120, 56.9%, 10.0%)',
+			              	"Boiler": 'hsl(120, 56.9%, 20.0%)',
+			              	"Evaporative Cooler": 'hsl(120, 56.9%, 30.0%)',
+			              	"Furnace": 'hsl(120, 56.9%, 40.0%)',
+			              	"Gas Log Fireplace": 'hsl(120, 56.9%, 50.0%)',
+			              	"Other": 'hsl(120, 56.9%, 60.0%)',
+			              	"Wood Stove": 'hsl(120, 56.9%, 70.0%)',
+			              	"Solar Thermal": 'hsl(120, 56.9%, 80.0%)'
+			              	},
 			              type: 'bar'//,
 			            }, 
 			            axis: {

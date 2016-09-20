@@ -28,11 +28,11 @@ var SelectSubtype = function selectSubtype(subtype){
   // var initialStartDate = 365;
 
   if (initialStartDate > 6) {
-                initialStartDate = (parseInt(initialStartDate) + 1);
+                initialStartDate = (parseInt(initialStartDate));
               }
 
   var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
-  var startDateMoment = moment().subtract(initialStartDate, 'M');
+  var startDateMoment = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
 
       // set up SQL query string
   // var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
@@ -54,7 +54,7 @@ var SelectSubtype = function selectSubtype(subtype){
   console.log(subRecords)
 
     subRecords2 = subRecords.filter(function(record){
-      return ((record["PermitType"]) == subtype && (moment(record.AppliedDate) > startDateMoment))
+      return ((record["PermitType"]) == subtype && (moment(record.AppliedDate).format("YYYY-MM-DD") > startDateMoment))
     })
 
 
@@ -63,12 +63,12 @@ var SelectSubtype = function selectSubtype(subtype){
 
     //extract permits applied for the last year
     var appliedLast365Days = subRecords.filter(function(d) { 
-      return moment(d.AppliedDate) > startDateMoment; 
+      return moment(d.longAppliedDate).format("YYYY-MM-DD") > startDateMoment; 
     });
 
     //extract permits issued in last year
     var issuedLast365Days2 = records.filter(function(d) { 
-      return ((d["PermitType"]) == subtype && (moment(d.IssuedDate) > startDateMoment)); 
+      return ((d["PermitType"]) == subtype && (moment(d.IssuedDate).format("YYYY-MM-DD") > startDateMoment)); 
     });
 
        //total construction value for new project in last year
@@ -99,9 +99,9 @@ var SelectSubtype = function selectSubtype(subtype){
       for (var  i = 0; i<appliedLast365Days.length; i++){
         var then = appliedLast365Days[i].AppliedDate;
 
-        var ago = moment(then);
+        var ago = moment(then).format("YYYY-MM-DD");
         var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
-        weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+        weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
 
       }
 
@@ -111,17 +111,18 @@ var SelectSubtype = function selectSubtype(subtype){
 
     else {
       records.forEach(function(record, inc, array) {
-        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
 
       })
 
       weeklyBunch = [];
 
       for (var  i = 0; i<appliedLast365Days.length; i++){
-        var then = appliedLast365Days[i].AppliedDate;
-        var ago = moment(then).subtract(1, "months");
-        var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM');
-        weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
+        var then = appliedLast365Days[i].longAppliedDate;
+        var ago = moment(then);
+        // .subtract(1, "months");
+        var weeksAgo = ago.startOf('isoWeek').format("YYYY-MM");
+        weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
 
       }
     }
@@ -166,7 +167,7 @@ var SelectSubtype = function selectSubtype(subtype){
     // })
 
     appliedLast365Days.forEach(function(day, inc, arr){
-      // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
+      console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
       appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][2];
     });
 
@@ -200,13 +201,35 @@ var SelectSubtype = function selectSubtype(subtype){
 
     console.log(appliedByDayBySubtype);
 
+    var subColor = {};
 
+                           // 'Electrical': 'hsl(360, 69.2%, 49.6%)',
+                           // 'Other': 'hsl(0, 0%, 49.8%)',
+                           // 'Mechanical': 'hsl(120, 56.9%, 40.0%)',
+                           // 'Roof': 'hsl(30, 100%, 50.2%)',
+                           // 'Plumbing': 'hsl(271, 39.4%, 57.3%)' ,
+                           // 'Pool/Spa': 'hsl(60, 69.5%, 43.7%)',
+                           // 'Fence': 'hsl(186, 80%, 45.1%)',
+                           // 'Grading': 'hsl(318, 65.9%, 67.8%)'
     // Initiate arrays with type label 
 
     switch(typeM) {
 
       case "bu":
         var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"];
+
+        var subColor = {   
+                        "Other" : 'hsl(205, 70.6%, 1.4%)',
+                        "NRB" : 'hsl(205, 70.6%, 11.4%)',
+                        "New Residence" : 'hsl(205, 70.6%, 21.4%)',  
+                        "RA" : 'hsl(205, 70.6%, 31.4%)',
+                        "Residential Accessory Building" : 'hsl(205, 70.6%, 41.4%)', 
+                        "Residential Addition" : 'hsl(205, 70.6%, 51.4%)',
+                        "Residential Remodel" : 'hsl(205, 70.6%, 61.4%)',
+                        "Commercial Remodel" : 'hsl(205, 70.6%, 71.4%)', 
+                        "NCR" : 'hsl(205, 70.6%, 81.4%)',
+                        "Accessory Agricultural Building" : 'hsl(205, 70.6%, 91.4%)'
+                        };
      
 
         $(function() {
@@ -218,6 +241,17 @@ var SelectSubtype = function selectSubtype(subtype){
       case "me":
         var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
 
+        subColor =  {
+                    "Air Conditioning": 'hsl(120, 56.9%, 10.0%)',
+                    "Boiler": 'hsl(120, 56.9%, 20.0%)',
+                    "Evaporative Cooler": 'hsl(120, 56.9%, 30.0%)',
+                    "Furnace": 'hsl(120, 56.9%, 40.0%)',
+                    "Gas Log Fireplace": 'hsl(120, 56.9%, 50.0%)',
+                    "Other": 'hsl(120, 56.9%, 60.0%)',
+                    "Wood Stove": 'hsl(120, 56.9%, 70.0%)',
+                    "Solar Thermal": 'hsl(120, 56.9%, 80.0%)'
+                  };
+
         $(function() {
                 $("#mch-monthly-dropdown-menu").val('me'+subtype);
         });
@@ -228,6 +262,15 @@ var SelectSubtype = function selectSubtype(subtype){
       case "el":
         var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
    
+        subColor = {"Commercial Electric": 'hsl(360, 69.2%, 19.6%)',
+                     "Electrical Lift Station" : 'hsl(360, 69.2%, 29.6%)',
+                     "Electrical Re-Wiring": 'hsl(360, 69.2%, 39.6%)',
+                     "Electrical Service Change": 'hsl(360, 69.2%, 49.6%)',
+                     "Temporary Electrical Service": 'hsl(360, 69.2%, 59.6%)',
+                     "Generator": 'hsl(360, 69.2%, 69.6%)',
+                     "Solar Electrical System": 'hsl(360, 69.2%, 79.6%)',
+                     "Other": 'hsl(360, 69.2%, 89.6%)'};
+
         $(function() {
                 $("#elc-monthly-dropdown-menu").val('el'+subtype);
         });
@@ -247,6 +290,10 @@ var SelectSubtype = function selectSubtype(subtype){
       case "de":
         var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
    
+        subColor = {"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
+                    "Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
+                    "Residential Demolition": 'hsl(10, 30.2%, 72.2%)'};
+
         $(function() {
                 $("#dem-monthly-dropdown-menu").val('de'+subtype);
         });
@@ -371,13 +418,14 @@ var SelectSubtype = function selectSubtype(subtype){
     /*  DATA PLOT    
     /*
     /************************************************************************************/
-
+    console.log(typeof(subColor));
 
     var chart = c3.generate({
       bindto: '#byDay',
       data: {
         columns: [selectedColumnData[0]],
         type: 'bar',
+        colors: subColor
         },
       grid: {
         y: {

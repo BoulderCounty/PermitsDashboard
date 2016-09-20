@@ -10,7 +10,7 @@ var initialStartDate = 365;
 var fstartDate = moment().subtract(fullStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 var startDate = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 // var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
-var startDateMoment = moment().subtract(initialStartDate, 'd').startOf('month');
+var startDateMoment = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 // var shortStartDateMoment = moment().subtract(30, 'd');
 
 var PermitDashboard = window.PermitDashboard || {};
@@ -67,6 +67,15 @@ $(document).ready(function() {
     console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT_#1");
 
     var records = json.result.records;
+    records.forEach(function(record, inc, array) {
+      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+      record.ShortAppliedDate = moment(record.AppliedDate).format('MMM-YY');
+    })
+
+    records.forEach(function(record, inc, array) {
+      record.longAppliedDate = moment(record.AppliedDate).format();
+    })
+
 
     var firstRecords = clone(records);
 
@@ -76,13 +85,16 @@ $(document).ready(function() {
     };
 
     // console.log(PermitDashboard.cache.last365.records);
-    // console.log(firstRecords);
+    console.log(firstRecords);
     // console.log(PermitDashboard.cache.last365.records === firstRecords);
 
     //extract permits applied for the last year
     var appliedLast365Days = firstRecords.filter(function(d) { 
-      return moment(d.AppliedDate) > startDateMoment; 
+      console.log(d.AppliedDate, startDateMoment);
+      return d.AppliedDate > startDateMoment; 
     });
+
+    console.log(appliedLast365Days);
 
     // //extract permits applied for in last 30 days
     // var appliedLast30Days = records.filter(function(d) { 
@@ -91,7 +103,7 @@ $(document).ready(function() {
     
     //extract permits issued in last year
     var issuedLast365Days = firstRecords.filter(function(d) { 
-      return moment(d.IssuedDate) > startDateMoment; 
+      return d.IssuedDate > startDateMoment; 
     });
 
     // //extract permits issued in last 30 days
@@ -109,7 +121,8 @@ $(document).ready(function() {
     // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
 
     firstRecords.forEach(function(record, inc, array) {
-      record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
+      record.ShortAppliedDate = moment(record.AppliedDate).format('MMM-YY');
+      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
     })
 
     $("#newApplications").text(appliedLast365Days.length);
@@ -153,7 +166,7 @@ $(document).ready(function() {
     // FURTHER DESCRIPTION NECESSARY {key_Month : [ {key_type : numb }]}
 
     var appliedByDayByType = d3.nest()
-      .key(function(d) { return d.AppliedDate })
+      .key(function(d) { return d.ShortAppliedDate })
       .key(function(d) { return d.PermitTypeMapped })
       .rollup (function(v) { return v.length })
       .entries(appliedLast365Days);
@@ -355,17 +368,17 @@ $(document).ready(function() {
 
 
             baRecords.forEach(function(record, inc, array) {
-              record['longAppliedDate'] = moment(record.AppliedDate).format('YYYY-MM-DD');
+              record['LongAppliedDate'] = moment(record.AppliedDate).format('YYYY-MM-DD');
 
-              record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM');
+              record.ShortAppliedDate = moment(record.AppliedDate).format('YYYY-MM');
 
-              // console.log(record.AppliedDate);
+              console.log(record.AppliedDate);
             })   
 
 
 
             var appliedLast365Days = baRecords.filter(function(d) { 
-              return moment(d.longAppliedDate) > startDateMoment; 
+              return moment(d.LongAppliedDate) > startDateMoment; 
             });
 
 
@@ -389,7 +402,7 @@ $(document).ready(function() {
             var appliedByDayByType = d3.nest()
 
               // concatenates date
-              .key(function(d) { return d.AppliedDate })
+              .key(function(d) { return d.ShortAppliedDate })
 
               // concatanates type
               .key(function(d) { return d.PermitTypeMapped })
@@ -469,12 +482,14 @@ $(document).ready(function() {
 
                 var total = 0;
 
-                var wereTotal = function (data) {
-                  for(var i=0, n=data.length; i < n; i++){ 
-                        total=total+data[i];
-                       }
-                  return total;
-                  };
+                wereSum = ar.reduce((pv, cv) => pv+cv, 0);
+
+                // var wereTotal = function (data) {
+                //   for(var i=0, n=data.length; i < n; i++){ 
+                //         total=total+data[i];
+                //        }
+                //   return total;
+                //   };
 
                  //total construction value for new project in last year
                   var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
@@ -489,8 +504,8 @@ $(document).ready(function() {
                   //   record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
                   // })
 
-                  $("#newApplications").text(wereTotal(ar));
-                  // $("#issuedPermits").text(issuedLast365Days.length);
+                  $("#newApplications").text(wereSum);
+                  $("#issuedPermits").text("n/a");
                   $("#totalConstructionValue").text(numeral(totalConstructionValue).format('( 0 a)'));
 
                   /*  On Pie-Chart Click - Reloads The Bar-Chart With A Single Type
@@ -811,7 +826,7 @@ function monthSelect(months){
             return moment(d.AppliedDate) > startDateMoment; 
           })
         
-        console.log(repieRecording.length)
+        console.log(repieRecording)
 
         var permitTypes = [];
 
@@ -1041,6 +1056,63 @@ function monthSelect(months){
                 var weeklyDates = weeklyAppliedByDayByType.map(function(date) {
                   return date.key;
                 })
+
+                requestJSONa(grabLast365, function(last365) {
+
+                  var records = grabLast365.records;
+                  var firstRecords = clone(records);
+
+
+                  firstRecords = firstRecords.filter(function(r){
+                    return  r['PermitTypeMapped'] == d.id;
+                  })
+
+
+                  var ar = [];
+
+                  for (var i = 0; i < output[d.id].length; i++){
+                    for(item in output[d.id][i]){
+                        ar.push(output[d.id][i][item]);
+                     }
+                  };
+
+                  console.log(ar);
+
+                  //extract permits applied for the last year
+                  var appliedLast365Days = firstRecords.filter(function(d) { 
+                    return moment(d.AppliedDate) > startDateMoment; 
+                  });
+
+                  
+                  //extract permits issued in last year
+                  var issuedLast365Days = firstRecords.filter(function(d) { 
+                    return moment(d.IssuedDate) > startDateMoment; 
+                  });
+
+                  // //extract permits issued in last 30 days
+                  // var issuedLast30Days = records.filter(function(d) { 
+                  //   return moment(d.IssuedDate) > shortStartDateMoment; 
+                  // });
+
+                  //total construction value for new project in last year
+                  var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
+                    return Number(d.EstProjectCost);
+                  });
+
+
+                  // format record.AppliedDate to drop days and years
+                  // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
+
+                  firstRecords.forEach(function(record, inc, array) {
+                    record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
+                  })
+
+                  $("#newApplications").text(appliedLast365Days.length);
+                  $("#issuedPermits").text(issuedLast365Days.length);
+                  $("#totalConstructionValue").text(numeral(totalConstructionValue).format('( 0 a)'));
+
+                })
+
 
 
                 var columnData=[];

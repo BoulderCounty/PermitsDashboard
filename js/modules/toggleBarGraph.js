@@ -84,7 +84,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
 
         if (innerValue != ""){
 
-          $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<optgroup label="Residential">'+    
             '<option value="buNRB">New Residence Building</option>'+
             '<option value="buNew Residence">New Residence</option>'+
@@ -106,7 +106,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         var subtype = Demolition(innerValue);
 
         if (innerValue !=""){
-          $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<option value="deCommercial Deconstruction">Commercial Deconstruction</option>'+
             '<option value="deResidential Deconstruction">Residential Deconstruction</option>'+
             '<option value="deResidential Demolition">Residential Demolition</option></select>');
@@ -122,7 +122,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         var subtype = Electrical(innerValue);
 
         if (innerValue != ""){
-          $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<option value="elCommercial Electric">Commercial Electric</option>'+
             '<option value="elElectrical Lift Station">Electrical Lift Station</option>'+
             '<option value="elElectrical Re-Wiring">Electrical Re-Wiring</option>'+
@@ -142,7 +142,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         var subtype = Mechanical(innerValue);
 
         if (innerValue != ""){
-          $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<option value="meAir Conditioning">Air Conditioning</option>'+
             '<option value="meBoiler">Boiler</option>'+
             '<option value="meEvaportive Cooler">Evaporative Cooler</option>'+
@@ -162,7 +162,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         var subtype = Other(innerValue);
 
         if (innerValue != ""){
-          $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<option value="otBridge">Bridge</option>'+
             '<option value="otBuilding Lot Determination">Building Lot Determination</option>'+
             '<option value="otOil and Gas Development">Oil and Gas Development</option></select>');
@@ -177,7 +177,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
         var subtype = Plumbing(innerValue);
 
         if (innerValue != ""){
-          $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+          $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtypo(value);"><option value="">ALL</option>'+
             '<option value="plWater Heater">Water Heater</option>'+
             '<option value="plGas Piping">Gas Piping</option>'+
             '<option value="plEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+

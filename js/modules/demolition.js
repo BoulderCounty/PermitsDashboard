@@ -248,10 +248,14 @@ var Demolition = function Demolition(config){
 		       var chart = c3.generate({
 		            bindto: '#byDay',
 		            data: {
-		              columns : columnData
-		              ,
+		              columns : columnData,
+		              colors: {
+			            	"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
+			            	"Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
+			            	"Residential Demolition": 'hsl(10, 30.2%, 72.2%)'
+			          },
 		              type: 'bar'//,
-		            }, 
+		            },
 		            axis: {
 		                y: {tick : {format: d3.format('d')}},
 		                x: {
@@ -268,6 +272,11 @@ var Demolition = function Demolition(config){
 		            data: {
 		              columns : weeklyColumnData
 		              ,
+		            colors: {
+		            	"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
+		            	"Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
+		            	"Residential Demolition": 'hsl(10, 30.2%, 72.2%)'
+		            },
 		              type: 'bar'//,
 		            }, 
 		            axis: {
@@ -413,6 +422,11 @@ var Demolition = function Demolition(config){
 			            data: {
 			              columns : columnData
 			              ,
+			              colors: {
+			            	"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
+			            	"Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
+			            	"Residential Demolition": 'hsl(10, 30.2%, 72.2%)'
+			              },
 			              type: 'bar'//,
 			            }, 
 			            axis: {
@@ -432,7 +446,12 @@ var Demolition = function Demolition(config){
 			              columns : weeklyColumnData
 			              ,
 			              type: 'bar'//,
-			            }, 
+			            },
+			            colors: {
+			            	"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
+			            	"Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
+			            	"Residential Demolition": 'hsl(10, 30.2%, 72.2%)'
+			            },
 			            axis: {
 			                y: {tick : {format: d3.format('d')}},
 			                x: {
