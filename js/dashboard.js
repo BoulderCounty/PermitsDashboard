@@ -3,10 +3,20 @@
 var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
+var selVar;
 var fullStartDate = 1826;
 // var fullStartDate = 365;
 
-var initialStartDate = 365;
+var url = window.location.href;    
+if (url.indexOf('?') !== -1){
+  selVar=location.search.slice(1);
+
+  console.log(selVar);
+  // url += '?12'
+}else{
+     var initialStartDate = 365;
+}
+
 var fstartDate = moment().subtract(fullStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 var startDate = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 // var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
@@ -38,10 +48,23 @@ d['id']="";
 
 $(document).ready(function() {
 
-    PermitDashboard.cache = {};
+  if ((!selVar) && (initialStartDate==365)){
+
+    verify(selVar)
+
+  }
+
+  else (monthSelect(selVar));
+
+});
+
+
+var verify= function(selVar){
+
+  PermitDashboard.cache = {};
 
   // Grab dropdown length of data to "breakdown"
-  initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+  initialStartDate = (selVar || 12);
 
 
   /********************************************************************************/
@@ -337,7 +360,7 @@ $(document).ready(function() {
 
           $("#uniqueSelector").html("<div style='display: inline-block'><i class='fa fa-bar-chart-o fa-fw'></i><span id='toggleWithPieClick'>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 120px; margin-top: 2px;'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></div>")
 
-          var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+          var initialStartDate = selVar;
 
           var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
           var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + startDate + "' group by \"PermitTypeMapped\" order by Count desc";
@@ -550,12 +573,18 @@ $(document).ready(function() {
 
 
 
-});
+};
 
 
 function monthSelect(months){
 
-    var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+     var country = document.getElementById("monthList-dropdown-menu");
+     console.log("index.html?"+months.toString());
+     // country.options[country.options.selectedIndex].selected='false';
+     country.value=("index.html?"+months.toString());
+    // console.log(country);
+
+    var initialStartDate = months;
 
     var startDate = moment().subtract(initialStartDate, 'months').format("YYYY-MM-DD"); 
 
@@ -574,13 +603,20 @@ function monthSelect(months){
     /*
     /********************************************************************************/
 
-    var grabLast365 = window.PermitDashboard.cache.last365;     
+    PermitDashboard.cache = {};  
 
-    requestJSONa(grabLast365, function(last365) {
+    requestJSON(urlLast365, function(last365) {
 
-      var records = grabLast365.records; 
+      var records = last365.result.records; 
 
       var timeRecords = clone(records);
+
+      var firstRecords = clone(records);
+
+      PermitDashboard.cache.last365 = {
+      records: records
+      // url: urlLast365
+      };
 
       if (initialStartDate > 6){
         var startDateMoment = moment().subtract(initialStartDate, 'months').startOf('month');
@@ -864,7 +900,7 @@ function monthSelect(months){
             type : 'donut',
             onclick: function (d, i) {
               console.log("onclick", d.id, i);
-              var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+              var initialStartDate = months;
 
               if (initialStartDate > 6) {
                 initialStartDate = (parseInt(initialStartDate) + 1);
@@ -892,14 +928,16 @@ function monthSelect(months){
 
               var grabLast365 = PermitDashboard.cache.last365;
 
+              console.log(grabLast365);
+
               requestJSONa(grabLast365, function(json) {
                 var records = json.records 
                 var rebarRecords = clone(records); 
 
+                console.log(months);
+                // console.log(document.getElementById('monthList-dropdown-menu').value, "#");
 
-                console.log(document.getElementById('monthList-dropdown-menu').value, "#");
-
-                switch (document.getElementById('monthList-dropdown-menu').value){
+                switch (months){
 
                   case '1':
                     rebarRecords.forEach(function(record, inc, array) {
@@ -947,7 +985,7 @@ function monthSelect(months){
 
                 };
 
-                var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+                var initialStartDate = months;
                 if (initialStartDate > 6){
                   initialStartDate = (parseInt(initialStartDate) + 1);
                 }
@@ -1194,7 +1232,8 @@ function monthSelect(months){
                   
                   /************************************************************************************/
                 
-                switch (document.getElementById('monthList-dropdown-menu').value){
+                switch (months){
+                  // document.getElementById('monthList-dropdown-menu').value){
 
                   case '2':
                   case '3':
