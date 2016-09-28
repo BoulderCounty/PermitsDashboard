@@ -5,6 +5,7 @@ var Building = function Building(config){
 	var columnData = [];
 
 
+
 	      /********************************************************************************/
 	      /*
 	      /*  DATA GRAB
@@ -24,7 +25,7 @@ var Building = function Building(config){
 
 		    console.log(buildRecords, "#");
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		buildRecords.forEach(function(record, inc, array) {
@@ -56,10 +57,10 @@ var Building = function Building(config){
                     console.log(weeklyBunch);
 
 		  	}; 
-//
-//  NEED TO ADD TO OTHER TYPES
-//
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		//
+		//  NEED TO ADD TO OTHER TYPES
+		//
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -228,13 +229,13 @@ var Building = function Building(config){
 		    	datesArray.push(dArray);
 			});
 
+			console.log(weeklyOutput);
+
 			weeklyDatesArray=[];
 		    weeklyOutput[Object.keys(weeklyOutput)[0]].forEach(function(d, i) {
 			    var dArray = [dates[i]];
 		    	weeklyDatesArray.push(dArray);
 			});
-
-		    console.log(weeklyDatesArray);
 
 
 		          /*  Within Reloaded Pie-Chart - Enables Selection Based On Type
@@ -351,13 +352,20 @@ var Building = function Building(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+
+				$('#bld-monthly-dropdown-menu').hide();
+				$('#Building').text('Subtype(s)');
+
+				clicker++;
+
 			}
 
 			else {
@@ -399,12 +407,11 @@ var Building = function Building(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
-			$('#Building').text('Subtype(s)');
-
 		    console.log(e);
 		    console.log(e.target);
 
+			$('#bld-monthly-dropdown-menu').hide();
+			$('#Building').text('Subtype(s)');
 
 			function returnObjChart(returnObj, datesArray){
 			    var chart = c3.generate({
@@ -467,6 +474,8 @@ var Building = function Building(config){
    		   	else {
 
    		   		console.log('BREAK');
+   		   		$('#bld-monthly-dropdown-menu').show();
+
 
 	          	if((config == 1) || (config > 6)){
 
@@ -497,6 +506,9 @@ var Building = function Building(config){
 			              	}
 			            }
 			        })
+
+			    clicker++;
+
 			    }
 
 		       	else{
@@ -534,11 +546,13 @@ var Building = function Building(config){
 		    	$('#Building').text('Totals');
 		    };
 
-
-
-		  clicker++;
+		
 
 	  });
+
+	  if (clicker ==0){
+		  clicker++;
+	  };
 
 	return subtype;
 

@@ -24,7 +24,7 @@ var Plumbing = function Plumbing(config){
 
 		    console.log(plumbRecords, "#");
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		plumbRecords.forEach(function(record, inc, array) {
@@ -59,7 +59,7 @@ var Plumbing = function Plumbing(config){
 //
 //  NEED TO ADD TO OTHER TYPES
 //
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -323,13 +323,19 @@ var Plumbing = function Plumbing(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+				$('plm-monthly-dropdown-menu').hide();
+				$('#Plumbing').text('Subtype(s)');
+
+				clicker++;
+
 			}
 
 			else {
@@ -367,7 +373,7 @@ var Plumbing = function Plumbing(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
+			$('#plm-monthly-dropdown-menu').hide();
 			$('#Plumbing').text('Subtype(s)');
 
 		    console.log(e);
@@ -408,6 +414,7 @@ var Plumbing = function Plumbing(config){
    		   	else {
 
    		   		console.log('BREAK');
+   		   		$('plm-monthly-dropdown-menu').show();
 
 	          	if((config == 1) || (config > 6)){
 
@@ -446,16 +453,21 @@ var Plumbing = function Plumbing(config){
 			        });
 			    }
 
-		    	$('#bld-monthly-dropdown-menu').show();
+		    	$('#plm-monthly-dropdown-menu').show();
 
 		    	$('#Plumbing').text('Totals');
 		    };
 
 
 
-		  clicker++;
+		  // clicker++;
 
 	  });
+
+
+	if (clicker ==0){
+	  clicker++;
+    };
 
 	return subtype;
 

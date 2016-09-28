@@ -24,7 +24,7 @@ var Other = function Other(config){
 
 		    console.log(otherRecords, "#");
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		otherRecords.forEach(function(record, inc, array) {
@@ -59,7 +59,7 @@ var Other = function Other(config){
 //
 //  NEED TO ADD TO OTHER TYPES
 //
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -323,13 +323,19 @@ var Other = function Other(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+				$('oth-monthly-dropdown-menu').hide();
+				$('#Other').text('Subtype(s)');
+
+				clicker++;
+
 			}
 
 			else {
@@ -368,7 +374,7 @@ var Other = function Other(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
+			$('#oth-monthly-dropdown-menu').hide();
 			$('#Other').text('Subtype(s)');
 
 		    console.log(e);
@@ -409,6 +415,7 @@ var Other = function Other(config){
    		   	else {
 
    		   		console.log('BREAK');
+   		   		$('oth-monthly-dropdown-menu').show();
 
 	          	if((config == 1) || (config > 6)){
 
@@ -427,6 +434,11 @@ var Other = function Other(config){
 			              	}
 			            }
 			        })
+
+
+			       	clicker++;
+
+
 			    }
 
 		       	else{
@@ -447,16 +459,21 @@ var Other = function Other(config){
 			        });
 			    }
 
-		    	$('#bld-monthly-dropdown-menu').show();
+		    	$('#oth-monthly-dropdown-menu').show();
 
 		    	$('#Other').text('Totals');
 		    };
 
 
 
-		  clicker++;
+		  // clicker++;
 
 	  });
+
+
+	if (clicker ==0){
+	  clicker++;
+    };
 
 	return subtype;
 

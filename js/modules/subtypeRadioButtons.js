@@ -2,9 +2,9 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
 	 console.log(value);
 
-      innerValue = $("#monthList-dropdown-menu option:selected").val();
+      // innerValue = $("#monthList-dropdown-menu option:selected").val();
 
-      console.log($("#monthList-dropdown-menu option:selected").val());
+      // console.log($("#monthList-dropdown-menu option:selected").val());
       console.log(value);
 
 

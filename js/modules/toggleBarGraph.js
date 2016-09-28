@@ -5,9 +5,9 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
   console.log(toggleSubtype);
 
 
-  innerValue = $(".monthly-dropdown-menu option:selected").val();
+  innerValue = $("#monthList-dropdown-menu").val().slice(11);
 
-  console.log($(".monthly-dropdown-menu option:selected").val());
+  console.log($("#monthList-dropdown-menu").val().slice(11));
   console.log(value);
   console.log(d.id, "+++++++++++++++");
   // console.log(value.target.id,"&&&&&&&&&&&&&");
@@ -17,7 +17,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
 
 
   if (toggleSubtype==0){
-    SubtypeRadioButtons(subtypeVar);
+    SubtypeRadioButtons(subtypeVar, subtypeVar);
     console.log(toggleSubtype);
     console.log("ZERO");
     toggleSubtype++;
@@ -25,7 +25,7 @@ var ToggleBarGraph = function ToggleBarGraph(value , toggleCount, returnObj){
 
 
 
-  else if (((toggleSubtype%2) == 0) && (returnObj)){
+  else if (((toggleSubtype%2) != 0) && (returnObj)){
     console.log(subtypeVar);
     console.log(toggleSubtype);
     console.log("EVEN");

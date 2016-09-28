@@ -354,10 +354,10 @@ var verify= function(selVar){
           $("#innerSelectSubs").empty();
           $("#uniqueSelector").empty();
           clearDomElementUS();
-          $(".monthly-dropdown-menu option:selected").val("");   
+          // $(".monthly-dropdown-menu option:selected").val("");   
 
               // REMOVE CSS STYLE
-
+          console.log(d.id);
           $("#uniqueSelector").html("<div style='display: inline-block'><i class='fa fa-bar-chart-o fa-fw'></i><span id='toggleWithPieClick'>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 120px; margin-top: 2px;'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></div>")
 
           var initialStartDate = selVar;
@@ -383,7 +383,9 @@ var verify= function(selVar){
             var baRecords = clone(records);
             var barredRecords = clone(records);
 
-         
+            months = 12;
+            initialStartDate = 12;
+            console.log(initialStartDate);
 
             var startDateMoment = moment().subtract(initialStartDate, 'months');
             startDateMoment = moment(startDateMoment).startOf('month');
@@ -418,6 +420,8 @@ var verify= function(selVar){
             // var appliedLast365Days = baRecords.filter(function(d) { 
             //   return moment(d.AppliedDate) > startDateMoment; 
             // });
+
+            console.log(appliedLastYearByType);
                 
             var appliedByDayByType = [];
 
@@ -438,6 +442,8 @@ var verify= function(selVar){
 
             var types = ["Plumbing", "Other", "Roof", "Electrical", "Mechanical", "Building", "Demolition", "Pool/Spa", "Grading", "Fence"];
 
+            console.log(appliedByDayByType);
+
             var output = [];
 
                 output[d.id] = appliedByDayByType.map(function(month) {
@@ -452,7 +458,6 @@ var verify= function(selVar){
                 var dates = appliedByDayByType.map(function(date) {
                   return date.key;
                 });
-
 
                 var columnData=[];
 
@@ -578,10 +583,10 @@ var verify= function(selVar){
 
 function monthSelect(months){
 
-     var country = document.getElementById("monthList-dropdown-menu");
-     console.log("index.html?"+months.toString());
+     var timePeriod = document.getElementById("monthList-dropdown-menu");
+     // console.log("index.html?"+months.toString());
      // country.options[country.options.selectedIndex].selected='false';
-     country.value=("index.html?"+months.toString());
+     timePeriod.value=("index.html?"+months.toString());
     // console.log(country);
 
     var initialStartDate = months;
@@ -1198,7 +1203,7 @@ function monthSelect(months){
 
                 console.log(weeklyReturnObj);
 
-                window.returningObj = weeklyReturnObj;
+                window.weeklyReturningObj = returnObj;
                 window.datesingArray = datesArray;
                 // window.weeklyReturningObj = returnObj;
 
@@ -1259,14 +1264,26 @@ function monthSelect(months){
 
                     $('#toggleWithPieClick').empty();
 
-                    document.getElementById("toggleWithPieClick").innerHTML= ("<span style='display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 400px; margin-top: 2px;'>Graph options - toggle between: <span class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' style = 'display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px;'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span></span>");
+                    document.getElementById("toggleWithPieClick").innerHTML= ("<span style='display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px; width: 400px; margin-top: 2px;'>Graph options - toggle between: <span class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id = '"+d.id+"' style = 'display: inline-block; border-top-right-radius: 0px; border-bottom-right-radius: 0px;'><input type='radio' class='innerSelectSub' value='sub' autocomplete='off'> Subtype(s) </label></span></span>");
                     $('#uniqueSelector').css({'padding-top': '14px'});
 
                   $('#toggleWithPieClick').on('click', $('#innerSelectSub'), function(e){
                     console.log(d.id);
                     console.log(e);
                     console.log(e.target);
-                    if ((toggleSubtypeDate%2)!=0){
+
+                    if ((toggleSubtypeDate)==0){
+
+                     
+                        subtypeVar = e.target.id  || d.id;
+                        subtypeVar = (subtypeVar.charAt(0)+subtypeVar.charAt(1));
+                        console.log(subtypeVar);
+                        console.log(months);
+                        SubtypeRadioButtons(subtypeVar, months);
+                     
+                    }
+
+                    else if ((toggleSubtypeDate%2)!=0){
 
                      returnObjChart(returnObj, datesArray)
                     
@@ -1276,7 +1293,8 @@ function monthSelect(months){
                       subtypeVar = e.target.id  || d.id;
                       subtypeVar = (subtypeVar.charAt(0)+subtypeVar.charAt(1));
                       console.log(subtypeVar);
-                      SubtypeRadioButtons(subtypeVar);
+                      console.log(months);
+                      SubtypeRadioButtons(subtypeVar, months);
                     }
 
                     toggleSubtypeDate++;
@@ -1287,7 +1305,7 @@ function monthSelect(months){
                     subtypeVar = e.target.id  || d.id;
                     subtypeVar = subtypeVar.charAt(0);
                     console.log(subtypeVar);
-                    SubtypeRadioButtons(subtypeVar);
+                    SubtypeRadioButtons(subtypeVar, months);
                   });
 
 

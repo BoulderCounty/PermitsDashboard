@@ -8,11 +8,11 @@ var SelectSubtype = function selectSubtype(subtype){
     // console.log(c);
     // $('#subtypeMenu').unbind('change');
 
-  var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+  var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
   console.log(initialStartDate);
 
   console.log(subtype,"^^");
-  var breaker = document.getElementById('monthList-dropdown-menu').value;
+  var breaker = $("#monthList-dropdown-menu").val().slice(11);
   var typeM = subtype.substr(0, 2);
   var subtype = subtype.slice(2);
 
@@ -33,6 +33,8 @@ var SelectSubtype = function selectSubtype(subtype){
 
   var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
   var startDateMoment = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
+
+  console.log(startDateMoment);
 
       // set up SQL query string
   // var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
@@ -60,11 +62,28 @@ var SelectSubtype = function selectSubtype(subtype){
 
   console.log(subRecords2.length)
 
-
+    console.log(startDateMoment);
+    console.log(subRecords);
     //extract permits applied for the last year
-    var appliedLast365Days = subRecords.filter(function(d) { 
-      return moment(d.longAppliedDate).format("YYYY-MM-DD") > startDateMoment; 
-    });
+
+    console.log(subRecords)
+
+    if (initialStartDate != 12) {
+
+      var appliedLast365Days = subRecords.filter(function(d) { 
+        return moment(d.AppliedDate).format("YYYY-MM-DD") > startDateMoment; 
+      });
+
+    }
+
+    else {
+
+      var appliedLast365Days = subRecords.filter(function(d) { 
+        return moment(d.longAppliedDate).format("YYYY-MM-DD") > startDateMoment; 
+      });
+
+
+    }
 
     //extract permits issued in last year
     var issuedLast365Days2 = records.filter(function(d) { 
@@ -99,7 +118,7 @@ var SelectSubtype = function selectSubtype(subtype){
       for (var  i = 0; i<appliedLast365Days.length; i++){
         var then = appliedLast365Days[i].AppliedDate;
 
-        var ago = moment(then).format("YYYY-MM-DD");
+        var ago = moment(then);
         var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
         weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
 
@@ -117,14 +136,15 @@ var SelectSubtype = function selectSubtype(subtype){
 
       weeklyBunch = [];
 
-      for (var  i = 0; i<appliedLast365Days.length; i++){
-        var then = appliedLast365Days[i].longAppliedDate;
-        var ago = moment(then);
-        // .subtract(1, "months");
-        var weeksAgo = ago.startOf('isoWeek').format("YYYY-MM");
-        weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
+        for (var  i = 0; i<appliedLast365Days.length; i++){
+          var then = appliedLast365Days[i].AppliedDate;
+          var ago = moment(then);
+          // .subtract(1, "months");
+          var weeksAgo = ago.startOf('isoWeek').format("YYYY-MM");
+          weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
 
-      }
+        }
+
     }
 
 
@@ -161,13 +181,13 @@ var SelectSubtype = function selectSubtype(subtype){
     // });
     
 
-    console.log(appliedPerWeekLast365Days.length);
+    console.log(appliedPerWeekLast365Days);
     // var appliedLast365Days = records.filter(function(d) { 
     //   return moment(d.AppliedDate) > startDateMoment; 
     // })
 
     appliedLast365Days.forEach(function(day, inc, arr){
-      console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
+      // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
       appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][2];
     });
 

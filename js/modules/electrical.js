@@ -5,6 +5,7 @@ var Electrical = function Electrical(config){
 	var columnData = [];
 
 
+
 	      /********************************************************************************/
 	      /*
 	      /*  DATA GRAB
@@ -24,7 +25,7 @@ var Electrical = function Electrical(config){
 
 		    console.log(elecRecords, "#");
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		elecRecords.forEach(function(record, inc, array) {
@@ -59,7 +60,7 @@ var Electrical = function Electrical(config){
 //
 //  NEED TO ADD TO OTHER TYPES
 //
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -348,13 +349,21 @@ var Electrical = function Electrical(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+				$('#elc-monthly-dropdown-menu').hide();
+				$('#Electrical').text('Subtype(s)');
+
+
+				clicker++;
+
+
 			}
 
 			else {
@@ -392,12 +401,11 @@ var Electrical = function Electrical(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
-			$('#Electrical').text('Subtype(s)');
-
 		    console.log(e);
 		    console.log(e.target);
 
+			$('#elc-monthly-dropdown-menu').hide();
+			$('#Electrical').text('Subtype(s)');
 
 			function returnObjChart(returnObj, datesArray){
 			    var chart = c3.generate({
@@ -428,11 +436,16 @@ var Electrical = function Electrical(config){
 			}
 
 			returnObjChart(coolum, daates);
+
+	  			// clicker++;
+
 		    }
 
    		   	else {
 
    		   		console.log('BREAK');
+				$('#elc-monthly-dropdown-menu').show();
+
 
 	          	if((config == 1) || (config > 6)){
 
@@ -461,6 +474,10 @@ var Electrical = function Electrical(config){
 			              	}
 			            }
 			        })
+
+	  			clicker++;
+
+
 			    }
 
 		       	else{
@@ -481,16 +498,23 @@ var Electrical = function Electrical(config){
 			        });
 			    }
 
-		    	$('#bld-monthly-dropdown-menu').show();
+
+	  			// clicker++;
+
+		    	$('#elc-monthly-dropdown-menu').show();
 
 		    	$('#Electrical').text('Totals');
 		    };
 
 
 
-		  clicker++;
 
 	  });
+
+
+	  if (clicker == 0){
+	  	clicker++;
+	  };
 
 	return subtype;
 

@@ -24,7 +24,7 @@ var Mechanical = function Mechanical(config){
 
 		    console.log(mechRecords, "#");
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		mechRecords.forEach(function(record, inc, array) {
@@ -59,7 +59,7 @@ var Mechanical = function Mechanical(config){
 //
 //  NEED TO ADD TO OTHER TYPES
 //
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -348,13 +348,18 @@ var Mechanical = function Mechanical(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+				$('#mch-monthly-dropdown-menu').hide();
+				$('#Mechanical').text('Subtype(s)');
+
+				clicker++;
 			}
 
 			else {
@@ -392,7 +397,7 @@ var Mechanical = function Mechanical(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
+			$('#mch-monthly-dropdown-menu').hide();
 			$('#Mechanical').text('Subtype(s)');
 
 		    console.log(e);
@@ -433,6 +438,7 @@ var Mechanical = function Mechanical(config){
    		   	else {
 
    		   		console.log('BREAK');
+   		   		$('#mch-monthly-dropdown-menu').show();
 
 	          	if((config == 1) || (config > 6)){
 
@@ -461,6 +467,9 @@ var Mechanical = function Mechanical(config){
 			              	}
 			            }
 			        })
+
+			       	clicker++;
+
 			    }
 
 		       	else{
@@ -481,16 +490,21 @@ var Mechanical = function Mechanical(config){
 			        });
 			    }
 
-		    	$('#bld-monthly-dropdown-menu').show();
+		    	$('#mch-monthly-dropdown-menu').show();
 
 		    	$('#Mechanical').text('Totals');
 		    };
 
 
 
-		  clicker++;
+		  // clicker++;
 
 	  });
+
+
+	if (clicker ==0){
+	  clicker++;
+    };
 
 	return subtype;
 

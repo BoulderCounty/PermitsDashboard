@@ -23,7 +23,7 @@ var Demolition = function Demolition(config){
 		    var timeRecords = clone(records);
 
 
-			switch (document.getElementById('monthList-dropdown-menu').value){
+			switch ($("#monthList-dropdown-menu").val().slice(11)){
 
 		  		case '1':
 		    		demoRecords.forEach(function(record, inc, array) {
@@ -58,7 +58,7 @@ var Demolition = function Demolition(config){
 //
 //  NEED TO ADD TO OTHER TYPES
 //
-		  	var initialStartDate = document.getElementById('monthList-dropdown-menu').value;
+		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
 	        	initialStartDate = (parseInt(initialStartDate) + 1);
@@ -328,13 +328,21 @@ var Demolition = function Demolition(config){
 
 		console.log(columnData, clicker);
 
-		if (clicker%2 == 0){
+		if (clicker%2 != 0){
 
 			if (config != 1){
-				var coolum = window.returningObj;
+				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
 				console.log(daates);
+
+
+			$('#dem-monthly-dropdown-menu').hide();
+			$('#Demolition').text('Subtype(s)');
+
+			clicker++;
+
+
 			}
 
 			else {
@@ -372,11 +380,15 @@ var Demolition = function Demolition(config){
 				console.log('STOP');
 			}
 
-			$('#bld-monthly-dropdown-menu').hide();
+			$('#dem-monthly-dropdown-menu').hide();
 			$('#Demolition').text('Subtype(s)');
 
 		    console.log(e);
 		    console.log(e.target);
+
+
+			$('#dem-monthly-dropdown-menu').hide();
+			$('#Demolition').text('Subtype(s)');
 
 
 			function returnObjChart(returnObj, datesArray){
@@ -414,6 +426,7 @@ var Demolition = function Demolition(config){
    		   	else {
 
    		   		console.log('BREAK');
+   		   		$('#dem-monthly-dropdown-menu').show();
 
 	          	if((config == 1) || (config > 6)){
 
@@ -437,6 +450,9 @@ var Demolition = function Demolition(config){
 			              	}
 			            }
 			        })
+
+			    clicker++;
+
 			    }
 
 		       	else{
@@ -469,9 +485,13 @@ var Demolition = function Demolition(config){
 
 
 
-		  clicker++;
+		  // clicker++;
 
 	  });
+
+	if (clicker ==0){
+	  clicker++;
+    };
 
 	return subtype;
 
