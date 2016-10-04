@@ -1,4 +1,4 @@
-var Plumbing = function Plumbing(confi, configTime){
+var Plumbing = function Plumbing(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
