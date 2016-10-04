@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Boulder Co Dashboard</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/boco.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/3.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/c3/0.3.0/c3.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Boulder County Permits Dashboard</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                        Powered by CivicData
+                            <!-- /input-group -->
+                        </li>
+                        <li>
+                            <a class="active" href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="metrics.html"><i class="fa fa-line-chart fa-fw"></i> Metrics / Trends</a>
+                        </li>
+                        <li>
+                            <a href="about.html"><i class="fa fa-info-circle fa-fw"></i> About</a>
+                        </li>
+                        <li>
+                            <a href="introduction.html"><i class="fa fa-lightbulb-o fa-fw"></i> Tour</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        
+
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Introductory Tour</h1>
+                </div>
+            </div>
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <container><h3>Navigation</h3>
+                            <h5>The top row of the dashboard - high level data story (From left to right)  </h5>
+                            <ul>
+                                <li class="col-xs-4">The Navigation Pane</li>
+                                <li class="col-xs-4">Time-scale menu: how much data to show</li>
+                                <li class="col-xs-4">Info-boxes: summary information</li>
+                            </ul>
+                            <hr  class="col-xs-10">
+                            <h5 class="clearfix"></h5>
+                            <h5>The pie chart: "Permits by Type"</h5>
+                            <ul>
+                                <li class="col-xs-12">Shows the breakdown of permit Types</li>
+                                <li class="col-xs-12">Selecting a 'slice' of the pie reloads the bar chart with the single, selected Type</li>
+                                <li class="col-xs-12">Type selection triggers the appearance of the Sub-Type menu</li>
+                                        <ol>
+                                            <li class="col-xs-6">the title of the bar chart collapses to reveal a toggle button labeled ‘Subtype(s)’</li>
+                                            <li class="col-xs-6">the graph then alternates between Type totals and a Subtype breakdown</li>
+                                        </ol>
+                            </ul>
+                            <hr class="col-xs-10">
+                            <h5 class="clearfix"></h5>
+                            <h5>The bar chart: "Applications..."</h5>
+                            <ul>
+                                <li class="col-xs-12">Scrolling over the different bars presents some summary info</li>
+                                <li class="col-xs-12">The button changes from 'Subtype(s)' to 'Total', indicating what will be shown
+                                        <ol class="col-xs-6">o total of that Type per time period (the initial state)</ol>
+                                        <ol class="col-xs-6">o a breakdown of the Type into Sub-Types</ol>
+                                </li>
+                                <li class="col-xs-12">When 'SubType(s)' are visible – when the key details the Sub-Type names - a drop down menu appears next to the 'Totals' button</li>
+                                <li class="col-xs-12">This menu will reload the bar chart with the selected Sub-Type - a complete drill down!</li>
+
+                                </li>
+                            </ul>
+                            <hr class="col-xs-10">
+                            <h5 class="clearfix"></h5>
+                            <h5>Dynamic "Recent Permit Applications" list</h5>
+                            <ul> 
+                                <li class="col-xs-12">Links to the project documentation - allows quick access to recently filed applications</li>
+                                <li class="col-xs-12">The list is static and does not interact with the user - only listing the last ten projects</li>
+                                <li class="col-xs-12">However, with future implementations of this website, the list will change to reflect the data shown in the bar chart; i.e. by drilling down in the bar chart, the ten most recent filings for only the selected Sub-Type will be shown. In addition, the ideal situation will be to make the 'bars' in the bar chart interactive with this list. Selecting a bar will present a scrollable list of all Types or Sub-Types selected within that specific time-frame.</li>
+                            </ul>
+                            </container>
+                            <h5 class="clearfix"></h5>
+                            <div class="panel panel-default">
+                               <container><h3>Now dig in!!</h3>
+                               <h5>Highlighting some <u><strong>examples</strong></u> showing off the data</h5>
+
+                                    <ul>
+                                      <li><a href="http://dev.boco.software/DataViz/index.html?60" target="_blank">A data landscape</a>: A snapshot of the information at your fingertips.</li>
+                                      <p>Select the 'Building' (blue) slice of the pie, and you can see an annual cycle in the data.</p>
+                                      <li><a href="http://dev.boco.software/DataViz/index.html?6" target="_blank">Shorter time frame</a>: While data is normally broken down by month, for time periods less than six months, it is broken down by week</li>
+                                      <p>Again, select the 'Building' slice, and notice that an obvious pattern in absent.</p>
+                                      <p>Now, click 'Subtype(s)' and then select 'Accessory Agricultural Building' from the drop-down menu. Notice the spike in the daily data.</p>
+                                      <li><a href="http://dev.boco.software/DataViz/index.html?36" target="_blank">The 2103 Flood</a></li>
+                                      <p>Select the 'Mechanical' slice (green)</p>
+                                      <p>Look at the 'Furnaces' sub-type. The peak in October of 2013 is due to the flood.</p>
+                                      <li><a href="http://dev.boco.software/DataViz/index.html?1" target="_blank">Daily data</a>: Daily data shown in one month.</li>
+                                      <p>You might also be interested in the patterns show by the 'Air Conditioning' subtype. See if you can find it without directions.</p>
+                                    </ul>
+                                </container>
+                            </div>
+                            <p>Built by: <a href="https://twitter.com/sethaxthelm">Seth Axthelm<i class="fa fa-twitter fa-fw"></i></a>.</p>
+
+                            <p>Code available on <a href="https://github.com/BoulderCounty/PermitsDashboard/tree/_local" target="_blank">GitHub<i class="fa fa-github fa-fw"></i></a>.</p>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>            
+        </div>
+    </div> <!-- /container -->
+        
+
+
+    <!-- /#wrapper -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.1/moment.min.js"></script>
+    <script src="js/plugins/metisMenu/metisMenu.min.js"></script>
+    <script src="js/sb-admin-2.js"></script>
+
+</body>
+
+</html>
+

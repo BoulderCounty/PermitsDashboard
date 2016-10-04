@@ -1,9 +1,13 @@
-var Mechanical = function Mechanical(config){
+var Mechanical = function Mechanical(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
 	var columnData = [];
 
+
+
+	var configTime = (configTime || 12);
+	console.log(configTime);
 
 	      /********************************************************************************/
 	      /*
@@ -95,7 +99,7 @@ var Mechanical = function Mechanical(config){
 			    permitTypes.push([mechRecords[i]["PermitType"], mechRecords[i].count]);
 			}
 
-			if (config != 1){				
+			if (configTime != 1){				
 				 appliedLast365Days.forEach(function(day, inc, arr){
 		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
 	              })
@@ -245,7 +249,7 @@ var Mechanical = function Mechanical(config){
 
 
 
-	       if((config == 1) || (config > 6)){
+	       if((configTime == 1) || (configTime > 6)){
 
 	       	console.log('SATURATION');
 
@@ -350,7 +354,7 @@ var Mechanical = function Mechanical(config){
 
 		if (clicker%2 != 0){
 
-			if (config != 1){
+			if (configTime != 1){
 				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
@@ -428,7 +432,7 @@ var Mechanical = function Mechanical(config){
 
 			// console.log(returnObj(coolum));
 
-			if (config == 1){
+			if (configTime == 1){
 				coolum = returnObjFunc(coolum);
 			}
 
@@ -440,7 +444,7 @@ var Mechanical = function Mechanical(config){
    		   		console.log('BREAK');
    		   		$('#mch-monthly-dropdown-menu').show();
 
-	          	if((config == 1) || (config > 6)){
+	          	if((configTime == 1) || (configTime > 6)){
 
 			       	var chart = c3.generate({
 			            bindto: '#byDay',

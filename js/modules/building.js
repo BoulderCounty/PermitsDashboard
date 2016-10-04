@@ -1,65 +1,71 @@
-var Building = function Building(config){
+var Building = function Building(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
 	var columnData = [];
 
-
-
+	var configTime = (configTime || 12);
+	console.log(configTime);
 	      /********************************************************************************/
 	      /*
 	      /*  DATA GRAB
 	      /*
 	      /********************************************************************************/
+			//	
+	      //** is there a problem here when windows is called without a sub-type?
+			//
+
 	check = function(config){
 		if (config){
 
-		var grabLast365 = PermitDashboard.cache.last365;
-		console.log(grabLast365);
+			var grabLast365 = PermitDashboard.cache.last365;
+			console.log(grabLast365);
 
-		requestJSONa(grabLast365, function(json) {
+			requestJSONa(grabLast365, function(json) {
 
-		    var records = json.records;
-		    var buildRecords = clone(records);
-		    var timeRecords = clone(records);
+			    	var records = json.records;
+			    var buildRecords = clone(records);
+			    var timeRecords = clone(records);
 
-		    console.log(buildRecords, "#");
+			    console.log(buildRecords, "#");
 
-			switch ($("#monthList-dropdown-menu").val().slice(11)){
+				switch ($("#monthList-dropdown-menu").val().slice(11)){
 
-		  		case '1':
-		    		buildRecords.forEach(function(record, inc, array) {
-		     		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-		    	});
+			  		case '1':
+			    		buildRecords.forEach(function(record, inc, array) {
+				     		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+				    	});
 
-		    		weeklyBunch =[];
-		  		break;
-		     
-		  		default:
-		   			buildRecords.forEach(function(record, inc, array) {
-		    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-		  			});
+			    		weeklyBunch =[];
+			  		break;
+			     
+			  		default:
+			   			buildRecords.forEach(function(record, inc, array) {
+			    		record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+			  			});
 
-		  			 weeklyBunch = [];
-
-
-                    for (var  i = 0; i<buildRecords.length; i++){
-                      var then = buildRecords[i].AppliedDate;
+			  			 weeklyBunch = [];
 
 
-                      var ago = moment(then);
-                      var weeksAgoLabel = ago.startOf('isoWeek').format('MMM-DD-YY');
-                      weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgoLabel]);
+	                    for (var  i = 0; i<buildRecords.length; i++){
+	                      var then = buildRecords[i].AppliedDate;
 
 
-                    };
+	                      var ago = moment(then);
+	                      var weeksAgoLabel = ago.startOf('isoWeek').format('MMM-DD-YY');
+	                      weeklyBunch.push([timeRecords[i]["AppliedDate"], weeksAgoLabel]);
 
-                    console.log(weeklyBunch);
 
-		  	}; 
-		//
-		//  NEED TO ADD TO OTHER TYPES
-		//
+	                	};
+
+	                    console.log(weeklyBunch);
+
+	                break;
+
+		  		}; 
+			//
+			//  NEED TO ADD TO OTHER TYPES
+			//
 		  	var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
 
 			if (initialStartDate > 6) {
@@ -96,7 +102,7 @@ var Building = function Building(config){
 			    permitTypes.push([buildRecords[i]["PermitType"], buildRecords[i].count]);
 			}
 
-			if (config != 1){				
+			if (configTime !== 1){				
 				 appliedLast365Days.forEach(function(day, inc, arr){
 		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
 	              })
@@ -194,6 +200,12 @@ var Building = function Building(config){
 		      return date.key;
 		    });
 
+		    var weeklyDates = weeklyAppliedByDayByType.map(function(date){
+		    	return date.key;
+		    })
+
+
+		    console.log(weeklyOutput);
 
 		    columnData=[];
 		    // console.log(columnData);
@@ -244,11 +256,12 @@ var Building = function Building(config){
 		          /*
 		          /************************************************************************************/
 
+		   console.log(configTime);
 
-
-	       if((config == 1) || (config > 6)){
+	       if((configTime == 1) || (configTime > 6)){
 
 	       	console.log('SATURATION');
+
 
 		       var chart = c3.generate({
 		            bindto: '#byDay',
@@ -262,7 +275,7 @@ var Building = function Building(config){
 						"Residential Remodel" : 'hsl(205, 70.6%, 61.4%)',
 						"Commercial Remodel" : 'hsl(205, 70.6%, 71.4%)', 
 						"NCR" : 'hsl(205, 70.6%, 81.4%)',
-						"Accessory Agricultural Building" : 'hsl(205, 70.6%, 91.4%)'},
+						"Accessory Agricultural Building" : 'hsl(205, 70.6%, 81.4%)'},
 		              columns : columnData
 		              ,
 		              type: 'bar'//,
@@ -290,7 +303,7 @@ var Building = function Building(config){
 							"Residential Remodel" : 'hsl(205, 70.6%, 61.4%)',
 							"Commercial Remodel" : 'hsl(205, 70.6%, 71.4%)', 
 							"NCR" : 'hsl(205, 70.6%, 81.4%)',
-							"Accessory Agricultural Building" : 'hsl(205, 70.6%, 91.4%)'},
+							"Accessory Agricultural Building" : 'hsl(205, 70.6%, 81.4%)'},
 		              columns : weeklyColumnData
 		              ,
 		              type: 'bar'//,
@@ -350,11 +363,13 @@ var Building = function Building(config){
 
 	$(clickHole).on('click', null, columnData, function(e){
 
+		console.log("click", configTime);
+
 		console.log(columnData, clicker);
 
 		if (clicker%2 != 0){
 
-			if (config != 1){
+			if (configTime !== 1){
 				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
@@ -437,7 +452,7 @@ var Building = function Building(config){
 
 			// console.log(returnObj(coolum));
 
-			if (config == 1){
+			if (configTime == 1){
 				coolum = returnObjFunc(coolum);
 			}
 
@@ -474,10 +489,13 @@ var Building = function Building(config){
    		   	else {
 
    		   		console.log('BREAK');
+
+    		    console.log(configTime);
+
    		   		$('#bld-monthly-dropdown-menu').show();
 
 
-	          	if((config == 1) || (config > 6)){
+	          	if((configTime == 1) || (configTime > 6)){
 
 			       	var chart = c3.generate({
 			            bindto: '#byDay',

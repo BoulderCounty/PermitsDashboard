@@ -301,6 +301,11 @@ var SelectSubtype = function selectSubtype(subtype){
       case "pl":
         var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
 
+        subColor = {"Eldorado Springs Sanitation Hookup" :  'hsl(271, 39.4%, 17.3%)',
+                    "Gas Piping" :  'hsl(271, 39.4%, 37.3%)',
+                    "Water Heater" :  'hsl(271, 39.4%, 57.3%)',
+                    "Plumbing - Other" :  'hsl(271, 39.4%, 77.3%)'}
+
         $(function() {
                 $("#plm-monthly-dropdown-menu").val('pl'+subtype);
         });
@@ -322,6 +327,10 @@ var SelectSubtype = function selectSubtype(subtype){
 
       case "ot":
         var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
+
+        subColor = {"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
+                    "Bridge" : 'hsl(0, 0%, 49.8%)',
+                    "Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'};
 
         $(function() {
                 $("#oth-monthly-dropdown-menu").val('ot'+subtype);

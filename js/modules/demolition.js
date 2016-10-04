@@ -1,9 +1,12 @@
-var Demolition = function Demolition(config){
+var Demolition = function Demolition(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
 	var columnData = [];
 
+
+	var configTime = (configTime || 12);
+	console.log(configTime);
 
 	      /********************************************************************************/
 	      /*
@@ -92,7 +95,7 @@ var Demolition = function Demolition(config){
 			    permitTypes.push([demoRecords[i]["PermitType"], demoRecords[i].count]);
 			}
 
-			if (config != 1){				
+			if (configTime != 1){				
 				 appliedLast365Days.forEach(function(day, inc, arr){
 		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
 	              })
@@ -242,7 +245,7 @@ var Demolition = function Demolition(config){
 
 
 
-	       if((config == 1) || (config > 6)){
+	       if((configTime == 1) || (configTime > 6)){
 
 
 		       var chart = c3.generate({
@@ -330,7 +333,7 @@ var Demolition = function Demolition(config){
 
 		if (clicker%2 != 0){
 
-			if (config != 1){
+			if (configTime != 1){
 				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
@@ -415,7 +418,7 @@ var Demolition = function Demolition(config){
 
 			// console.log(returnObj(coolum));
 
-			if (config == 1){
+			if (configTime == 1){
 				coolum = returnObjFunc(coolum);
 			}
 
@@ -428,7 +431,7 @@ var Demolition = function Demolition(config){
    		   		console.log('BREAK');
    		   		$('#dem-monthly-dropdown-menu').show();
 
-	          	if((config == 1) || (config > 6)){
+	          	if((configTime == 1) || (configTime > 6)){
 
 			       	var chart = c3.generate({
 			            bindto: '#byDay',

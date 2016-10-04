@@ -1,6 +1,6 @@
 var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
-	 console.log(value);
+	 console.log(value, selVar);
 
       // innerValue = $("#monthList-dropdown-menu option:selected").val();
 
@@ -18,7 +18,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Building(innerValue);
 
-            $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="Building(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="bld-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="Building(value, selVar);"><option value="">ALL</option>'+
                         '<optgroup label="Residential">'+    
                         '<option value="buNRB">New Residence Building</option>'+
                         '<option value="buNew Residence">New Residence</option>'+
@@ -33,8 +33,8 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
             clearDomElementUS();
           
           }
-
-          Building(innerValue);
+          console.log(value, selVar);
+          Building(value, selVar);
 
         break;
 
@@ -46,14 +46,14 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Demolition(innerValue);
 
-            $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="dem-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="Demolition(value, selVar);"><option value="">ALL</option>'+
                       '<option value="deCommercial Deconstruction">Commercial Deconstruction</option>'+
                       '<option value="deResidential Deconstruction">Residential Deconstruction</option>'+
                       '<option value="deResidential Demolition">Residential Demolition</option></select>');
             clearDomElementUS();
           }
 
-          Demolition(innerValue);
+          Demolition(innerValue, selVar);
 
         break;
 
@@ -65,7 +65,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Electrical(innerValue);
 
-            $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="elc-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="Electrical(value, selVar);"><option value="">ALL</option>'+
                       '<option value="elCommercial Electric">Commercial Electric</option>'+
                       '<option value="elElectrical Lift Station">Electrical Lift Station</option>'+
                       '<option value="elElectrical Re-Wiring">Electrical Re-Wiring</option>'+
@@ -77,7 +77,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
             clearDomElementUS();
           }
 
-          Electrical(innerValue);
+          Electrical(innerValue, selVar);
 
         break;
 
@@ -88,7 +88,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Mechanical(innerValue);
 
-            $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="mch-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="Mechanical(value, selVar);"><option value="">ALL</option>'+
                     '<option value="meAir Conditioning">Air Conditioning</option>'+
                     '<option value="meBoiler">Boiler</option>'+
                     '<option value="meEvaportive Cooler">Evaporative Cooler</option>'+
@@ -100,7 +100,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
             clearDomElementUS();
           }
 
-          Mechanical(innerValue);
+          Mechanical(innerValue, selVar);
 
         break;
 
@@ -111,14 +111,14 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Other(innerValue);
 
-            $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="Other(value, selVar);"><option value="">ALL</option>'+
                     '<option value="otBridge">Bridge</option>'+
                     '<option value="otBuilding Lot Determination">Building Lot Determination</option>'+
                     '<option value="otOil and Gas Development">Oil and Gas Development</option></select>');
             clearDomElementUS();
           } 
 
-          Other(innerValue);
+          Other(innerValue, selVar);
 
         break;
 
@@ -129,7 +129,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
 
             // var subtype = Plumbing(innerValue);
 
-            $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="SelectSubtype(value);"><option value="">ALL</option>'+
+            $("#innerSelectSubs").html('<select id="plm-monthly-dropdown-menu" class="monthly-dropdown-menu" onchange ="Plumbing(value, selVar);"><option value="">ALL</option>'+
                   '<option value="plWater Heater">Water Heater</option>'+
                   '<option value="plGas Piping">Gas Piping</option>'+
                   '<option value="plEldorado Springs Sanitation Hookup">Eldorado Springs Sanitation Hookup</option>'+
@@ -137,7 +137,7 @@ var SubtypeRadioButtons = function SubtypeRadioButtons(value, innerValue){
             clearDomElementUS();
           }
 
-          Plumbing(innerValue);
+          Plumbing(innerValue, selVar);
 
         break;
 

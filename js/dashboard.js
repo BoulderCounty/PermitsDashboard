@@ -158,7 +158,7 @@ var verify= function(selVar){
     /* NEED TO EXPAND THIS SECTION TO INCLUDE SUBSET AND 'INFINITE SCROLL'
     /********************************************************************************/
 
-    var permitsToLoad = 10;
+    var permitsToLoad = 25;
     var totalPermits = appliedLast365Days.length-1;
     var permitStart = 1
     
@@ -656,9 +656,29 @@ function monthSelect(months){
         return Number(d.EstProjectCost);
       });
 
+
+      // LITTLE BOXES
+
       $("#newApplications").text(appliedLast365Days.length);
       $("#issuedPermits").text(issuedLast365Days.length);
       $("#totalConstructionValue").text(numeral(totalConstructionValue).format('( 0 a)'));
+
+
+      // PERMITS LIST
+
+      var permitsToLoad = 25;
+      var totalPermits = appliedLast365Days.length-1;
+      var permitStart = 1
+      
+      for (var i = totalPermits; i > totalPermits - 100; i--) {
+        $("#recent" + permitStart).attr("href", appliedLast365Days[i].Link);
+        $("#permit" + permitStart).text(appliedLast365Days[i].PermitNum);
+        $("#address" + permitStart).text(appliedLast365Days[i].OriginalAddress1);
+        permitStart++;
+      }
+
+
+
 
       var bld;
       var roof;

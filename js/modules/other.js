@@ -1,9 +1,12 @@
-var Other = function Other(config){
+var Other = function Other(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
 	var columnData = [];
 
+
+	var configTime = (configTime || 12);
+	console.log(configTime);
 
 	      /********************************************************************************/
 	      /*
@@ -95,7 +98,7 @@ var Other = function Other(config){
 			    permitTypes.push([otherRecords[i]["PermitType"], otherRecords[i].count]);
 			}
 
-			if (config != 1){				
+			if (configTime != 1){				
 				 appliedLast365Days.forEach(function(day, inc, arr){
 		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
 	              })
@@ -245,16 +248,21 @@ var Other = function Other(config){
 
 
 
-	       if((config == 1) || (config > 6)){
+	       if((configTime == 1) || (configTime > 6)){
 
 	       	console.log('SATURATION');
 
 		       var chart = c3.generate({
 		            bindto: '#byDay',
 		            data: {
-		              columns : columnData
-		              ,
-		              type: 'bar'//,
+		            	colors: {
+			            	"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
+			            	"Bridge" : 'hsl(0, 0%, 49.8%)',
+			            	"Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'
+		            	},
+		              	columns : columnData
+  		                ,
+		                type: 'bar'//,
 		            }, 
 		            axis: {
 		                y: {tick : {format: d3.format('d')}},
@@ -270,9 +278,14 @@ var Other = function Other(config){
 		        var chart = c3.generate({
 		            bindto: '#byDay',
 		            data: {
-		              columns : weeklyColumnData
-		              ,
-		              type: 'bar'//,
+		            	colors: {
+			            	"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
+			            	"Bridge" : 'hsl(0, 0%, 49.8%)',
+			            	"Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'
+		            	},
+		                columns : weeklyColumnData
+		                ,
+		                type: 'bar'//,
 		            }, 
 		            axis: {
 		                y: {tick : {format: d3.format('d')}},
@@ -325,7 +338,7 @@ var Other = function Other(config){
 
 		if (clicker%2 != 0){
 
-			if (config != 1){
+			if (configTime != 1){
 				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
@@ -390,8 +403,10 @@ var Other = function Other(config){
 			      ,
 			      type: 'bar',
 			      colors: {
-	                 'Other': 'hsl(0, 0%, 49.8%)',
-			      }
+			            	"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
+			            	"Bridge" : 'hsl(0, 0%, 49.8%)',
+			            	"Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'
+		          }
 			    },
 			    axis: {
 			        y: {tick : {format: d3.format('d')}},
@@ -405,7 +420,7 @@ var Other = function Other(config){
 
 			// console.log(returnObj(coolum));
 
-			if (config == 1){
+			if (configTime == 1){
 				coolum = returnObjFunc(coolum);
 			}
 
@@ -417,14 +432,19 @@ var Other = function Other(config){
    		   		console.log('BREAK');
    		   		$('oth-monthly-dropdown-menu').show();
 
-	          	if((config == 1) || (config > 6)){
+	          	if((configTime == 1) || (configTime > 6)){
 
 			       	var chart = c3.generate({
 			            bindto: '#byDay',
 			            data: {
 			              columns : columnData
 			              ,
-			              type: 'bar'//,
+			              type: 'bar',
+			              colors: {
+			            	"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
+			            	"Bridge" : 'hsl(0, 0%, 49.8%)',
+			            	"Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'
+		            	  }
 			            }, 
 			            axis: {
 			                y: {tick : {format: d3.format('d')}},

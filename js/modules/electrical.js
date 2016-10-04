@@ -1,9 +1,12 @@
-var Electrical = function Electrical(config){
+var Electrical = function Electrical(config, configTime){
 	console.log("START:", config);
 	var clicker = 0;
 	var records = [];
 	var columnData = [];
 
+
+	var configTime = (configTime || 12);
+	console.log(configTime);
 
 
 	      /********************************************************************************/
@@ -96,7 +99,7 @@ var Electrical = function Electrical(config){
 			    permitTypes.push([elecRecords[i]["PermitType"], elecRecords[i].count]);
 			}
 
-			if (config != 1){				
+			if (configTime != 1){				
 				 appliedLast365Days.forEach(function(day, inc, arr){
 		                appliedLast365Days[inc]["week"] = appliedPerWeekSelectedDays[inc][1];
 	              })
@@ -246,7 +249,7 @@ var Electrical = function Electrical(config){
 
 
 
-	       if((config == 1) || (config > 6)){
+	       if((configTime == 1) || (configTime > 6)){
 
 	       	console.log('SATURATION');
 
@@ -351,7 +354,7 @@ var Electrical = function Electrical(config){
 
 		if (clicker%2 != 0){
 
-			if (config != 1){
+			if (configTime != 1){
 				var coolum = window.weeklyReturningObj;
 				var daates = window.datesingArray;
 				console.log(coolum);
@@ -431,7 +434,7 @@ var Electrical = function Electrical(config){
 
 			// console.log(returnObj(coolum));
 
-			if (config == 1){
+			if (configTime == 1){
 				coolum = returnObjFunc(coolum);
 			}
 
@@ -447,7 +450,7 @@ var Electrical = function Electrical(config){
 				$('#elc-monthly-dropdown-menu').show();
 
 
-	          	if((config == 1) || (config > 6)){
+	          	if((configTime == 1) || (configTime > 6)){
 
 			       	var chart = c3.generate({
 			            bindto: '#byDay',
