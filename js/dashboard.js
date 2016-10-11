@@ -4,12 +4,6 @@ var permitsResourceId = "d914e871-21df-4800-a473-97a2ccdf9690";
 var inspectionsResourceId = "";
 var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
 var selVar;
-var subtype="";
-var returnedObj="";
-var toggleSubtype=[];
-var toggleSubtypeDate=[];
-var d={};
-d['id']="";
 var fullStartDate = 1826;
 // var fullStartDate = 365;
 
@@ -18,24 +12,32 @@ if (url.indexOf('?') !== -1){
   selVar=location.search.slice(1);
 
   console.log(selVar);
+  // url += '?12'
 }else{
      var initialStartDate = 365;
 }
 
 var fstartDate = moment().subtract(fullStartDate, 'd').startOf('month').format("YYYY-MM-DD");
 var startDate = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
+// var shortStartDate = moment().subtract(30, 'd').format("YYYY-MM-DD");
 var startDateMoment = moment().subtract(initialStartDate, 'd').startOf('month').format("YYYY-MM-DD");
+// var shortStartDateMoment = moment().subtract(30, 'd');
 
 var PermitDashboard = window.PermitDashboard || {};
 
 var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + fstartDate + "' order by \"AppliedDate\"";
+  // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
 var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
+  // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
+var subtype="";
+var returnedObj="";
+var toggleSubtype=[];
+var toggleSubtypeDate=[];
 
-var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + fstartDate + "' group by \"PermitTypeMapped\" order by Count desc";
-
-var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
+var d={};
+d['id']="";
 
 
 /******************************************************************************/
@@ -76,50 +78,72 @@ var verify= function(selVar){
 
       // set up SQL query string
   var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + fstartDate + "' order by \"AppliedDate\"";
-
+  // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
   var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
+  // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
 
 
   requestJSON(urlLast365, function(json) {
 
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT_#1");
+    console.log(json);
+
     var records = json.result.records;
     records.forEach(function(record, inc, array) {
       record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
       record.ShortAppliedDate = moment(record.AppliedDate).format('MMM-YY');
-    })
-
-    records.forEach(function(record, inc, array) {
       record.longAppliedDate = moment(record.AppliedDate).format();
     })
 
-    // Make copy with pointer before caching
     var firstRecords = clone(records);
+
     PermitDashboard.cache.last365 = {
     records: records,
     url: urlLast365
     };
 
+    // console.log(PermitDashboard.cache.last365.records);
+    console.log(firstRecords);
+    // console.log(PermitDashboard.cache.last365.records === firstRecords);
 
     //extract permits applied for the last year
     var appliedLast365Days = firstRecords.filter(function(d) { 
+      console.log(d.AppliedDate, startDateMoment);
       return d.AppliedDate > startDateMoment; 
     });
 
     console.log(appliedLast365Days);
+
+    // //extract permits applied for in last 30 days
+    // var appliedLast30Days = records.filter(function(d) { 
+    //   return moment(d.AppliedDate) > shortStartDateMoment; 
+    // });
     
     //extract permits issued in last year
     var issuedLast365Days = firstRecords.filter(function(d) { 
       return d.IssuedDate > startDateMoment; 
     });
 
+    // //extract permits issued in last 30 days
+    // var issuedLast30Days = records.filter(function(d) { 
+    //   return moment(d.IssuedDate) > shortStartDateMoment; 
+    // });
 
     //total construction value for new project in last year
     var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
       return Number(d.EstProjectCost);
     });
 
+
+    // format record.AppliedDate to drop days and years
+    // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
+
+    firstRecords.forEach(function(record, inc, array) {
+      record.ShortAppliedDate = moment(record.AppliedDate).format('MMM-YY');
+      record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+    })
 
     $("#newApplications").text(appliedLast365Days.length);
     $("#issuedPermits").text(issuedLast365Days.length);
@@ -276,10 +300,15 @@ var verify= function(selVar){
 
   // Get the number of instances of each type
 
+
+  var permitTypesQuery = "SELECT \"PermitTypeMapped\", count(*) as Count from \"permitsResourceId\" where \"IssuedDate\" > '" + fstartDate + "' group by \"PermitTypeMapped\" order by Count desc";
+
+  var permitTypesQ = baseURI + encodeURIComponent(permitTypesQuery.replace("permitsResourceId", permitsResourceId));
       
   var records = [];
 
   requestJSON(permitTypesQ, function(json) {
+    console.log("GGGGGGGGGGGGGGGGGGEEEEEEEEEEEEEEEEEEEETTTTTTTTTTTTTTTTTTT_#2");
     var records = json.result.records; 
     PermitDashboard.cache.permitTypesQ = {
       records: records,
@@ -322,6 +351,7 @@ var verify= function(selVar){
           $("#innerSelectSubs").empty();
           $("#uniqueSelector").empty();
           clearDomElementUS();
+          // $(".monthly-dropdown-menu option:selected").val("");   
 
               // REMOVE CSS STYLE
           console.log(d.id);
@@ -384,6 +414,12 @@ var verify= function(selVar){
               permitTypes.push([baRecords[i]["PermitTypeMapped"], baRecords[i].count]);
             }
 
+            // var appliedLast365Days = baRecords.filter(function(d) { 
+            //   return moment(d.AppliedDate) > startDateMoment; 
+            // });
+
+            console.log(appliedLastYearByType);
+                
             var appliedByDayByType = [];
 
               // compiles array for bar-graph
@@ -446,6 +482,7 @@ var verify= function(selVar){
                 var returnObj = ([Object.keys(output)[0]]).concat(returnObj);
 
                 window.returningObj = returnObj;
+                window.weeklyReturningObj = returnObj;
 
                 console.log(Object.keys(output)[0],'_____');
 
@@ -458,6 +495,8 @@ var verify= function(selVar){
               
                 });
 
+                window.datesingArray = datesArray;
+
                 var ar = [];
 
                 for (var i = 0; i < output[d.id].length; i++){
@@ -468,15 +507,32 @@ var verify= function(selVar){
 
                 console.log(ar);
 
-
                 var total = 0;
 
-                wereSum = ar.reduce((pv, cv) => pv+cv, 0);
+                wereSum = ar.reduce(function(pv, cv, i, ar) {return pv+cv});
+                //             arr[i].reduce(function(a, b){
+                //     return a >= b ? a : b;
+                // }
+
+                // var wereTotal = function (data) {
+                //   for(var i=0, n=data.length; i < n; i++){ 
+                //         total=total+data[i];
+                //        }
+                //   return total;
+                //   };
 
                  //total construction value for new project in last year
                   var totalConstructionValue = d3.sum(appliedLast365Days, function(d) {
                     return Number(d.EstProjectCost);
                   });
+
+
+                  // format record.AppliedDate to drop days and years
+                  // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
+
+                  // firstRecords.forEach(function(record, inc, array) {
+                  //   record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
+                  // })
 
                   $("#newApplications").text(wereSum);
                   $("#issuedPermits").text("n/a");
@@ -500,6 +556,7 @@ var verify= function(selVar){
                       var selectedSubtype = this.querySelector("div").querySelector("span").querySelector("div").querySelector("label").id;
                       console.log(selectedSubtype);
                       returnedObj = ToggleBarGraph(selectedSubtype, '', returnObj);
+                      // console.log('***', returnedObj, '***');
                     })
                 });
 
@@ -1316,18 +1373,49 @@ function monthSelect(months){
 
   // Helper function to make request for JSONP.
 
+// loadXMLDoc(url);
+
 function requestJSON(url, callback) {
-    $.ajax({
-      beforeSend: function() {
-        // Handle the beforeSend event
-      },
-      url: url,
-      complete: function(xhr) {
-        callback.call(null, xhr.responseJSON);
-         
-      }
-    });
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+        if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
+           if (xmlhttp.status == 200) {
+               var jsonResponse = JSON.parse(xmlhttp.responseText);
+               // document.getElementById("myDiv").innerHTML = xmlhttp.responseText;
+               callback.call(null, jsonResponse);
+           }
+           else if (xmlhttp.status == 400) {
+              console.log('There was an error 400');
+           }
+           else {
+               console.log(url,'something else other than 200 was returned');
+           }
+        }
+    };
+
+    xmlhttp.open("GET", url, true);
+    xmlhttp.send();
 }
+
+// function requestJSON(url, callback) {
+//     $.ajaxSetup({ cache: false });
+//     $.ajax({
+//       async: false,
+//       type: "get",
+//       cache: false,
+//       beforeSend: function() {
+//         // Handle the beforeSend event
+//         console.log('before');
+//       },
+//       dataType: 'json',
+//       url: url,
+//       complete: function(xhr) {
+//         callback.call(null, xhr.responseJSON);
+//         console.log('complete');
+//       }
+//     });
+// }
 
 
  function clone(obj) {

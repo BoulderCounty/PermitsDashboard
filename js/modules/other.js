@@ -314,7 +314,7 @@ var Other = function Other(config, configTime){
     document.getElementById("toggleWithPieClick").innerHTML= ("<span>Graph options - toggle between: <div class='btn-group' data-toggle='buttons'><label class='btn btn-primary btn-inline' id='"+ $('.btn-primary').attr('id') +"' style = 'display: inline-block'><input type='radio' class='innerSelectSub'> Totals </label><span style='display: inline-block' id='innerSelectSubs'><span>");
 
     $(".monthly-dropdown-menu").empty();
-    $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" oninput ="SelectSubtype(value);"><option value="">ALL</option>'+
+    $("#innerSelectSubs").append('<select id="oth-monthly-dropdown-menu" class="monthly-dropdown-menu" onmouseup ="SelectSubtype(value);"><option value="">ALL</option>'+
                 '<option value="otBridge">Bridge</option>'+
                 '<option value="otBuilding Lot Determination">Building Lot Determination</option>'+
                 '<option value="otOil and Gas Development">Oil and Gas Development</option></select>'); 
@@ -374,7 +374,8 @@ var Other = function Other(config, configTime){
 	                for (var i = 1; i<columnData[0].length ; i++){
 	                	console.log(i);
 	                	// console.log(prepacked[i]);
-	                	repacked[i]=prepacked[i].reduce((a , b) => a + b, 0);
+	                	repacked[i] = prepacked[i].reduce(function(pv, cv, i, ar) {return pv+cv});
+	                	// repacked[i]=prepacked[i].reduce((a , b) => a + b, 0);
 	                	// console.log(repacked);
 	            	}
 	                console.log(repacked);
