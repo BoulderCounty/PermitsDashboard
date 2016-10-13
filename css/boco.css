@@ -356,4 +356,45 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+/*
+.btn-group>.btn:first-child {
+    background-color: white;
+    padding-bottom: 40px;
+    padding-top: 0px;
+}*/
+
+.constant-height {
+    height: 60px;
+    padding-top: 20px;
+}
+
+/*BAD CSS*/
+
+#toggleWithPieClick > div {
+    margin-top: -9.5px;
+}
+
+
+#uniqueSelector > div {
+    margin-top: -6px;
+}
+
+/*#uniqueSelector > #toggleWithPieClick {
+    background-color: green;
+}*/
+
+#Building,
+#Demolition,
+#Electrical,
+#Mechanical,
+#Other,
+#Plumbing {
+    width: 120px;
+}
+
+.monthly-dropdown-menu {
+    height: 34px;
+    border-color: blue;
+    border-width: 2px;
+}
 
