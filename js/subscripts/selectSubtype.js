@@ -1,4 +1,4 @@
- function selectSubtype(subtype){
+var selectSubtype = function(subtype){
 
 
     console.log($("#uniqueSelector .monthly-dropdown-menu").length);
@@ -185,6 +185,19 @@
       })
 
     console.log(columnData);
+
+
+    var permitsToLoad = 25;
+    var totalPermits = appliedByDayBySubtype.length-1;
+    var permitStart = 1
+    
+    for (var i = totalPermits; i > totalPermits - 100; i--) {
+      $("#recent" + permitStart).attr("href", appliedByDayBySubtype[i].Link);
+      $("#permit" + permitStart).text(appliedByDayBySubtype[i].PermitNum);
+      $("#address" + permitStart).text(appliedByDayBySubtype[i].OriginalAddress1);
+      permitStart++;
+    }
+
 
     // (H) create the bar chart with months and types breakdown 
     /*

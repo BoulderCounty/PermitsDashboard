@@ -7,11 +7,8 @@ var baseURI = "http://www.civicdata.com/api/action/datastore_search_sql?sql=";
 // Helper function to make request for JSONP.
 function requestJSON(url, callback) {
   $.ajax({
-    beforeSend: function() {
-      // Handle the beforeSend event
-    },
     url: url,
-    complete: function(xhr) {
+    complete: function(xhr, status) {
       callback.call(null, xhr.responseJSON);
       // $('.canvas').show();
       // $('#loading').hide();
@@ -26,7 +23,12 @@ var dateCalc = moment().subtract(12, 'M').format("YYYY-MM-DD");
 // In SQL Query string, original 'IssuedDate' has been changed to 'StatusDate'
 //============================================================================
 var permitDescQuery = "SELECT \"Description\" from \"resource_id\" WHERE \"StatusDate\" >= \'" + dateCalc + "\'";
+
+console.log(permitDescQuery);
+
 var permitDesc = baseURI + encodeURIComponent(permitDescQuery.replace("resource_id", resourceId));
+
+console.log(permitDesc);
 
 var initialStartDate = 365;
 var startDate = moment().subtract(initialStartDate, 'd').format("YYYY-MM-DD");

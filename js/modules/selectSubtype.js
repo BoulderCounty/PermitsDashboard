@@ -1,151 +1,97 @@
-var SelectSubtype = function selectSubtype(subtype){
+var SelectSubtype = function (subtype){
 
-    var appliedPerWeekLast365Day={};
-    var appliedLast365Days={};
-    var records={};
-    // console.log($("#uniqueSelector .monthly-dropdown-menu").length);
-    // var c = document.getElementById('subtypeMenu');
-    // console.log(c);
-    // $('#subtypeMenu').unbind('change');
+  (function( $ ){
+     $.fn.myfunction = function(divElement) {
+        var bob2;
+        var bob1 = ($(this).text());
+        bob2 = bob1[337];
+        // bob4= (6 + (divElement.element.innerText.match(/\n/g)||[]).length*10);
+        // console.log($(this).text);
+        // console.log(divElement.element.innerText);
+        console.log($(this));
+        console.log(typeof($(this).text()));
+
+
+        bob5= (divElement.element.innerText.length);
+        bob6= ($(this).text()).length;
+        bob7= bob6-10-1;
+
+        console.log($(divElement.element)[0].innerText);
+        console.log(bob6);
+        var bob3 = bob2;
+        for (var i=bob7; i >= 0; i--){
+          var bob2 = bob1[i];
+          // console.log(i, bob2);
+          var bob3 = bob3+bob2;
+        }
+        console.log(bob3);
+        return bob3;
+     }; 
+  })( jQuery );
+
+
+    console.log($("#uniqueSelector .monthly-dropdown-menu").length);
+    console.log($("#uniqueSelector .monthly-dropdown-menu"));
+    var c = document.getElementById('subtypeMenu');
+    console.log(c);
+    $('#subtypeMenu').unbind('change');
+
 
   var initialStartDate = $("#monthList-dropdown-menu").val().slice(11);
   console.log(initialStartDate);
 
   console.log(subtype,"^^");
-  var breaker = $("#monthList-dropdown-menu").val().slice(11);
   var typeM = subtype.substr(0, 2);
   var subtype = subtype.slice(2);
-
+  console.log(typeM,"%^^%");
 
     /********************************************************************************/
     /* Get all activity in last year (START)
-    /*
-    /* DATA GRAB
-    /*
+    /* ____    _  _____  _       ____ ____      _    ____  
+    /*|  _ \  / \|_   _|/ \     / ___|  _ \    / \  | __ ) 
+    /*| | | |/ _ \ | | / _ \   | |  _| |_) |  / _ \ |  _ \ 
+    /*| |_| / ___ \| |/ ___ \  | |_| |  _ <  / ___ \| |_) |
+    /*|____/_/   \_\_/_/   \_\  \____|_| \_\/_/   \_\____/ 
     /********************************************************************************/
 
     // Original data grab
   // var initialStartDate = 365;
-
-  if (initialStartDate > 6) {
-                initialStartDate = (parseInt(initialStartDate));
-              }
-
   var startDate = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
-  var startDateMoment = moment().subtract(initialStartDate, 'M').format("YYYY-MM-DD");
-
-  console.log(startDateMoment);
+  var startDateMoment = moment().subtract(initialStartDate, 'M');
 
       // set up SQL query string
-  // var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
+  var urlLast365Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + startDate + "' order by \"AppliedDate\"";
   // var urlLast30Query = "SELECT \"PermitNum\",\"AppliedDate\",\"IssuedDate\",\"EstProjectCost\",\"PermitType\",\"PermitTypeMapped\",\"Link\",\"OriginalAddress1\" from \"permitsResourceId\" where \"StatusDate\" > \'" + shortStartDate + "' order by \"AppliedDate\"";
       // encode URL
-  // var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
+  var urlLast365 = baseURI + encodeURIComponent(urlLast365Query.replace("permitsResourceId", permitsResourceId));
   // var urlLast30 = baseURI + encodeURIComponent(urlLast30Query.replace("permitsResourceId", permitsResourceId));
 
   var records=[];
 
-  var grabLast365 = PermitDashboard.cache.last365;  
-
-  requestJSONa(grabLast365, function(json) {
-      var records = json.records;
-      var subRecords = clone(records); 
-      var subRecords2 = clone(records); 
+  requestJSON(urlLast365, function(json) {
+    var records = json.result.records;
+    var subRecords = clone(records); 
+    var subRecords2 = clone(records); 
 
 
   console.log(subRecords)
 
     subRecords2 = subRecords.filter(function(record){
-      return ((record["PermitType"]) == subtype && (moment(record.AppliedDate).format("YYYY-MM-DD") > startDateMoment))
+      return (((record["PermitType"]) == subtype) && (moment(record.AppliedDate).format("YYYY-MM-DD") > startDateMoment.format("YYYY-MM-DD")))
     })
-
-
-  console.log(subRecords2.length)
-
-    console.log(startDateMoment);
-    console.log(subRecords);
-    //extract permits applied for the last year
-
-    console.log(subRecords)
-
-    if (initialStartDate != 12) {
-
-      var appliedLast365Days = subRecords.filter(function(d) { 
-        return moment(d.AppliedDate).format("YYYY-MM-DD") > startDateMoment; 
-      });
-
-    }
-
-    else {
-
-      var appliedLast365Days = subRecords.filter(function(d) { 
-        return moment(d.longAppliedDate).format("YYYY-MM-DD") > startDateMoment; 
-      });
-
-
-    }
-
-    //extract permits issued in last year
-    var issuedLast365Days2 = records.filter(function(d) { 
-      return ((d["PermitType"]) == subtype && (moment(d.IssuedDate).format("YYYY-MM-DD") > startDateMoment)); 
-    });
-
-       //total construction value for new project in last year
-    var totalConstructionValue2 = d3.sum(subRecords2, function(d) {
-      return Number(d.EstProjectCost);
-    });
-
-    console.log(appliedLast365Days.length);
-
-
-    $("#newApplications").text(subRecords2.length);
-    $("#issuedPermits").text(issuedLast365Days2.length);
-    $("#issuedPermits").show();
-    $("#totalConstructionValue").text(numeral(totalConstructionValue2).format('( 0 a)'));
 
 
     // format record.AppliedDate to drop days and years
     // ?? DOES THIS DO ANYTHING IN THIS LOCATION ??
 
-    if (breaker < 7) {
-      records.forEach(function(record, inc, array) {
-        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
+    // subRecords2.forEach(function(record, inc, array) {
+    //   record.AppliedDate = moment(record.AppliedDate).format('MMM-YY');
+    // })
 
-        weeklyBunch = [];
-
-      })
-
-      for (var  i = 0; i<appliedLast365Days.length; i++){
-        var then = appliedLast365Days[i].AppliedDate;
-
-        var ago = moment(then);
-        var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM-DD');
-        weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
-
-      }
-
-      console.log(weeklyBunch.length);
-
-    }
-
-    else {
-      records.forEach(function(record, inc, array) {
-        record.AppliedDate = moment(record.AppliedDate).format('YYYY-MM-DD');
-
-      })
-
-      weeklyBunch = [];
-
-        for (var  i = 0; i<appliedLast365Days.length; i++){
-          var then = appliedLast365Days[i].AppliedDate;
-          var ago = moment(then);
-          // .subtract(1, "months");
-          var weeksAgo = ago.startOf('isoWeek').format("YYYY-MM");
-          weeklyBunch.push([appliedLast365Days[i]["longAppliedDate"], ago, weeksAgo]);
-
-        }
-
-    }
+    //extract permits applied for the last year
+    var appliedLast365Days = subRecords2.filter(function(d) { 
+      return moment(d.AppliedDate) > startDateMoment; 
+    });
 
 
     /* INITIAL CONSTRUCTION OF BAR CHART (START)
@@ -157,195 +103,50 @@ var SelectSubtype = function selectSubtype(subtype){
 
     /********************************************************************************/
     
-    // weeklyBunch = [];
-
-
-    // for (var  i = 0; i<appliedLast365Days.length; i++){
-    //   var then = appliedLast365Days[i].AppliedDate;
-
-
-
-    //   var ago = moment(then);
-    //   var weeksAgo = ago.startOf('isoWeek').format('YYYY-MM');
-    //   weeklyBunch.push([appliedLast365Days[i]["AppliedDate"], ago, weeksAgo]);
-
-    // }
-
-    // console.log(weeklyBunch.length);
-
-    var appliedPerWeekLast365Days = weeklyBunch;
-
-    // .filter(function(d) {
-    //     // console.log(moment(d[1]),"*********",startDateMoment);
-    //     return (moment(d[1]).diff(startDateMoment) >= 0);
-    // });
-    
-
-    console.log(appliedPerWeekLast365Days);
-    // var appliedLast365Days = records.filter(function(d) { 
-    //   return moment(d.AppliedDate) > startDateMoment; 
-    // })
-
-    appliedLast365Days.forEach(function(day, inc, arr){
-      // console.log(appliedLast365Days[inc],"#####", appliedPerWeekLast365Days[inc][2]);
-      appliedLast365Days[inc]["week"] = appliedPerWeekLast365Days[inc][2];
-    });
-
-    // creates the data object
+    // (A) creates the data object
     // FURTHER DESCRIPTION NECESSARY {key_Month : [ {key_type : numb }]}
 
-    // console.log(appliedPerWeekLast365Days);
+    var appliedByDayBySubtype = d3.nest()
+      .key(function(d) { return d.AppliedDate })
+      .key(function(d) { return d.PermitType })
+      .rollup (function(v) { return v.length })
+      .entries(subRecords2);
 
-    console.log(appliedLast365Days);
-
-    if (breaker < 7) { 
-      var appliedByDayBySubtype = d3.nest()
-        .key(function(d) { return d.AppliedDate })
-        .key(function(d) { return d.PermitType })
-        .rollup (function(v) { return v.length })
-        .entries(appliedLast365Days);
-
-        console.log('days');
-
-      }
-
-    else {
-
-      var appliedByDayBySubtype = d3.nest()
-        .key(function(d) { return d.week })
-        .key(function(d) { return d.PermitType })
-        .rollup (function(v) { return v.length })
-        .entries(appliedLast365Days);
-
-      }
 
     console.log(appliedByDayBySubtype);
 
-    var subColor = {};
-
-                           // 'Electrical': 'hsl(360, 69.2%, 49.6%)',
-                           // 'Other': 'hsl(0, 0%, 49.8%)',
-                           // 'Mechanical': 'hsl(120, 56.9%, 40.0%)',
-                           // 'Roof': 'hsl(30, 100%, 50.2%)',
-                           // 'Plumbing': 'hsl(271, 39.4%, 57.3%)' ,
-                           // 'Pool/Spa': 'hsl(60, 69.5%, 43.7%)',
-                           // 'Fence': 'hsl(186, 80%, 45.1%)',
-                           // 'Grading': 'hsl(318, 65.9%, 67.8%)'
-    // Initiate arrays with type label 
+    // (B) Initiate arrays with type label 
 
     switch(typeM) {
 
       case "bu":
         var subtypes = ["Other","NRB","New Residence","RA","Residential Accessory Building","Residential Addition","Residential Remodel","Commercial Remodel","NCR","Accessory Agricultural Building"];
-
-        var subColor = {   
-                        "Other" : 'hsl(205, 70.6%, 1.4%)',
-                        "NRB" : 'hsl(205, 70.6%, 11.4%)',
-                        "New Residence" : 'hsl(205, 70.6%, 21.4%)',  
-                        "RA" : 'hsl(205, 70.6%, 31.4%)',
-                        "Residential Accessory Building" : 'hsl(205, 70.6%, 41.4%)', 
-                        "Residential Addition" : 'hsl(205, 70.6%, 51.4%)',
-                        "Residential Remodel" : 'hsl(205, 70.6%, 61.4%)',
-                        "Commercial Remodel" : 'hsl(205, 70.6%, 71.4%)', 
-                        "NCR" : 'hsl(205, 70.6%, 81.4%)',
-                        "Accessory Agricultural Building" : 'hsl(205, 70.6%, 91.4%)'
-                        };
      
-
-        $(function() {
-            $("#bld-monthly-dropdown-menu").val('bu'+subtype);
-        });
-        
       break;
     
       case "me":
         var subtypes = ["Air Conditioning","Boiler","Evaporative Cooler","Furnace","Gas Log Fireplace","Other","Wood Stove","Solar Thermal"];
-
-        subColor =  {
-                    "Air Conditioning": 'hsl(120, 56.9%, 10.0%)',
-                    "Boiler": 'hsl(120, 56.9%, 20.0%)',
-                    "Evaporative Cooler": 'hsl(120, 56.9%, 30.0%)',
-                    "Furnace": 'hsl(120, 56.9%, 40.0%)',
-                    "Gas Log Fireplace": 'hsl(120, 56.9%, 50.0%)',
-                    "Other": 'hsl(120, 56.9%, 60.0%)',
-                    "Wood Stove": 'hsl(120, 56.9%, 70.0%)',
-                    "Solar Thermal": 'hsl(120, 56.9%, 80.0%)'
-                  };
-
-        $(function() {
-                $("#mch-monthly-dropdown-menu").val('me'+subtype);
-        });
-            
-
       break;
-    
+
       case "el":
         var subtypes = ["Commercial Electric", "Electrical Lift Station", "Electrical Re-Wiring", "Electrical Service Change", "Temporary Electrical Service", "Generator", "Solar Electrical System", "Other"];
-   
-        subColor = {"Commercial Electric": 'hsl(360, 69.2%, 19.6%)',
-                     "Electrical Lift Station" : 'hsl(360, 69.2%, 29.6%)',
-                     "Electrical Re-Wiring": 'hsl(360, 69.2%, 39.6%)',
-                     "Electrical Service Change": 'hsl(360, 69.2%, 49.6%)',
-                     "Temporary Electrical Service": 'hsl(360, 69.2%, 59.6%)',
-                     "Generator": 'hsl(360, 69.2%, 69.6%)',
-                     "Solar Electrical System": 'hsl(360, 69.2%, 79.6%)',
-                     "Other": 'hsl(360, 69.2%, 89.6%)'};
-
-        $(function() {
-                $("#elc-monthly-dropdown-menu").val('el'+subtype);
-        });
-    
-
       break;
 
       case "pl":
         var subtypes = ["Eldorado Springs Sanitation Hookup", "Gas Piping", "Water Heater", "Plumbing - Other"];
-
-        subColor = {"Eldorado Springs Sanitation Hookup" :  'hsl(271, 39.4%, 17.3%)',
-                    "Gas Piping" :  'hsl(271, 39.4%, 37.3%)',
-                    "Water Heater" :  'hsl(271, 39.4%, 57.3%)',
-                    "Plumbing - Other" :  'hsl(271, 39.4%, 77.3%)'}
-
-        $(function() {
-                $("#plm-monthly-dropdown-menu").val('pl'+subtype);
-        });
-
       break;
 
       case "de":
         var subtypes = ["Commercial Deconstruction", "Residential Deconstruction", "Residential Demolition"];
-   
-        subColor = {"Commercial Deconstruction": 'hsl(10, 30.2%, 12.2%)',
-                    "Residential Deconstruction": 'hsl(10, 30.2%, 42.2%)',
-                    "Residential Demolition": 'hsl(10, 30.2%, 72.2%)'};
-
-        $(function() {
-                $("#dem-monthly-dropdown-menu").val('de'+subtype);
-        });
-
       break;
 
       case "ot":
         var subtypes = ["Building Lot Determination", "Bridge", "Oil and Gas Development"];
-
-        subColor = {"Building Lot Determination" : 'hsl(0, 0%, 19.8%)',
-                    "Bridge" : 'hsl(0, 0%, 49.8%)',
-                    "Oil and Gas Development" : 'hsl(0, 0%, 79.8%)'};
-
-        $(function() {
-                $("#oth-monthly-dropdown-menu").val('ot'+subtype);
-        });
-
       break;
-
-      default:
-
-      console.log('no subtype!?!?!?!?!?!?!??!?!?!');
-
     }
 
 
-    // $("#uniqueSelector").on("click", $(".monthly-dropdown-menu"), function(){console.log(subtype, "!!!!")});
+     $("#uniqueSelector").on("click", $(".monthly-dropdown-menu"), function(){console.log(subtype, "!!!!")});
 
     // // $("#uniqueSelector select").on("change", gearUp())
 
@@ -354,71 +155,67 @@ var SelectSubtype = function selectSubtype(subtype){
     // // var c = eval(document.getElementById('toggleWithPieClick').innerHTML);
 
 
-//     
- //     ___________   _____    ______________.___. ___________._______  ___   ___ ___________________________________
- //     \_   _____/  /  _  \  /   _____/\__  |   | \_   _____/|   \   \/  /  /   |   \_   _____/\______   \_   _____/
- //      |    __)_  /  /_\  \ \_____  \  /   |   |  |    __)  |   |\     /  /    ~    \    __)_  |       _/|    __)_ 
- //      |        \/    |    \/        \ \____   |  |     \   |   |/     \  \    Y    /        \ |    |   \|        \
- //     /_______  /\____|__  /_______  / / ______|  \___  /   |___/___/\  \  \___|_  /_______  / |____|_  /_______  /
- //              \/         \/        \/  \/             \/              \_/        \/        \/         \/        \/ 
-
+    
 
     // console.log(appliedByDayBySubtype);
 
     var output = {};
-
-    // // (C) Enumerates each type
-    // console.log(appliedByDayBySubtype);
-    // appliedByDayBySubtype2 =[];
-
-    // appliedByDayBySubtype.map(function(week){
-    //   week.key=moment(week.key).format("YYYY-MM");
-    //   console.log(week.key)
-    // });
-
-    // for(var week in appliedByDayBySubtype){
-    //   appliedByDayBySubtype2.push({country : country, data : countries[country] / countries_count[country]})
-    // }
-
-
-    // // var result = _.mapValues(appliedByDayBySubtype, function (e) {
-    // //   return _.reduce(e, function (prev, current) {
-    // //     return _(current)
-    // //       .pick(_.isNumber)
-    // //       .mapValues(function (value, key) {
-    // //          return (prev[key] || 0) + value;
-    // //       })
-    // //       .value();
-    // //   }, {});
-    // // });
-
-    // console.log(appliedByDayBySubtype2);
-
-
+  
+    // (C) Enumerates each type
 
 
     subtypes.forEach(function(subtyper) {
-      output[subtyper] = appliedByDayBySubtype.map(function(week) {
+      output[subtyper] = appliedByDayBySubtype.map(function(month) {
           var o = {};
-          o[week.key] = week.values.filter(function(val) {
-            return val.key == subtyper;
-          }).map(function(m) { return m.values; }).shift() || '0';
+          o[month.key] = month.values.filter(function(val) {
+            return val.key == subtype;
+          }).map(function(m) { return m.values; }).shift() || 0;
           return o;
         })
     });
 
-    console.log(subtypes, output);
+    console.log(appliedByDayBySubtype, subtypes, output);
 
     // (D) Enumerates each month
     // (E) initiates array of months
     // (F) Throws a blank into each arrays month if there were no records
 
-    var weeks = appliedByDayBySubtype.map(function(week) {
-      return week.key;
+    var months = appliedByDayBySubtype.map(function(month) {
+      return month.key;
     });
 
+    console.log(months);
 
     // (G) push the value into the type-labeled array
+  
+    console.log(output);
+    console.log(typeof(output));
+
+    // output=output[subtype];
+
+    //  = output.filter(function(record){
+    //   return ((record["PermitType"]) == subtype)
+    // });
+
+
+    function getObjValues(obj) {
+        var o = [];
+        for ( var key in obj ) {
+          o.push(obj[key]);
+        }
+        return o;
+    }
+
+
+    // function getObjKeys(obj) {
+    //     var o = [];
+    //     for ( var elem in obj ) {
+    //       o.push(elem.keys());
+    //     }
+    //     return o;
+    // }
+
+    console.log(Object.keys(output).indexOf(subtype));
 
     var columnData = Object.keys(output).map(function(type) {
         var a = output[type].map(function(month){
@@ -426,35 +223,68 @@ var SelectSubtype = function selectSubtype(subtype){
         });
         return [type].concat(a);
       })
+    
+    console.log(Object.keys(columnData));
 
-    // console.log(subtype);
 
     console.log(columnData);
 
-    var selectedColumnData = columnData.filter(function(subtypet){
-      return (subtypet[0] == subtype);
-    });
+    var columnData=[columnData[Object.keys(output).indexOf(subtype)]];
 
-    console.log(selectedColumnData);
-    console.log(weeks);
 
-    // console.log(selectedColumnData);
+
+    // var columnData = getObjValues(output);
+    // .map(function(type) {
+    //     var a = output[type].map(function(month){
+    //       return month[Object.keys(month)[0]];
+    //     });
+    //     return [type].concat(a);
+    //   })
+
+    console.log(columnData);
+
+    console.log('arr', getObjValues(output));
+    console.log('keys', Object.keys(output));
+    console.log('obj', output);
+
+    var subtypeKeys = Object.keys(output);
+
+    var permitsToLoad = 25;
+    var totalPermits = appliedLast365Days.length-1;
+    var permitStart = 1
+
+    console.log(totalPermits);
+    
+    for (var i = totalPermits; i > totalPermits - 10; i--) {
+      console.log(i);
+      $("#recent" + permitStart).attr("href", appliedLast365Days[i].Link);
+      $("#permit" + permitStart).text(appliedLast365Days[i].PermitNum);
+      $("#address" + permitStart).text(appliedLast365Days[i].OriginalAddress1);
+      permitStart++;
+    }
+
 
     // (H) create the bar chart with months and types breakdown 
     /*
     /*  Bar Graph - Initial Load
-    /*
-    /*  DATA PLOT    
-    /*
+    /*     //    ) ) // | |  /__  ___/ // | |       //   ) ) / /        //   ) ) /__  ___/ 
+    /*    //    / / //__| |    / /    //__| |      //___/ / / /        //   / /    / /     
+    /*   //    / / / ___  |   / /    / ___  |     / ____ / / /        //   / /    / /      
+    /*  //    / / //    | |  / /    //    | |    //       / /        //   / /    / /       
+    /* //____/ / //     | | / /    //     | |   //       / /____/ / ((___/ /    / /       
     /************************************************************************************/
-    console.log(typeof(subColor));
+
+    var columnType = columnData[0][0];
+    console.log(columnType);
 
     var chart = c3.generate({
       bindto: '#byDay',
       data: {
-        columns: [selectedColumnData[0]],
+        columns: columnData,
         type: 'bar',
-        colors: subColor
+        types: { columnData:'bar'},
+        onclick: function (d, i) {var devo = chart.categories()[d.index]; var bob = $(this["element"]).myfunction(this); console.log("date=>"+bob); var numberOfLineBreaks = (this.element.innerText.match(/\n/g)||[]).length; console.log('Number of breaks: ' + numberOfLineBreaks);var splitted = $(this.element).text(); console.log(splitted, "onclick"); return restrictList(d, bob, devo);}
+        // , "this.element.innerText", this.element.innerText.toString(), "this.element", this.element, "this", this, "i", i, "offclick", Object.keys(d.index), "d", d, d.index); restrictList(d); return (console.log('boo-hoo')); }
         },
       grid: {
         y: {
@@ -464,7 +294,7 @@ var SelectSubtype = function selectSubtype(subtype){
       axis: {
         x: {
           type: 'category',
-          categories: weeks
+          categories: months
         }
       },
       // legend: {
@@ -474,6 +304,41 @@ var SelectSubtype = function selectSubtype(subtype){
     });
 
   });
-};
 
-window.SelectSubtype = SelectSubtype;
+  function restrictList(x, y, divElement){
+
+    // console.log((divElement.element.innerText.match(/\n/g)||[]).length);
+    // console.log(x);
+    appliedLastYearByType = window.PermitDashboard.cache.last365.records;
+    // console.log(appliedLastYearByType);
+    // console.log(appliedLastYearByType.length);
+    var totalPermitting = appliedLastYearByType.length-1;
+    function isTheRightType(value) {
+      // console.log(this, value);
+      return value.PermitType == this.id;
+    }
+    function isTheRightDate(value) {
+      // console.log(this, value);
+      return value.AppliedDate == divElementls
+      ;
+    }
+    var totalPermits = appliedLastYearByType.filter(isTheRightType, x);
+    var selectedPermits = totalPermits.filter(isTheRightDate, y);
+    console.log(x, y, selectedPermits.length);
+    
+    for (var i = 0; i < 10; i++) {
+      $("#recent" + i).attr('');
+      $("#permit" + i).empty('');
+      $("#address" + i).empty('');
+    }
+
+    var permitStart = 1
+    for (var i = (selectedPermits.length)-1; i >= 0; i--) {
+      console.log(i, selectedPermits);
+      $("#recent" + permitStart).attr("href", selectedPermits[i].Link);
+      $("#permit" + permitStart).text(selectedPermits[i].PermitNum);
+      $("#address" + permitStart).text(selectedPermits[i].OriginalAddress1);
+      permitStart++;
+    }
+  };
+};
